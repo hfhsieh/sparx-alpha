@@ -63,7 +63,7 @@ static PyMethodDef _SPARXMethods[] = {
 #endif
 	{NULL, NULL, 0, NULL} /* Sentinel */
 };
- 
+
 /*----------------------------------------------------------------------------*/
 
 PyMODINIT_FUNC init_sparx (void)
@@ -87,7 +87,7 @@ PyMODINIT_FUNC init_sparx (void)
 
 	/* Initialize module */
         char static_library[7] = "._sparx";
-        char *static_library_path = 
+        char *static_library_path =
           malloc(1 + strlen(Sp_SPARX_VERSION) + strlen(static_library) );
         strcpy(static_library_path, Sp_SPARX_VERSION);
         strcat(static_library_path, static_library);
@@ -251,11 +251,11 @@ static PyObject *task_telsim(PyObject *self, PyObject *args)
 static PyObject *task_contobs(PyObject *self, PyObject *args)
 {
     int status = 0;
-    
+
     USEUP_SELF_ARGS();
-    
+
     status = SpTask_ContObs();
-    
+
     if(!status) Py_RETURN_NONE;
     else return NULL;
 }
@@ -290,11 +290,11 @@ static PyObject *task_visual(PyObject *self, PyObject *args)
 static PyObject *task_pops2ascii(PyObject *self, PyObject *args)
 {
     int status = 0;
-    
+
     USEUP_SELF_ARGS();
-    
+
     status = SpTask_Pops2ASCII();
-    
+
     if(!status) Py_RETURN_NONE;
     else return NULL;
 }
@@ -395,7 +395,7 @@ static PyObject *load_mir_xyv(PyObject *self, PyObject *args)
                 dims[1] = y.n;
                 dims[2] = v.n;
                 np_cube = PyArray_ZEROS(3, dims, NPY_FLOAT, 0);
-                
+
 		/* Load image data into NumPy array */
 		for(i = 0; i < x.n; i++) {
 			for(j = 0; j < y.n; j++) {
@@ -412,7 +412,7 @@ static PyObject *load_mir_xyv(PyObject *self, PyObject *args)
 		free(cube);
 	}
 
-	/* Insert np_cube into the dictionary: the DECREF afterwords is VERY IMPORTANT! 
+	/* Insert np_cube into the dictionary: the DECREF afterwords is VERY IMPORTANT!
 	   Neglecting to DECREF any objects inserted into a dictionary can cause serious
 	   memory leaks! */
 	if(!sts) sts = PyDict_SetItemString(ret, "cube", np_cube); Py_DECREF(np_cube);
@@ -493,7 +493,7 @@ static PyObject *load_mir_xyv2(PyObject *self, PyObject *args)
 			sts = 1;
 	}
 
-	/* Insert np_cube into the dictionary: the DECREF afterwords is VERY IMPORTANT! 
+	/* Insert np_cube into the dictionary: the DECREF afterwords is VERY IMPORTANT!
 	   Neglecting to DECREF any objects inserted into a dictionary can cause serious
 	   memory leaks! */
 	if(!sts) sts = PyDict_SetItemString(ret, "cube", np_cube); Py_DECREF(np_cube);

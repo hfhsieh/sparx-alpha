@@ -302,7 +302,7 @@ class SPARXH5(object):
 		data = self.GetParmData(parm, index)
 		if self.coord == SPH1D:
 			return np.array(data)
-			
+
 		elif self.coord == REC3D:
 			# Get zone positions
 			Xcen = self.GetParmData("X_cen", 0)

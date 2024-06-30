@@ -5,7 +5,7 @@
 ###############################################################################
 
 
-from tables import * 
+from tables import *
 from numpy import *
 from math import *
 from scipy import optimize
@@ -78,7 +78,7 @@ def CubicEq(xx):
 	return xx*xx*xx+pp*xx+qq
 
 
-    
+
 # Define a user record to characterize some kind of particles
 class Particle(IsDescription):
         LEVEL=Int32Col(pos=0)
@@ -123,7 +123,7 @@ def writezone(direc,lev,position,xmax,xmin,naxes):
 	#Insert a new particle record
 	particle.append()
 	table.flush()
-	del table.attrs.FIELD_0_FILL 
+	del table.attrs.FIELD_0_FILL
 	del table.attrs.FIELD_1_FILL
 	del table.attrs.FIELD_2_FILL
 	del table.attrs.FIELD_3_FILL
@@ -150,9 +150,9 @@ def writezone(direc,lev,position,xmax,xmin,naxes):
 	del table.attrs.FIELD_24_FILL
 	del table.attrs.FIELD_25_FILL
 	del table.attrs.NROWS
-	
+
 def writegrid(direc,lev,naxes,Raxis,Taxis,Paxis,nc):
-	global pp,qq	
+	global pp,qq
 	# Create GRID table
 	table = h5file.createTable(direc, 'GRID', Particle, "Grid table")
 	particle = table.row
@@ -164,7 +164,7 @@ def writegrid(direc,lev,naxes,Raxis,Taxis,Paxis,nc):
 	mass_env=0.
 	mass_disc=0.
 	total_volume = 0.
-	
+
 	for i in range(naxes[0]):
 	        for j in range(naxes[1]):
 	                for k in range(naxes[2]):
@@ -174,39 +174,39 @@ def writegrid(direc,lev,naxes,Raxis,Taxis,Paxis,nc):
         	                particle['geom'] = geom
 				particle['X_max'] =[ Raxis[i+1],Taxis[j+1],Paxis[k+1] ]
 				particle['X_min'] =[ Raxis[i]  ,Taxis[j]  ,Paxis[k]   ]
-				particle['X_cen'] =[ 0.5*(Raxis[i]+Raxis[i+1]),0.5*(Taxis[j]+Taxis[j+1]),0.5*(Paxis[k]+Paxis[k+1]) ]	
+				particle['X_cen'] =[ 0.5*(Raxis[i]+Raxis[i+1]),0.5*(Taxis[j]+Taxis[j+1]),0.5*(Paxis[k]+Paxis[k+1]) ]
 				# write out the non-empty-leaf zone
 				r=particle['X_cen'][0]
 				theta=particle['X_cen'][1]
 				R=r*sin(theta)
 				phi=particle['X_cen'][2]
-				
+
 				pp=r/Rd-1.
 				qq=-cos(theta)*r/Rd
-				
+
 				cos_theta0 = optimize.brentq(CubicEq, -1.,1.)
 				#if j == 25:
                                 #        print cos_theta0
 				if (cos_theta0>1. or cos_theta0<-1.):
 					print cos_theta0,pp,qq
-				
+
 				volume = -2. * pi / 3. * ( Raxis[i+1]**3 - Raxis[i]**3 ) * ( cos(Taxis[j+1]) - cos(Taxis[j]) )
 				total_volume = total_volume + volume
-				
+
 				if(env==1):
 					density_env = rho_e0 * ((r/Rd)**(-1.5))*((1+cos(theta)/cos_theta0)**(-0.5))*((1 + ((r/Rd)**(-1)) * (3*cos_theta0**2-1.0))**(-1))
 					mass_env += density_env*volume
 				else:
 					density_env = 0.0
-				
+
 				if (r<=Rd and disk==1):
 					rho_0 = rho_d0*(Rd/R)**2.25
-					H=H0*(R/Rt)**1.25				
+					H=H0*(R/Rt)**1.25
 					density_disc = rho_0*exp(-(r*r-R*R)/(2.*H*H))
 					mass_disc += density_disc*volume
 				else:
 					density_disc =0.
-				
+
 				density[i,j,k]=density_env+density_disc
 				Vkep = sqrt(G*Mt/r)
 				Vp_disc = sqrt(G*Mt/R)
@@ -227,13 +227,13 @@ def writegrid(direc,lev,naxes,Raxis,Taxis,Paxis,nc):
 					Vt = 0.0
 					Vp = 0.0
 					temperature[i,j,k] = 0.0
-				
+
 				if(writevtk):
 					Vx[i,j,k] = cos(phi)*sin(theta)*Vr + cos(phi)*cos(theta)*Vt -sin(phi)*Vp
 					Vy[i,j,k] = sin(phi)*sin(theta)*Vr + sin(phi)*cos(theta)*Vt +cos(phi)*Vp
 					Vz[i,j,k] = cos(theta)*Vr - sin(theta)*Vt
-				
-				
+
+
 				particle['n_H2'] = density[i,j,k]
 				particle['V_cen'] = [km2m*Vr,km2m*Vt,km2m*Vp]
 				particle['T_k'] = temperature[i,j,k]
@@ -270,7 +270,7 @@ def writegrid(direc,lev,naxes,Raxis,Taxis,Paxis,nc):
 						print >>fvtk1,'%(0)e %(1)d %(2)e'%{'0':Rp[i]*sin(thetap[j]),'1':0,'2':Rp[i]*cos(thetap[j])}
 					elif(k==1):
 						print >>fvtk1,'%(0)e %(1)e %(2)e'%{'0':Rp[i]*sin(thetap[j]),'1':1e-6,'2':Rp[i]*cos(thetap[j])}
-							
+
 		print >>fvtk1,'CELL_DATA %(0)d'%{'0':naxes[0]*naxes[1]*naxes[2]}
 		print >>fvtk1,'SCALARS density float 1'
 		print >>fvtk1,'LOOKUP_TABLE default'
@@ -306,7 +306,7 @@ def writegrid(direc,lev,naxes,Raxis,Taxis,Paxis,nc):
 
 
 	table.flush()
-	del table.attrs.FIELD_0_FILL 
+	del table.attrs.FIELD_0_FILL
 	del table.attrs.FIELD_1_FILL
 	del table.attrs.FIELD_2_FILL
 	del table.attrs.FIELD_3_FILL
@@ -382,13 +382,13 @@ h5file.delNodeAttr("/", "PYTABLES_FORMAT_VERSION", name=None)
 h5file.setNodeAttr("/", "molec", molec, name=None)
 h5file.setNodeAttr("/", "T_cmb", T_cmb, name=None)
 h5file.setNodeAttr("/", "gas_to_dust", gas_to_dust, name=None)
-h5file.setNodeAttr("/", "velfield", "grid ", name=None)	
+h5file.setNodeAttr("/", "velfield", "grid ", name=None)
 writezone(root,-1,0,[Rp[nr],thetap[nt],phip[np]],[Rp[0],thetap[0],phip[0]],[nr,nt,np])
 ncell=writegrid(root,-1,[nr,nt,np],Rp,thetap,phip,0)
 h5file.close()
 
 
 print 'Total cells=',ncell
-	
+
 
 

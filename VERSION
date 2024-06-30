@@ -9,15 +9,15 @@ alpha-2.1.0     Dec 2015        add FITS output
 alpha-2.1.1     Dec 2015        get rid of MIRIAD dependancy
 alpha-2.2.0     Jan 2016        implement cylindrical coordinate (GEOM : CYL3D)
                                 TODO : a test case of nested CYL3D model
-alpha-2.2.1     Jan 2016        fix kappa-LTE-lineobs bug 
+alpha-2.2.1     Jan 2016        fix kappa-LTE-lineobs bug
                                 & multi-thread telsim memory conflict
-alpha-2.2.2     Jan 2016        improving readability of task_telsim 
+alpha-2.2.2     Jan 2016        improving readability of task_telsim
                                 & enable I_bb in telsim
                                 Done in 2.3.0 : test various tracer
                                 (coldens/line/zeeman/overlap/cont)
 alpha-2.2.3     Feb 2016        improving the readability of AMC
 alpha-2.2.4     Feb 2016        compiling unit tests
-alpha-2.2.5     Feb 2016        fixing B-free-cont bug in SPH1D 
+alpha-2.2.5     Feb 2016        fixing B-free-cont bug in SPH1D
                                 & dev-version friendly support
 alpha-2.3.0     Feb 2016        complete all the unit tests of telsim and realease
 alpha-2.3.1     Mar 2016        fix CRPIX consitent between MIRIAD&FITS
@@ -35,19 +35,19 @@ alpha-3.0.0     Oct 2016        PRESPARX : integrated preprocessor
                                 molecular data consistency
                                 benchmark case test
                                 free-free emission
-                                Inner boundary condition : sph1d/sph3d 
-                                sph3d central pixel penetratipon 
+                                Inner boundary condition : sph1d/sph3d
+                                sph3d central pixel penetratipon
                                 correction for polarized stokes I emission
                                 correction for observed map coordinate
 alpha-3.0.1     Oct 2016        bug fixing
-alpha-3.0.2     Jan 2017        presparx functional model bug fixing 
+alpha-3.0.2     Jan 2017        presparx functional model bug fixing
 alpha-3.0.3     Feb 2017        parallel projection while model to distance ratio is too low
 alpha-3.0.4     Sep 2017        tag Sep 2017
 alpha-3.0.5     Sep 2017        contribution analysis detatched from telsim
 alpha-3.0.6     Sep 2017        reduce sph1d contribution visualization to 2-dim
 alpha-3.1       Oct 2017        preprocessor: ZeusTW converter interface
-alpha-3.1.1     Nov 2018        task_coldens is detached from task_telsim 
-alpha-3.1.2     Nov 2018        task_contobs is detached from task_telsim 
+alpha-3.1.1     Nov 2018        task_coldens is detached from task_telsim
+alpha-3.1.2     Nov 2018        task_contobs is detached from task_telsim
 alpha-3.1.3     Mar 2020        presparx: ZEUS extension -- molecular density data
 
 
@@ -68,33 +68,33 @@ alpha-3.x                       multi-grid
 ######################################################
 - Short-term :
         * Algorithm :                           (High / 2 weeks + 2 weeks)
-          Successive-and-Over Relaxation method in ALI 
+          Successive-and-Over Relaxation method in ALI
           Goal : optimize stability of ALI
 
         * Application of line-fitting           (Medium-to-High)
-        
+
         * Infrared pumping                      (Medium)
-        * consistency of the intialization for molecule 
+        * consistency of the intialization for molecule
           with HDF format and data structures
                                                 (Medium-Low)
-        
+
         * automatic converged mapping           (Low)
-        * arbitrary bounday / painter's algorithm 
+        * arbitrary bounday / painter's algorithm
           -- for user's flexibility             (Low)
 
-        
+
 - Mid-term :
         * PRE-SPARX project -- integrated preprocessor
           To make the gridding efficient and reliable (show the limitation)
           feature : 1. warning of excessive velocity gradient
                     2. output of the error of mass
-        
+
         * Validation : 1. compile benchmark in 2002
-                       2. validation over all coordinate systems 
-                - 
+                       2. validation over all coordinate systems
+                -
         * capability of unstructured grid solvers
 
 - Long-term :
         * angular high-order scheme (upgrade to second-order accuracy)
-        
-        
+
+

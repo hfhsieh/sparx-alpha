@@ -18,10 +18,10 @@ python-tables
 FEDORA_VERSION=`grep -o '[0-9]*' /etc/fedora-release`
 
 
-if [ $FEDORA_VERSION == '22' ]; then 
+if [ $FEDORA_VERSION == '22' ]; then
   # INSTALL SPARX FOR FEDORA 22
-  sudo yum install scipy 
- 
+  sudo yum install scipy
+
   # setup bash environment
   if ! grep -q "# SPARX ENVIRONMENT" ~/.bashrc; then
     echo "# SPARX ENVIRONMENT" >> ~/.bashrc
@@ -31,7 +31,7 @@ if [ $FEDORA_VERSION == '22' ]; then
 
 elif [ $FEDORA_VERSION == '24' ]; then
   # INSTALL SPARX FOR FEDORA 24
-  sudo yum install python2-scipy 
+  sudo yum install python2-scipy
 
 fi
 

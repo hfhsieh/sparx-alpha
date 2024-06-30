@@ -8,7 +8,7 @@ cd $TMP_DIR
 
 # OPENMPI
 wget https://www.open-mpi.org/software/ompi/v2.0/downloads/openmpi-2.0.0.tar.gz  --no-check-certificate -O- | tar xz
-cd openmpi-2.0.0 
+cd openmpi-2.0.0
 ./configure --prefix=$OPT_DIR/openmpi-2.0.0
 make all install
 cd ..
@@ -23,13 +23,13 @@ cd ..
 
 # HDF5
 wget http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.10.1.tar -O- | tar x
-cd hdf5-1.10.1 
+cd hdf5-1.10.1
 CC=$OPT_DIR/openmpi-2.0.0/bin/mpicc ./configure --enable-parallel --prefix=$OPT_DIR/hdf5-1.10.1
-make 
-make check 
+make
+make check
 make install
 cd ..
- 
+
 
 
 

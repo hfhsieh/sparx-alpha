@@ -3,7 +3,7 @@
  * e-mail: schung@asiaa.sinica.edu.tw
  *
  * some useful tool for debugging
- * 
+ *
  * History:
  * esc 23Jul07 genesis
  */
@@ -49,6 +49,6 @@ void Deb_Fprintf(FILE *fp, const char *file, int line, const char *format, ...)
   va_start(ap, format);
   vfprintf(stderr, format, ap);
   va_end(ap);
-  
+
   return;
 }

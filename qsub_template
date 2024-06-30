@@ -25,7 +25,7 @@ source ~/.load_sparx_module
 
 
 ###### Run parallel jobs ######
- 
+
 if [ -n "$PBS_NODEFILE" ]; then
   if [ -f $PBS_NODEFILE ]; then
     awk '!x[$0]++' $PBS_NODEFILE > MPIHOST

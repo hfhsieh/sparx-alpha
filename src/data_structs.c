@@ -11,13 +11,13 @@
 DatINode *Dat_IList_NameLookup(DatINode *list, const char *name)
 {
     size_t i;
-    
+
     for(i = 0; list[i].name; i++) {
-        
+
         if(!strcmp(list[i].name, name))
             return &list[i];
     }
-    
+
     return NULL;
 }
 
@@ -53,7 +53,7 @@ LNode *Dat_Llst_Lookup(LNode *list, const char *name)
 /*----------------------------------------------------------------------------*/
 
 LNode *Dat_Llst_Push(LNode *list, void *value, void (*freef)(void *))
-/* Insert value associated with name in a linked list of LNodes */ 
+/* Insert value associated with name in a linked list of LNodes */
 {
 	LNode *np;
 
@@ -76,7 +76,7 @@ LNode *Dat_Llst_Push(LNode *list, void *value, void (*freef)(void *))
 /*----------------------------------------------------------------------------*/
 
 LNode *Dat_Llst_Insert(LNode *list, const char *name, void *value, void (*freef)(void *))
-/* Insert value associated with name in a linked list of LNodes */ 
+/* Insert value associated with name in a linked list of LNodes */
 {
 	LNode *np, *newlst;
 

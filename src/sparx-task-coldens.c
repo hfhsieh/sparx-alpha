@@ -9,7 +9,7 @@
 static struct glb {
     DatINode *task;
     int tracer;
-    
+
     DatINode *unit;
     MirImg_Axis x, y, v;
     MirFile *imgf;
@@ -33,7 +33,7 @@ int SpTask_ColDens(void)
 {
     Mem_BZERO(&glb);
     int sts = 0;
-    
+
     // 1. GET PARAMETERS FROM PYTHON
     PyObject *o;
     /*    1-1 those are the general parameters */
@@ -58,16 +58,16 @@ int SpTask_ColDens(void)
         glb.v.delt = Sp_PYDBL(Sp_PYLST(o, 1));
         SpPy_XDECREF(o);
     }
-    
+
     /* out (mandatory) */
     if(!sts){
         sts = SpPy_GetInput_mirxy_new("out", glb.x.n, glb.y.n, glb.v.n, &glb.imgf);
     }
-    
+
     /* dist */
     if(!sts) sts = SpPy_GetInput_dbl("dist", &glb.tel_parms.dist);
     glb.tel_parms.dist /= Sp_LENFAC;
-    
+
     /* rotate */
     if(!sts && !(sts = SpPy_GetInput_PyObj("rotate", &o))) {
         glb.tel_parms.rotate[0] = Sp_PYDBL(Sp_PYLST(o, 0));
@@ -93,45 +93,45 @@ int SpTask_ColDens(void)
         }
         SpPy_XDECREF(o);
     }
-    
-    
+
+
     /*    1-2 get the task-based parameters */
     /* obs */
     if(!sts && !(sts = SpPy_GetInput_PyObj("obs", &o))) {
-        
+
         /* task */
         PyObject *o_task;
         o_task = PyObject_GetAttrString(o, "task");
         glb.task = Dat_IList_NameLookup(TASKS, Sp_PYSTR(o_task));
-        SpPy_XDECREF(o_task);	
-        
-        switch (glb.task->idx){            
+        SpPy_XDECREF(o_task);
+
+        switch (glb.task->idx){
             case TASK_COLDENS:
                 if(!sts) sts = SpPy_GetInput_bool("tracer", &glb.tracer);
                 break;
-            default: 
+            default:
                 /* Shouldn't reach here */
                 Deb_ASSERT(0);
         }
     }
-    
+
     /* unit */
     if(!sts && !(sts = SpPy_GetInput_PyObj("unit", &o))) {
         glb.unit = Dat_IList_NameLookup(UNITS, Sp_PYSTR(o));
         Deb_ASSERT(glb.unit != NULL);
         SpPy_XDECREF(o);
-        
+
     }
-    
+
     /*    1-3 read the source model */
     /* source */
     if(!sts) {
-        int task_id = glb.task->idx; 
+        int task_id = glb.task->idx;
         int popsold = 0;
         sts = SpPy_GetInput_model("source","source", &glb.model, &popsold, task_id);
     }
-    
-    
+
+
     /* 2. Initialize model */
     if(!sts) sts = InitModel();
 
@@ -158,7 +158,7 @@ int SpTask_ColDens(void)
                 break;
         }
         stokes = 0;
-        
+
         char filename[32];
         sprintf(filename,"%s.vtk",glb.imgf->name);
         {
@@ -174,10 +174,10 @@ int SpTask_ColDens(void)
             fprintf(fp,"SCALARS CD float 1\n");
             fprintf(fp,"LOOKUP_TABLE default\n");
             size_t iv=0;
-            for(size_t iy = 0; iy < glb.y.n; iy++) 
+            for(size_t iy = 0; iy < glb.y.n; iy++)
                 for(size_t ix = 0; ix < glb.x.n; ix++)
                     fprintf(fp,"%11.4e\n",MirImg_PIXEL(*glb.image, iv, ix, iy));
-                
+
             fclose(fp);
         }
         #if Sp_MIRSUPPORT
@@ -185,13 +185,13 @@ int SpTask_ColDens(void)
         Sp_PRINT("Wrote Miriad image to `%s'\n", glb.imgf->name);
         #endif
 
-   
+
 
         FITSoutput( glb.imgf, glb.image, NULL, NULL, glb.unit->name, scale_factor, stokes);
         Sp_PRINT("Wrote FITS image to `%s'\n", glb.imgf->name);
-        
+
     }
-    
+
     /* 5. Cleanup */
     #if Sp_MIRSUPPORT
     /* Miriad images must always be closed! */
@@ -203,9 +203,9 @@ int SpTask_ColDens(void)
 
     if(glb.tel_parms.subres)
         free(glb.tel_parms.subres);
-    
+
     SpModel_Cleanup(glb.model);
-    
+
     return sts;
 }
 
@@ -214,20 +214,20 @@ int SpTask_ColDens(void)
 static int InitModel(void)
 {
     Zone *root = glb.model.grid, *zp;
-    
+
     for(zp = Zone_GetMinLeaf(root); zp; zp = Zone_AscendTree(zp)) {
         SpPhys *pp;
         /* Pointer to physical parameters */
         pp = zp->data;
-        
+
         if((pp->n_H2 > 1e-200) && !zp->children) {
             /* This is a non-empty leaf zone */
             pp->non_empty_leaf = 1;
-            
+
             if(pp->X_mol > 0) {
                 /* This zone contains tracer molecules */
                 pp->has_tracer = 1;
-                
+
             }
             else{
                 pp->has_tracer = 0;
@@ -287,8 +287,8 @@ static void *CalcImageThreadColdens(void *tid_p)
 
     /* Cleanup */
     free(CD_sub);
-    free(CD);	
-    
+    free(CD);
+
     return NULL;
 }
 
@@ -300,39 +300,39 @@ static void ColumnDensityTracer(double dx, double dy, double *CD)
     double t;
     size_t side;
     Zone *root = glb.model.grid;
-    
+
     SpImgTrac_InitRay(root, &dx, &dy, &ray, &glb.tel_parms);
-    
+
     //      GeVec3_d z;
     // 	z.x[0]=-GeRay_D(ray, 0);
     // 	z.x[1]=-GeRay_D(ray, 1);
     // 	z.x[2]=-GeRay_D(ray, 2);
-    
+
     Mem_BZERO(CD);
-    
+
     /* Shoot ray at model and see what happens! */
     if ( GeRay_IntersectVoxel(&ray, &root->voxel, &t, &side) ) {
-        
+
         /* Calculate intersection */
         ray = GeRay_Inc(&ray, t);
-        
+
         /* Locate starting leaf zone according to intersection */
         Zone *zp = Zone_GetLeaf(root, side, &ray.e, &ray);
-        
+
         /* Keep going until there's no next zone to traverse to */
         while(zp) {
             /* Calculate path to next boundary */
             GeRay_TraverseVoxel(&ray, &zp->voxel, &t, &side);
-            
+
             /* Pointer to physical parameters associated with this zone */
             SpPhys *pp = zp->data;
-            
+
             /* Do radiative transfer only if gas is present in this zone */
             if(pp->non_empty_leaf) {
-                /* Do calculations on all channels at this pixel. Try to minimize the 
-                 * amount of operations in this loop, since everything here is repeated 
+                /* Do calculations on all channels at this pixel. Try to minimize the
+                 * amount of operations in this loop, since everything here is repeated
                  * for ALL channels, and can significantly increase computation time.
-                 */ 
+                 */
                 // 				GeVec3_d B = SpPhys_GetBfac(&ray, t, zp, 0);
                 // 				double zproduct = GeVec3_DotProd(&z,&B);
                 //				GeVec3_d V = SpPhys_GetVfac2(&ray, t, zp, 0);
@@ -345,7 +345,7 @@ static void ColumnDensityTracer(double dx, double dy, double *CD)
             }
             /* Calculate next position */
             ray = GeRay_Inc(&ray, t);
-            
+
             /* Get next zone to traverse to */
             zp = Zone_GetNext(zp, &side, &ray);
         }

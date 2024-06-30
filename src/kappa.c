@@ -22,7 +22,7 @@ Kappa *Kap_New_Powerlaw(double freq_0, double kappa_0, double index)
 
 	Kappa *kap = Mem_CALLOC(1, kap);
 
-	
+
 	Deb_ASSERT(freq_0 > 0);
 
 	kap->type = Kap_POWERLAW;
@@ -108,7 +108,7 @@ void Kap_Free(void *ptr)
 /*----------------------------------------------------------------------------*/
 
 double Kap_FromFreq(const Kappa *kap, double freq)
-{       
+{
 	switch(kap->type) {
 		case Kap_POWERLAW:
 			return Kap_FromFreq_plaw(kap, freq);
@@ -141,11 +141,11 @@ static double Kap_FromFreq_table(const Kappa *kap, double freq)
 	Deb_ASSERT(freq > 0);
 
 	double loglam = log10(Kap_LIGHTC_MKS / freq), logkap;
-        
+
         static int over_max = 0;
         static int under_min = 0;
 
-        
+
         int m = kap->nrows;
         double min_loglam = kap->loglam[0];
         double max_loglam = kap->loglam[m-1];

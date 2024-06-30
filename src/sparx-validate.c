@@ -100,7 +100,7 @@ static int SpVali_WaterSphere1D(void)
 			pp->T_k = 40.0; /* K */
 			GeVec3_X(pp->v_cen, 0) = vgrad * 1000.0 * radii[i]; /* km/s -> m/s */
 		}
-	
+
 		/* Write model to file */
 		status = SpIO_FwriteModel(out_fp, model);
 	}
@@ -208,7 +208,7 @@ static void *SpVali_RayPath_Thread(void *tid_p)
 
 		if((izone % Sp_MPISIZE) != Sp_MPIRANK)
 			continue;
-			
+
 		if(((izone / Sp_MPISIZE) % Sp_NTHREAD) != tid)
 			continue;
 

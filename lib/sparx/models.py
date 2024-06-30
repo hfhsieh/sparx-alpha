@@ -221,7 +221,7 @@ class TwoLayer:
 			print "Tex=", Tex
 			print "T0/Tex=", self.T0 / Tex
 			raise
-		
+
 
 	def get_tauf(self, velo):
 		return self.tau0 * exp(-((velo - self.vlsr - self.vin) / (2.0 * self.sigma))**2.0)

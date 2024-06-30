@@ -15,11 +15,11 @@ int SpPy_GetInput_PyObj(const char *name, PyObject **obj)
 {
 	int sts = 0;
 	PyObject *inputs = NULL, *INP_DICT = NULL, *keyobj = NULL;
-	
+
 	/* Import sparx.inputs (new ref) */
         char static_library[] = ".inputs";
-        
-        char *static_library_path = 
+
+        char *static_library_path =
           malloc(1+ strlen(Sp_SPARX_VERSION) + strlen(static_library) );
         //char static_library_path[16];
         strcpy(static_library_path, Sp_SPARX_VERSION);
@@ -162,10 +162,10 @@ int SpPy_GetInput_model(const char *Source,const char *Pops, SpModel *model, int
 
 	status = SpPy_GetInput_PyObj(Source, &SourceObj);
 	status = SpPy_GetInput_PyObj(Pops,   &PopsObj  );
-        
+
         const char * sourcefname = Sp_PYSTR(SourceObj);
         const char * popsfname   = Sp_PYSTR(PopsObj);
-        
+
         if ( task_id == TASK_AMC ){
                 if ( popsfname == 0)
                         *read_pops = 0;
@@ -252,7 +252,7 @@ int SpPy_GetInput_mirxy_new(const char *name, size_t nx, size_t ny, size_t nv, M
 void SpPy_CallVoidFunc(const char *func)
 {
 	PyObject *o;
-	
+
 	o = SpPy_GETMAIN(func);
 	Deb_ASSERT(o != NULL);
 
@@ -327,7 +327,7 @@ PyObject *SpPy_GetMain(const char *symb, const char *file, int line, const char 
 	int status = 0;
 	static PyObject *__main__ = 0;
 	PyObject *op = 0;
-	
+
 	/* Get borrowed reference to __main__ */
 	if(!__main__)
 		__main__ = PYMAIN;

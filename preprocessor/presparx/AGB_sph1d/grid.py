@@ -12,4 +12,4 @@ from model import R_star
 Rin = R_star
 
 # outer radius (pc)
-Rout = 0.1 
+Rout = 0.1

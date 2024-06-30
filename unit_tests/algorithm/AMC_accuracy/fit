@@ -34,7 +34,7 @@ plot QuasiRay title 'Quasi Random', \
      PseudoRay title 'Pseudo Random', \
      f(x) notitle, \
      g(x) notitle
-     
+
 # 2nd plot
 set terminal wxt 2 enhanced font 'Verdana,10' persist
 
@@ -69,7 +69,7 @@ plot PseudoRay title 'Pseudo Random', \
      QuasiRay title 'Quasi Random', \
      f(x) notitle, \
      g(x) notitle
-     
+
 
 # 3rd plot
 set terminal wxt 3 enhanced font 'Verdana,10' persist
@@ -99,8 +99,8 @@ plot PseudoError using 1:2:3 with errorbars title 'Pseudo Random', \
      c/x with lines notitle, \
      a/x with lines notitle
 unset object
-     
-     
+
+
 # 4th plot
 set terminal wxt 4 enhanced font 'Verdana,10' persist
 PseudoError="<awk '{print $1,$2,$3}' Cosine_error.dat"
@@ -111,7 +111,7 @@ c=0.1
 d=1e-2
 fit log(g(x)) QuasiError using 1:(log($2)) via c
 
-f(x)=sqrt( (a/x)**2 + (a/ref_snr)**2 ) 
+f(x)=sqrt( (a/x)**2 + (a/ref_snr)**2 )
 a=0.1
 b=1e-2
 fit log(f(x)) PseudoError using 1:(log($2)) via a

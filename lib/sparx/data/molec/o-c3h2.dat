@@ -1,5 +1,5 @@
 !MOLECULE
- o-C3H2  energies from JPL, A re-scaled to mu=3.27                      
+ o-C3H2  energies from JPL, A re-scaled to mu=3.27
 !MOLECULAR WEIGHT
   38.
 ! NUMBER OF ENERGY LEVELS
@@ -1307,11 +1307,11 @@
 ! E-levels from JPL database, and A-coeff re-scaled to mu=3.27 D
 ! Freq's are of spectroscopic accuracy
 ! COMMENTS:
-! c038002.cat                                                             
+! c038002.cat
 ! Q(300)=  13229.4775
 ! NOTE: new number of lines =  156
 ! Degrees of freedom in partition fn.=  3
 ! MOLTAG =   38007
 ! Quantum number code: 1404
-! NOTE: A-values from database have been scaled by 9.089E-01 to 
+! NOTE: A-values from database have been scaled by 9.089E-01 to
 ! account for revised dipole moment-squared

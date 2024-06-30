@@ -34,9 +34,9 @@ FILENAME=$MODEL$RandomMode
 
 for j in `seq $Nrun`
 do
-  
+
   output=$FILENAME'_'$j
-  
+
   DAT=$FILENAME'RAYS_'$j'.dat'
   rm -f $DAT
 
@@ -45,14 +45,14 @@ do
     SNR=${REQUEST_SNR[$i]}
     case=$output'_snr_'$SNR
     # take previous snr run as initial condition
-    if [ $i != 0 ]; then 
-      POPS='pops='$output'_snr_'${REQUEST_SNR[$((i-1))]} 
+    if [ $i != 0 ]; then
+      POPS='pops='$output'_snr_'${REQUEST_SNR[$((i-1))]}
     else
       POPS=''
     fi
     # run AMC
     rm -f $case
-    
+
     sparx run task_amc \
     source=model \
     $POPS \
@@ -64,9 +64,9 @@ do
     fixiter=1 \
     $QMC \
     | tee $case.log
-    
+
     # grep numer of rays using in this case
     RAYS=`grep 'rays' $case.log | grep -v 'Iterating for convergence' | tail -n 1 | sed -e 's/rays//g' -e 's/.*->//g'`
-    echo $SNR $RAYS | tee -a $ $DAT 
+    echo $SNR $RAYS | tee -a $ $DAT
   done
 done

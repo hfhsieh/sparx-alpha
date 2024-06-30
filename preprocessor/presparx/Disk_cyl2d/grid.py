@@ -12,7 +12,7 @@ nrc = 64
 Rc_in = 0.0
 
 # outer radius (pc)
-Rc_out = 0.1 
+Rc_out = 0.1
 
 # stretching ratio from inner radius to outer radius
 stretch_ratio_rc = 1.02

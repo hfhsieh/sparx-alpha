@@ -99,7 +99,7 @@ static void *ExecThread(void *tid_p)
 {
 	int i;
 	size_t tid;
-	
+
 	tid = *((size_t *)tid_p);
 
 	for(i = 0; i < 5; i++) {

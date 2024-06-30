@@ -1752,13 +1752,13 @@
 !
 ! NOTES & REFS.  The energy levels and transition frequencies are now
 ! of spectroscopic accuracy.  Frequencies have been computed through
-! use of the spectroscopic constants (Fit 2) of Cazzoli, Puzzarini, 
+! use of the spectroscopic constants (Fit 2) of Cazzoli, Puzzarini,
 ! and Lapinov (2004, ApJ, 611, 615), which improve upon those
 ! presented by Klapper et al. (2000, JMS, 201, 124). Cazzoli et al.
 ! apparently did not note that Klapper et al. (2003, ApJ, 582, 262)
-! published a re-fit of their earlier data.  Both studies have 
+! published a re-fit of their earlier data.  Both studies have
 ! resolved the 13C hfs in the low-lying transitions, but the hfs is
-! neglected here. The spontaneous 
+! neglected here. The spontaneous
 ! transition probabilities have been recomputed with the use of the
 ! J-dependent expansion of the dipole moment function presented by
 ! Goorvitch (1994, ApJS, 95, 535). This describes the

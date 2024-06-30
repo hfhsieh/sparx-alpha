@@ -269,7 +269,7 @@ class Type:
 		'kg': 1.0,
 		'Msun': U.Msun,
 	}
-	
+
 
 
 	# Number density units in m^-3
@@ -369,7 +369,7 @@ class Type:
 				return arg
 			else:
 				raise Exception, "'%s' is not a valid option. Try: "+self.optlist
-		
+
 		def __repr__(self):
 			return self.optlist
 

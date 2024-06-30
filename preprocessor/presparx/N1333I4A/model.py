@@ -1,4 +1,4 @@
-# Model Type : Function / Constant / TABLE / ZEUS 
+# Model Type : Function / Constant / TABLE / ZEUS
 ModelType = 'Function'
 
 # Molecule

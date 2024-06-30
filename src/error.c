@@ -54,7 +54,7 @@ int Err_SetString(const char *file, int line, const char *func, const char *form
 	err = Err_Alloc(file, line, func, string);
 
 	/* Push onto error stack */
-	Err_stack = Dat_Llst_Push(Err_stack, err, Err_Free); 
+	Err_stack = Dat_Llst_Push(Err_stack, err, Err_Free);
 
 	/* Return a positive integer, which can be used by the caller
 	 * to indicate an error condition */

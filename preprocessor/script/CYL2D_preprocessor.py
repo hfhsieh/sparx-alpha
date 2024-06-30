@@ -5,7 +5,7 @@
 ###############################################################################
 
 
-from tables import * 
+from tables import *
 from numpy import *
 from math import *
 from scipy import optimize
@@ -81,7 +81,7 @@ def CubicEq(xx):
 	return xx*xx*xx+pp*xx+qq
 
 
-    
+
 # Define a user record to characterize some kind of particles
 class Particle(IsDescription):
         LEVEL=Int32Col(pos=0)
@@ -126,7 +126,7 @@ def writezone(direc,lev,position,xmax,xmin,naxes):
 	#Insert a new particle record
 	particle.append()
 	table.flush()
-	del table.attrs.FIELD_0_FILL 
+	del table.attrs.FIELD_0_FILL
 	del table.attrs.FIELD_1_FILL
 	del table.attrs.FIELD_2_FILL
 	del table.attrs.FIELD_3_FILL
@@ -153,9 +153,9 @@ def writezone(direc,lev,position,xmax,xmin,naxes):
 	del table.attrs.FIELD_24_FILL
 	del table.attrs.FIELD_25_FILL
 	del table.attrs.NROWS
-	
+
 def writegrid(direc,lev,naxes,Raxis,Paxis,Zaxis,nc):
-	global pp,qq	
+	global pp,qq
 	# Create GRID table
 	table = h5file.createTable(direc, 'GRID', Particle, "Grid table")
 	particle = table.row
@@ -167,7 +167,7 @@ def writegrid(direc,lev,naxes,Raxis,Paxis,Zaxis,nc):
 	mass_env=0.
 	mass_disc=0.
 	total_volume = 0.
-	
+
 	for i in range(naxes[0]):
 	        for j in range(naxes[1]):
 	                for k in range(naxes[2]):
@@ -179,38 +179,38 @@ def writegrid(direc,lev,naxes,Raxis,Paxis,Zaxis,nc):
 				particle['X_min'] =[ Raxis[i]  ,Paxis[j]  ,Zaxis[k]   ]
 				particle['X_cen'] = [ 0.5*(Raxis[i]+Raxis[i+1]),
                                                       0.5*(Paxis[j]+Paxis[j+1]),
-                                                      0.5*(Zaxis[k]+Zaxis[k+1]) ]	
+                                                      0.5*(Zaxis[k]+Zaxis[k+1]) ]
 				# write out the non-empty-leaf zone
 				Rc = particle['X_cen'][0]
 				phi = particle['X_cen'][1]
 				Z = particle['X_cen'][2]
 				R = sqrt( Rc * Rc + Z * Z)
 				theta = acos( Z / R )
-				
+
 				pp = R/Rd-1.
 				qq = -cos(theta)*R/Rd
-				
+
 				cos_theta0 = optimize.brentq(CubicEq, -1.,1.)
 				if (cos_theta0 > 1. or cos_theta0 < -1.):
 					print cos_theta0,pp,qq
-				
+
 				volume = 0.5 * ( Raxis[i+1]**2 - Raxis[i]**2 ) * ( Paxis[j+1] - Paxis[j] ) * ( Zaxis[k+1] - Zaxis[k] )
 				total_volume = total_volume + volume
-				
+
 				if(env==1):
-					density_env = rho_e0 * ((R/Rd)**(-1.5)) * ((1+cos(theta)/cos_theta0)**(-0.5)) * (1 + ((R/Rd)**(-1)) * (3*cos_theta0**2-1.0) )**(-1) 
+					density_env = rho_e0 * ((R/Rd)**(-1.5)) * ((1+cos(theta)/cos_theta0)**(-0.5)) * (1 + ((R/Rd)**(-1)) * (3*cos_theta0**2-1.0) )**(-1)
 					mass_env += density_env*volume
 				else:
 					density_env = 0.0
-				
+
 				if (R<=Rd and disk==1):
 					rho_0 = rho_d0*(Rd/Rc)**2.25
-					H=H0*(Rc/Rt)**1.25				
+					H=H0*(Rc/Rt)**1.25
 					density_disc = rho_0*exp(-(R*R-Rc*Rc)/(2.*H*H))
 					mass_disc += density_disc*volume
 				else:
 					density_disc =0.
-				
+
 				density[i,j,k] = density_env + density_disc
 				Vkep = sqrt(G*Mt/R)
 				Vp_disc = sqrt(G*Mt/Rc)
@@ -231,17 +231,17 @@ def writegrid(direc,lev,naxes,Raxis,Paxis,Zaxis,nc):
 					Vt = 0.0
 					Vp = 0.0
 					temperature[i,j,k] = 0.0
-				
+
 				if(writevtk):
 					Vx[i,j,k] = cos(phi)*sin(theta)*Vr + cos(phi)*cos(theta)*Vt -sin(phi)*Vp
 					Vy[i,j,k] = sin(phi)*sin(theta)*Vr + sin(phi)*cos(theta)*Vt +cos(phi)*Vp
 					Vz[i,j,k] = cos(theta)*Vr - sin(theta)*Vt
-				
-				
+
+
 				particle['n_H2'] = density[i,j,k]
 				particle['V_cen'] = [
-                                        km2m * ( Vr*sin(theta) + Vt*cos(theta) ), 
-                                        km2m * Vp, 
+                                        km2m * ( Vr*sin(theta) + Vt*cos(theta) ),
+                                        km2m * Vp,
                                         km2m * ( Vr*cos(theta) - Vt*sin(theta) )
                                               ]
 				particle['T_k'] = temperature[i,j,k]
@@ -263,7 +263,7 @@ def writegrid(direc,lev,naxes,Raxis,Paxis,Zaxis,nc):
 	print 'Total disc mass     =',mass_disc,'(solar mass)'
 	print 'Total mass          =',mass_env+mass_disc,'(solar mass)'
 	print 'Total volume          =',total_volume,'(pc^3)'
-	
+
 	if (writevtk):
         	fvtk1=open(vtkfilea, mode = "w")
         	print >>fvtk1,'# vtk DataFile Version 3.0'
@@ -279,7 +279,7 @@ def writegrid(direc,lev,naxes,Raxis,Paxis,Zaxis,nc):
 						print >>fvtk1,'%(0)e %(1)d %(2)e'%{'0':Rc_p[i],'1':0,'2':Z_p[k]}
 					elif(j==1):
 						print >>fvtk1,'%(0)e %(1)e %(2)e'%{'0':Rc_p[i],'1':1e-6,'2':Z_p[k]}
-							
+
 		print >>fvtk1,'CELL_DATA %(0)d'%{'0':naxes[0]*naxes[1]*naxes[2]}
 		print >>fvtk1,'SCALARS density float 1'
 		print >>fvtk1,'LOOKUP_TABLE default'
@@ -294,7 +294,7 @@ def writegrid(direc,lev,naxes,Raxis,Paxis,Zaxis,nc):
 				for i in range(naxes[0]):
 	        			print >>fvtk1,'%(0)e'%{'0':temperature[i,j,k]},
 		fvtk1.close()
-		
+
 		fvtk2=open(vtkfileb, mode = "w")
         	print >>fvtk2,'# vtk DataFile Version 3.0'
         	print >>fvtk2,'ENV_DISK'
@@ -311,11 +311,11 @@ def writegrid(direc,lev,naxes,Raxis,Paxis,Zaxis,nc):
 			for j in range(naxes[1]):
 				for i in range(naxes[0]):
 	        			print >>fvtk2,'%(0)e %(1)e %(2)e'%{'0':-Vx[i,j,k],'1':-Vy[i,j,k],'2':Vz[i,j,k]}
-        	fvtk2.close()  	
+        	fvtk2.close()
 
 
 	table.flush()
-	del table.attrs.FIELD_0_FILL 
+	del table.attrs.FIELD_0_FILL
 	del table.attrs.FIELD_1_FILL
 	del table.attrs.FIELD_2_FILL
 	del table.attrs.FIELD_3_FILL
@@ -394,7 +394,7 @@ h5file.delNodeAttr("/", "PYTABLES_FORMAT_VERSION", name=None)
 h5file.setNodeAttr("/", "molec", molec, name=None)
 h5file.setNodeAttr("/", "T_cmb", T_cmb, name=None)
 h5file.setNodeAttr("/", "gas_to_dust", gas_to_dust, name=None)
-h5file.setNodeAttr("/", "velfield", "grid ", name=None)	
+h5file.setNodeAttr("/", "velfield", "grid ", name=None)
 writezone(root,-1,0, [Rc_p[nr],phi_p[np],Z_p[nz]], [Rc_p[0],phi_p[0],Z_p[0]], [nr,np,nz])
 ncell=writegrid(root,-1, [nr,np,nz], Rc_p, phi_p, Z_p, 0)
 h5file.close()

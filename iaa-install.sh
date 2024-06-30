@@ -11,7 +11,7 @@ fi
 destination=$HOME/opt/sparx
 rm -rf build/* $destination
 python setup.py install \
---prefix=$destination 
+--prefix=$destination
 
 if ! grep -q "# SPARX PATH" ~/.bashrc; then
   echo "# SPARX PATH" >> ~/.bashrc

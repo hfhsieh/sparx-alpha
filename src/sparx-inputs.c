@@ -7,7 +7,7 @@ Kappa *SpInp_GetKey_kappa(const char *name)
 	PyObject *Inputs = 0, *o = 0, *o1;
 	Kappa *kap = NULL;
 	char *sp;
-	
+
 	/* Get class Inputs */
 	Inputs = SpPy_GetMain("Inputs", __FILE__, __LINE__, name);
 	Deb_ASSERT(Inputs != NULL);
@@ -33,7 +33,7 @@ Kappa *SpInp_GetKey_kappa(const char *name)
 		Py_DECREF(o);
 		Deb_ASSERT(kap != NULL);
 	}
-        
+
 	Py_DECREF(Inputs);
 
 	return kap;
@@ -45,7 +45,7 @@ const char *SpInp_GetKey_str(const char *name)
 {
 	PyObject *Inputs = 0, *o = 0;
 	static char buffer[BUFSIZ] = "";
-	
+
 	/* Get class Inputs */
 	Inputs = SpPy_GetMain("Inputs", __FILE__, __LINE__, name);
 	Deb_ASSERT(Inputs != NULL);
@@ -69,7 +69,7 @@ MirFile *SpInp_GetKey_miruv(const char *name, const char *mode)
 {
 	PyObject *Inputs = 0, *o = 0;
 	MirFile *fp = 0;
-	
+
 	/* Get class Inputs */
 	Inputs = SpPy_GetMain("Inputs", __FILE__, __LINE__, name);
 	Deb_ASSERT(Inputs != NULL);
@@ -92,7 +92,7 @@ MirFile *SpInp_GetKey_mirxy_new(const char *name, size_t nx, size_t ny, size_t n
 {
 	PyObject *Inputs = 0, *o = 0;
 	MirFile *fp = 0;
-	
+
 	/* Get class Inputs */
 	Inputs = SpPy_GetMain("Inputs", __FILE__, __LINE__, name);
 	Deb_ASSERT(Inputs != NULL);
@@ -117,7 +117,7 @@ MirFile *SpInp_GetKey_mirxy_old(const char *name, size_t *nx, size_t *ny, size_t
 {
 	PyObject *Inputs = 0, *o = 0;
 	MirFile *fp = 0;
-	
+
 	/* Get class Inputs */
 	Inputs = SpPy_GetMain("Inputs", __FILE__, __LINE__, name);
 	Deb_ASSERT(Inputs != NULL);
@@ -139,7 +139,7 @@ PyObject *SpInp_GetKey_obj(const char *name)
 /* Retrieve a keyword from user input */
 {
 	PyObject *Inputs = 0, *o = 0;
-	
+
 	/* Get class Inputs */
 	Inputs = SpPy_GetMain("Inputs", __FILE__, __LINE__, name);
 	Deb_ASSERT(Inputs != NULL);
@@ -162,7 +162,7 @@ Molec *SpInp_GetKey_molec(const char *name)
 {
 	PyObject *Inputs = 0, *o = 0;
 	Molec *mol = NULL;
-	
+
 	/* Get class Inputs */
 	Inputs = SpPy_GetMain("Inputs", __FILE__, __LINE__, name);
 	Deb_ASSERT(Inputs != NULL);
@@ -185,7 +185,7 @@ int SpInp_GetKey_model(const char *name, SpModel *model)
 {
 	int status = 0;
 	PyObject *Inputs = 0, *o = 0;
-	
+
 	/* Get class Inputs */
 	Inputs = SpPy_GetMain("Inputs", __FILE__, __LINE__, name);
 	Deb_ASSERT(Inputs != NULL);
@@ -208,7 +208,7 @@ SpFile *SpInp_GetKey_spfile(const char *name, int mode)
 {
 	PyObject *Inputs = 0, *o = 0;
 	SpFile *fp;
-	
+
 	/* Get class Inputs */
 	Inputs = SpPy_GetMain("Inputs", __FILE__, __LINE__, name);
 	Deb_ASSERT(Inputs != NULL);
@@ -231,7 +231,7 @@ size_t SpInp_GetKey_size_t(const char *name)
 {
 	size_t size;
 	PyObject *Inputs = 0, *o = 0;
-	
+
 	/* Get class Inputs */
 	Inputs = SpPy_GetMain("Inputs", __FILE__, __LINE__, name);
 	Deb_ASSERT(Inputs != NULL);
@@ -258,7 +258,7 @@ int SpInp_GetKey_TF(const char *name)
 {
 	int intgr = 0;
 	PyObject *Inputs = 0, *o = 0;
-	
+
 	/* Get class Inputs */
 	Inputs = SpPy_GetMain("Inputs", __FILE__, __LINE__, name);
 	Deb_ASSERT(Inputs != NULL);
@@ -284,7 +284,7 @@ int SpInp_GetKey_int(const char *name)
 {
 	int intgr;
 	PyObject *Inputs = 0, *o = 0;
-	
+
 	/* Get class Inputs */
 	Inputs = SpPy_GetMain("Inputs", __FILE__, __LINE__, name);
 	Deb_ASSERT(Inputs != NULL);
@@ -311,7 +311,7 @@ double SpInp_GetKey_dbl(const char *name)
 {
 	double dbl;
 	PyObject *Inputs = 0, *o = 0;
-	
+
 	/* Get class Inputs */
 	Inputs = SpPy_GetMain("Inputs", __FILE__, __LINE__, name);
 	Deb_ASSERT(Inputs != NULL);
@@ -342,7 +342,7 @@ PyObject *SpInp_GetKey(const char *key, const char *file, int line, const char *
 {
 	int status = 0;
 	PyObject *Inputs = 0, *op = 0;
-	
+
 	/* Get class Inputs */
 	Inputs = SpPy_GetMain("Inputs", file, line, func);
 

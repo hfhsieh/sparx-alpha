@@ -4,7 +4,7 @@ OH
 17.0
 !NUMBER OF ENERGY LEVELS
 24
-!LEVEL + ENERGIES(cm^-1) + WEIGHT + J, F,+/- , e-state 
+!LEVEL + ENERGIES(cm^-1) + WEIGHT + J, F,+/- , e-state
   1        0.000000          3.0    3/2 1-  2PI3/2
   2        0.001800          5.0    3/2 2-  2PI3/2
   3        0.055600          3.0    3/2 1+  2PI3/2

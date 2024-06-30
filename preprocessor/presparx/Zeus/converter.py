@@ -1,20 +1,20 @@
 ### data to input to SPARX: ###
 # GridType: the geometry-type of the data (sph3d/cyl3d/rec3d)
 # naxes : resolution of 3-D input, [n1,n2,n3]
-# x1    : bounding points of first  dimension, 
+# x1    : bounding points of first  dimension,
 #         to be (n1+1)-elements array, unit in [parsec]
-# x2    : bounding points of second dimension, 
+# x2    : bounding points of second dimension,
 #         to be (n2+1)-elements array, unit in [parsec]
-# x3    : bounding points of third  dimension, 
+# x3    : bounding points of third  dimension,
 #         to be (n3+1)-elements array, unit in [parsec]
-# n_H2  : number density of H2 molecule, 
-#         3-D numpy array in the size of "naxes", 
+# n_H2  : number density of H2 molecule,
+#         3-D numpy array in the size of "naxes",
 #         value in the unit [number of H2 per cubic meter]
 # T_k   : Kinetic temperature of gas,
-#         3-D numpy array in the size of "naxes", 
+#         3-D numpy array in the size of "naxes",
 #         value in the unit [Kelvin]
 # T_d   : dust temperature,
-#         3-D numpy array in the size of "naxes", 
+#         3-D numpy array in the size of "naxes",
 #         value in the unit [Kelvin]
 # v1    : gas velocity on the first  dimension, unit in [m/s]
 # v2    : gas velocity on the second dimension, unit in [m/s]
@@ -31,11 +31,11 @@
 # kapp_d: dust opacity profile
 # dust_to_gas : dust-to-gas ratio
 
-# MOLECULAR attributes: 
+# MOLECULAR attributes:
 # molec : molecular name
 # X_mol : molecular abundance
 
-# BOUNDARY attribute: 
+# BOUNDARY attribute:
 # T_cmb : CMB temperature
 TIARA_CLUSTER = ['oc','tc','px','xl']
 
@@ -80,7 +80,7 @@ def FetchZeusData(filename):
         return None
 
 
-# Load the griding 
+# Load the griding
 # the bounding points on the first dimension
 x1a = FetchZeusData('z_x1ap')
 # the cell     points on the first dimension
@@ -105,12 +105,12 @@ def ReverseIndex(data):
     len_naxes = len(naxes)
     new_naxes = ()
     for i in range(len_naxes):
-        new_naxes += (naxes[len_naxes-1-i],) 
+        new_naxes += (naxes[len_naxes-1-i],)
     new_data = np.zeros(new_naxes)
     for i in range(new_naxes[0]):
         for j in range(new_naxes[1]):
             for k in range(new_naxes[2]):
-                new_data[i,j,k] = data[k,j,i] 
+                new_data[i,j,k] = data[k,j,i]
     return new_data
 
 # Function to fetch Zeus Physical data
@@ -134,7 +134,7 @@ def CheckAndSetArray(attr):
     else:
         print("{0} has no {1} data".format(ZeusPar.__name__,attr) )
         return None
-    
+
 # Time stamp of the files
 time_stamp = str('%.5d' % ZeusPar.TimeStamp)
 
@@ -163,34 +163,34 @@ B1 = FetchZeusPhys('o_b1_'+time_stamp)
 B2 = FetchZeusPhys('o_b2_'+time_stamp)
 B3 = FetchZeusPhys('o_b3_'+time_stamp)
 
-# 
+#
 # Function definition for generating both sides of equatorial plane if necessary
 #
-def Sph_MirrorNTrimR( 
-    naxes, 
-    R_ap, R_bp, T_ap, T_bp, P_ap, P_bp, 
+def Sph_MirrorNTrimR(
+    naxes,
+    R_ap, R_bp, T_ap, T_bp, P_ap, P_bp,
     density, T,
-    Vr, Vth, Vp, Br, Bth, Bp,  
+    Vr, Vth, Vp, Br, Bth, Bp,
     Rmax=1e99 ):
 
     R_bounds = R_ap[Ngz:-Ngz+1]
     R_cells =  R_bp[Ngz:-Ngz]
-    
+
     # Determine whether the input data cover one or two quadrant(s)
     Theta_max = T_ap[-Ngz] / (np.pi/2.0)
     # Padding, mirroring, or leaving as is
-    
+
     if (np.abs(Theta_max - 1.0) <= 0.01):
-        print "[ZeusConverter] Only one quadrant exists. Generate the other quardrant. Mirror into two opposite quadrants."        
+        print "[ZeusConverter] Only one quadrant exists. Generate the other quardrant. Mirror into two opposite quadrants."
         naxes_new = [ naxes[0], naxes[1]*2, naxes[2] ]
         T_bounds = np.concatenate( (T_ap[Ngz:-Ngz+1], np.pi - T_ap[-Ngz-1:Ngz-1:-1] ) )
         T_cells =  np.concatenate( (T_bp[Ngz:-Ngz],   np.pi - T_bp[-Ngz-1:Ngz-1:-1] ) )
-        
-        
-                
+
+
+
         upper_hemisphere_index = slice(Ngz,-Ngz),slice(Ngz,-Ngz),   slice(0,naxes[2]) if naxes[2] == 1 else slice(Ngz,-Ngz)
         lower_hemisphere_index = slice(Ngz,-Ngz),slice(-Ngz,Ngz,-1),slice(0,naxes[2]) if naxes[2] == 1 else slice(Ngz,-Ngz)
-        
+
         def ConcatenateQuadrant(Var, ReversedDirection = False):
             if Var is None:
                 return None
@@ -199,22 +199,22 @@ def Sph_MirrorNTrimR(
                 return np.concatenate((Var[upper_hemisphere_index],-Var[lower_hemisphere_index]), axis=1)
             else:
                 return np.concatenate((Var[upper_hemisphere_index], Var[lower_hemisphere_index]), axis=1)
-            
-                
-        
+
+
+
         Density_cells = ConcatenateQuadrant(density)
         if np.size(T) > 1:
             Temperature_cells = ConcatenateQuadrant(T)
-        
+
         upper_hemisphere_index = slice(Ngz,-Ngz+1),slice(Ngz,-Ngz+1),    slice(0,naxes[2]) if naxes[2] == 1 else slice(Ngz,-Ngz+1)
         lower_hemisphere_index = slice(Ngz,-Ngz+1),slice(-Ngz-1,Ngz-1,-1),slice(0,naxes[2]) if naxes[2] == 1 else slice(Ngz,-Ngz+1)
-        
-        
-        
+
+
+
         Vr_bounds =     ConcatenateQuadrant(Vr)
         Vth_bounds =    ConcatenateQuadrant(Vth, ReversedDirection = True)
         Vp_bounds =     ConcatenateQuadrant(Vp)
-        
+
         Br_bounds =     ConcatenateQuadrant(Br)
         Bth_bounds =    ConcatenateQuadrant(Bth)
         Bp_bounds =     ConcatenateQuadrant(Bp)
@@ -224,30 +224,30 @@ def Sph_MirrorNTrimR(
         naxes_new = naxes
         T_bounds = T_ap[Ngz:-Ngz+1]
         T_cells =  T_bp[Ngz:-Ngz]
-        
+
         index = slice(Ngz,-Ngz), slice(Ngz,-Ngz), slice(0,naxes[2]) if naxes[2] == 1 else slice(Ngz,-Ngz)
-        
-        
-            
+
+
+
         Density_cells = density[index]
         if np.size(T) > 1:
-            Temperature_cells =   T[index] 
-        
+            Temperature_cells =   T[index]
+
         index = slice(Ngz,-Ngz+1),slice(Ngz,-Ngz+1),    slice(0,naxes[2]) if naxes[2] == 1 else slice(Ngz,-Ngz+1)
-        
+
         def TrimIndex(Var):
             if Var is None:
                 return None
             return Var[index]
-        
+
         Vr_bounds =     TrimIndex(Vr)
         Vth_bounds =    TrimIndex(Vth)
         Vp_bounds =     TrimIndex(Vp)
-        
+
         Br_bounds =     TrimIndex(Br)
         Bth_bounds =    TrimIndex(Bth)
         Bp_bounds =     TrimIndex(Bp)
-        
+
 
     # Made-up Azimuthal properties for axisymmetric data set
     if naxes_new[2] == 1:
@@ -256,7 +256,7 @@ def Sph_MirrorNTrimR(
     else:
         P_bounds = P_ap[Ngz:-Ngz+1]
         P_cells =  P_bp[Ngz:-Ngz]
-    
+
     R_map, T_map, P_map = np.meshgrid(R_cells,T_cells, P_cells, indexing='ij')
     mesh = (R_map, T_map, P_map)
 
@@ -265,7 +265,7 @@ def Sph_MirrorNTrimR(
     def MeshInterpolate(Var,direction=None):
         if Var is None:
             return None
-        
+
         if direction == 'r':
             fspline_r = \
                 scintp.RegularGridInterpolator(( R_bounds, T_cells, P_cells), Var, fill_value=0.0)
@@ -280,14 +280,14 @@ def Sph_MirrorNTrimR(
             return fspline_p(mesh)
         else:
             print("[ZeusConverter ERROR] Interpolated direction `%s` is not recognized.".format(direction))
-    
+
 
 
     if naxes[2] == 1:
         Vr_cells =  MeshInterpolate( Vr_bounds[:,:-1,:],'r' )
         Vth_cells = MeshInterpolate(Vth_bounds[:-1,:,:],'th')
         Vph_cells = np.zeros(naxes_new)
-        
+
         Br_cells =  MeshInterpolate( Br_bounds[:,  :-1,:],'r' ) if Br  is not None else None
         Bth_cells = MeshInterpolate(Bth_bounds[:-1,:,  :],'th') if Bth is not None else None
         Bph_cells = Bp_bounds[:-1,:-1,:]
@@ -305,7 +305,7 @@ def Sph_MirrorNTrimR(
     naxes_new[0] = rind_max + 1
     R_bounds = R_bounds[:naxes_new[0]+1]
     R_cells =   R_cells[:naxes_new[0]]
-    
+
     def TrimR(Var):
         if Var is None:
             return np.zeros(naxes_new)
@@ -316,23 +316,23 @@ def Sph_MirrorNTrimR(
         Temperature_cells = TrimR(Temperature_cells)
     else:
         Temperature_cells = T * np.ones(naxes_new)
-        
+
     Vr_cells =  TrimR( Vr_cells)
     Vth_cells = TrimR(Vth_cells)
     Vph_cells = TrimR(Vph_cells)
-    
+
     Br_cells =  TrimR( Br_cells)
     Bth_cells = TrimR(Bth_cells)
     Bph_cells = TrimR(Bph_cells)
-        
 
-    
+
+
     import astropy.constants as const
     mH = const.u.to('g').value
     pc = const.pc.to('cm').value
-    # Return properties 
-    return (naxes_new, 
-            R_bounds/pc, T_bounds, P_bounds, 
+    # Return properties
+    return (naxes_new,
+            R_bounds/pc, T_bounds, P_bounds,
             Density_cells/(2.0*mH)*1e6, Temperature_cells,
             Vr_cells*1e-2, Vth_cells*1e-2, Vph_cells*1e-2,
             Br_cells, Bth_cells, Bph_cells)
@@ -352,16 +352,16 @@ if ZeusPar.GridType == 'SPH':
             library_version = '_'+cluster_name
     pre_unit = "sparx"+library_version+".pre_unit"
     AU2cm = importlib.import_module(pre_unit).AU2cm
-    Rmax = CheckAbdSetAtrr('Rmax_AU') 
+    Rmax = CheckAbdSetAtrr('Rmax_AU')
     if Rmax is not None:
         Rmax *= AU2cm
         print "[ZeusConverter] Include the inner R = %d AU into SPARX HDF5 table" % Rmax
-    
+
     naxes, x1, x2, x3, n_H2, T_k, v1, v2, v3, b1, b2, b3 = \
-        Sph_MirrorNTrimR( naxes, 
-                         x1a, x1b, x2a, x2b, x3a, x3b, 
-                         density, temperature, 
-                         V1, V2, V3, B1, B2, B3, 
+        Sph_MirrorNTrimR( naxes,
+                         x1a, x1b, x2a, x2b, x3a, x3b,
+                         density, temperature,
+                         V1, V2, V3, B1, B2, B3,
                          Rmax )
 
 

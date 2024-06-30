@@ -161,7 +161,7 @@ if __name__ == "__main__":
 	# Disable interspersed argument parsing so that commands and tasks
 	# can have options of their own
 	parser.disable_interspersed_args()
-	 
+
 	# Setup options
 	parser.add_option("-d", "--debug", dest="debug", action="store_true", help="Show traceback on exception")
 

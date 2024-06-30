@@ -67,7 +67,7 @@ void Zone_Fprintf(FILE *fp, const Zone *zone, void (*DataFprintf)(void *data, FI
 void Zone_Cpgplot(Zone *zone, GeCam *cam);
 
 size_t Zone_Fwrite(const Zone *zone, size_t (*DataFwrite)(void *data, FILE *fp), FILE *fp);
-Zone *Zone_Fread(void *(*DataAlloc)(const void *data_parms), const void *data_parms, 
+Zone *Zone_Fread(void *(*DataAlloc)(const void *data_parms), const void *data_parms,
 	size_t (*DataFread)(void *data, FILE *fp), FILE *fp);
 
 Zone *Zone_GetNext(Zone *zone, size_t *plane, const GeRay *ray);

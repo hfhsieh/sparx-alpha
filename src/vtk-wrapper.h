@@ -34,9 +34,9 @@ typedef struct{
                 size_t nx, ny, nz;
                 double *x, *y, *z;
         } *rec3d;
-        double 
-                **contrib, 
-                **tau, 
+        double
+                **contrib,
+                **tau,
                 **tau_dev,
                 *contrib_dust,
                 *tau_dust,

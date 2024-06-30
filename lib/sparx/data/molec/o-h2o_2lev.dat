@@ -14,12 +14,12 @@
 ! NUMBER OF COLLISION PARTNERS
 1
 ! COLLISION PARTNER
-1 ortho and para H2 in 3:1 ratio (Phillips et al 1996)     
+1 ortho and para H2 in 3:1 ratio (Phillips et al 1996)
 ! NUMBER OF COLLISIONAL TRANSITIONS
-1 
+1
 ! NUMBER OF COLLISION TEMPERATURES
 1
 ! COLLISION TEMPERATURES
  40.0
 ! TRANS + UP + LOW + RATE COEFFS(cm^3 s^-1)
-    1    2   1   2.18e-10 
+    1    2   1   2.18e-10

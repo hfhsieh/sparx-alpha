@@ -11,7 +11,7 @@
 # This program does the necessary work to reproduce all the results
 # written in Dr. David Neufeld's document for benchmarking non-LTE
 # line radiative transfer codes.
-# 
+#
 # CAVEAT: Be ware that the line width used in Neufeld's documents
 # is 1 km/s FWHM, and if a direct comparison is to be made, some
 # adjustments must be applied first.
@@ -77,11 +77,11 @@ class Static(Cloud):
 	are solved:
 	  a) the optcially thick LTE limit
 	  b) the optically thin case
-	
+
 	Formulating detailed balance in terms of photon escape probability,
 	we may arrive at the following solution for the ratio of the upper
 	and lower level populations
-	
+
 	n_u / n_l = u / (1 + s * beta)
 	where u = (g_u / g_l) * exp(-(E_u - E_l) / (k * T_k))
 	      s = n_cr / n_H2
@@ -649,7 +649,7 @@ if __name__ == "__main__":
 	# Init option parser
 	from optparse import OptionParser
 	parser = OptionParser()
-	 
+
 	# Setup options
 	parser.add_option("--ndiv", metavar="POSINT", dest="ndiv", nargs=1, default="8", help="Number of zones along radial direction")
 	parser.add_option("--xmol", metavar="XLIST", dest="xmol", nargs=1, default="1e-10,1e-9,1e-8,1e-7,1e-6", help="List of abundances to calcualte")
@@ -672,7 +672,7 @@ if __name__ == "__main__":
 	parser.add_option("--orig", dest="orig", action="store_true", default=False, help="Use original problem description")
 	parser.add_option("--1d-only", dest="only1d", action="store_true", default=False, help="Do 1D problem only")
 	parser.add_option("--np", metavar="NPROC", dest="nproc", nargs=1, default="1", help="Number of parallel processes")
-	 
+
 	# The actual parsing
 	(opts, args) = parser.parse_args()
 

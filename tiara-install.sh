@@ -79,7 +79,7 @@ printf "${RED}CREATE bin/pre${SPARXVERSION}${NC}\n"
 
 
 
-# REPLACE sparx_module in FILE to 'sparx_CLUSTERNAME' 
+# REPLACE sparx_module in FILE to 'sparx_CLUSTERNAME'
 SPARX_PYTHONPATH=$destination/lib/python2.7/site-packages
 for FILE in `ls lib/sparx | grep .py`;do
   sed -e "s/import sparx/import $SPARX_VERSION/" \

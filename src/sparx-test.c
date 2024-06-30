@@ -40,11 +40,11 @@ SpTask
 	SpTask_t_mirimg = Sp_TASK("t_mirimg", "A demonstration of writing Miriad images to disk.", SpTest_MirImg, 0),
 	SpTask_t_raytracing = Sp_TASK("t_raytracing", "For debugging purposes", SpTest_RayTracing, 0),
 #endif
-	
-	
+
+
 	SpTask_t_nothing = Sp_TASK("t_nothing", "This is for generating valgrind suppressions.", SpTest_Nothing, 0),
 	SpTask_t_model = Sp_TASK("t_model", "Test model allocation and i/o.", SpTest_Model, 0),
-	SpTask_t_hdf5 = Sp_TASK("t_hdf5", "Test HDF5 access.", SpTest_HDF5, 0),	
+	SpTask_t_hdf5 = Sp_TASK("t_hdf5", "Test HDF5 access.", SpTest_HDF5, 0),
 	SpTask_t_phys = Sp_TASK("t_phys", "Test physics.", SpTest_Phys, 0),
 	SpTask_t_zone = Sp_TASK("t_zone", "Test zone manipulation.", SpTest_Zone, 0),
 	SpTask_t_pkeys = Sp_TASK("t_pkeys", "For debugging purposes", SpTest_Pkeys, 0),
@@ -229,7 +229,7 @@ int SpTest_Test(void)
 static int SpTest_Kappa(void)
 {
 	Kappa *kap;
-	
+
 	size_t i, n = 1000;
 	double c = PHYS_CONST_MKS_LIGHTC;
 	double nu_min, nu_max, nu_del, nu;
@@ -415,7 +415,7 @@ static int SpTest_HDF5(void)
 
 	/* Close file */
 	H5Fclose(file_id);
-	
+
 	/* Print grid */
 	SpZone_FPRINTF(stdout, root);
 
@@ -604,7 +604,7 @@ static int SpTest_VecInterp(void)
 		*mapy = Mem_CALLOC(NI * NJ, mapy),
 		tr[6] = {-0.5, 1, 0, -0.5, 0, 1};
 	GeVec3_d
-		a = GeVec3_INIT(5.0, 4.0, 0.0), 
+		a = GeVec3_INIT(5.0, 4.0, 0.0),
 		b = GeVec3_INIT(-4.0, -1.0, 0.0),
 		xa = GeVec3_INIT(0.0, 0.0, 0.0),
 		xb = GeVec3_INIT(LEN, LEN, LEN),
@@ -894,7 +894,7 @@ static int SpTest_RayTracing3(void)
 					Deb_PAUSE();
 				}
 
-				
+
 			}
 		}
 	}
@@ -1558,7 +1558,7 @@ int SpTest_XYReadWrite(void)
 	double width = 5.0, *chan;
 	char *bunit;
 	FILE *fp;
-	
+
 	Mem_BZERO(&x);
 	Mem_BZERO(&y);
 	Mem_BZERO(&v);

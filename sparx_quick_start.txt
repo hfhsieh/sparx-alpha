@@ -10,38 +10,38 @@
 #######################################################
 
 -- 1. DOWNLOAD THE SOURCE CODE
-      * # download the source code from 
+      * # download the source code from
         git clone https://github.com/itahsieh/sparx-alpha.git
 
 -- 2. LOADING THE LIBRARY AND DEPENDENT PACKAGES
       THEN INSTALL
-        # first of all, enter the directory 
+        # first of all, enter the directory
         # and checkout to the latest release
         cd sparx-alpha
         git checkout alpha-2.4.0
-        
+
     * If you are the user/developer on TIARA`s cluster
         # install sparx on TIARA's cluster (oc/tc/px/xl)
         ./tiara-install.sh
 
-    * If you are just the user for the applicational 
-      purpose on TIARA, try to load the SPARX module 
+    * If you are just the user for the applicational
+      purpose on TIARA, try to load the SPARX module
       directly. Then just modify the preprocessor script
-      to what you want. 
+      to what you want.
         # load sparx module
         module add sparx
-        
-    * If you are using ubuntu 14.04 / 16.04, 
+
+    * If you are using ubuntu 14.04 / 16.04,
         # install sparx
         ./ubuntu-install.sh
-        
-    * If you are a linux user 
+
+    * If you are a linux user
       and you are going to build the dependancy on your own
         # install the dependancies (at $HOME/opt)
         ./dep-install.sh
         # install sparx
         ./linux-install.sh
-  
+
 -- 3. TEST
         ./test.sh AMC
 
@@ -49,13 +49,13 @@
 #######################################################
 #                    THE TUTORIAL                     #
 #######################################################
-# 1. PREPROCESSOR 
+# 1. PREPROCESSOR
 # -- build a Shu's collapsing cloud
 # copy the model and grid template ( grid.py & model.py )
 cp $HOME/sparx-alpha/preprocessor/presparx/Shu1D/*.py ./
-# 'presparx' would generate SPARX HDF file ('model') 
+# 'presparx' would generate SPARX HDF file ('model')
 # and the plot (profile.png) of the profile
-# '-e' estimates the mass error o the FEM mesh 
+# '-e' estimates the mass error o the FEM mesh
 # corresponding to exact model
 presparx -o model -p -e
 
@@ -67,7 +67,7 @@ presparx -o model -p -e
 sparx run task_amc \
 source=model \
 out=pops \
-molec='hco+' 
+molec='hco+'
 
 # making the image
 sparx run task_lineobs \
@@ -84,7 +84,7 @@ npix="[128,128]"
 #          HOW TO CREATE YOUR OWN SIMULATION          #
 #######################################################
 
-# modify the template of the grid and model profile 
+# modify the template of the grid and model profile
 sparx-alpha/preprocessor/script
 
 # A spherical 2D/3D preprocessor template
@@ -98,42 +98,42 @@ pre-sparx/nested3D.py
 #               THINGS ABOUT NUMERICS                 #
 #######################################################
 
-- The most dominating numerical error in the scheme 
-  * AMC -- Monte Carlo ray sampling 
-        -- most computational demanding 
+- The most dominating numerical error in the scheme
+  * AMC -- Monte Carlo ray sampling
+        -- most computational demanding
            (0.5th order of accuracy in MC method)
-        -- The other numerical errors could be eliminated easier 
+        -- The other numerical errors could be eliminated easier
 
 - How to determine and request the AMC error?
-  * How large is the observational noise? 
+  * How large is the observational noise?
     -- set the numerical SNR over the instrumental SNR
-  * "snr" flag 
+  * "snr" flag
     -- typical value : 20
 
 - How are the other errors in the whole simulation?
-  * preprocessor : 
+  * preprocessor :
     -- Error of FEM (Finite Element method)
     -- How many number of cell should we adopt?
        Suggestion : test the convergency of the total mass
-                    make the error 1 order less than MC noise 
-  * AMC solver : 
-    -- MC noise : number of rays ('snr' flag) 
-    -- ALI stopping criteria : 
+                    make the error 1 order less than MC noise
+  * AMC solver :
+    -- MC noise : number of rays ('snr' flag)
+    -- ALI stopping criteria :
        iteration error
        ALI stops until the error of the iteration 1/10 less than MC noise
-    -- Detailed balance loop : 
-       inner iteration error 
+    -- Detailed balance loop :
+       inner iteration error
        ('minpop' flag, typically 1e-6)
-  
-  * Image mapping : 
+
+  * Image mapping :
     --  How many resolution should be used when ray sampling?
-        Suggestion : 
+        Suggestion :
         Twice finer than the ∆x in the grding of physical model
-        ('cell' flag to refine the pixel size)      
-        Could double the sampling to check 
+        ('cell' flag to refine the pixel size)
+        Could double the sampling to check
         if there's significant change of the emission
-        'subres' flag could be used for sub-level and 
+        'subres' flag could be used for sub-level and
         specific region sampling
- 
+
 
 

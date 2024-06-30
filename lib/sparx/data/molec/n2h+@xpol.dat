@@ -37,7 +37,7 @@ N2H+
    30     1349.7410   59.0    29
    31     1442.6634   61.0    30
 !NUMBER OF RADIATIVE TRANSITIONS
-30		    
+30
 !TRANS + UP + LOW + EINSTEINA(s^-1) + FREQ(GHz) + E_u(K)
     1     2     1  3.6280e-05	   93.1737000      4.47
     2     3     2  3.4817e-04	  186.3447710     13.41
@@ -70,7 +70,7 @@ N2H+
    29    30    29  1.2550e+00	 2693.4856910   1941.96
    30    31    30  1.3873e+00	 2785.7438118   2075.66
 !NUMBER OF COLL PARTNERS
-1		    
+1
 !COLLISIONS BETWEEN
 1 N2H+ - H2 adopting HCO+ - H2 from Flower (1999) + extrapolation
 !NUMBER OF COLL TRANS

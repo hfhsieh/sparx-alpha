@@ -1,4 +1,4 @@
-# Model Type : Function / Constant / TABLE / ZEUS 
+# Model Type : Function / Constant / TABLE / ZEUS
 ModelType = 'Function'
 
 # Molecule
@@ -32,16 +32,16 @@ class model:
                 self._Vt1D(r)
                 self._MolecAbd1D(r)
                 self._DustToGas1D(r)
-                
+
                 # Dust Temperature (Kelvin)
                 self.T_d = self.T_k
                 # dust kappa
                 self.kapp_d = 'table,jena_thin_e5'
-                
+
         # Gas Density (number/m^3)
         def _Density1D(self,r):
                 self.n_H2 = Density1D(r)
-        
+
         # Temperature (Kelvin)
         def _Tgas1D(self,r):
                 self.T_k = 10.
@@ -49,7 +49,7 @@ class model:
         # Velocity (m/s)
         def _Velo1D(self,r):
                 self.Vr = V_ref * ( r / r_ref )**-0.5
-                
+
         # turbulent speed (m/s)
         def _Vt1D(self,r):
                 self.Vt = 200.

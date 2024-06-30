@@ -178,7 +178,7 @@ GeVec3_d GeVec3_Normalize(const GeVec3_d *a)
         GeVec3_X(b, 2) = 0.0;
     }
     else{
-        for(size_t i = 0; i < 3; i++) 
+        for(size_t i = 0; i < 3; i++)
             GeVec3_X(b, i) = GeVec3_X(*a, i) / mag;
     }
     return b;
@@ -199,7 +199,7 @@ GeVec3_d GeVec3_Scale(const GeVec3_d *a, double fac)
 
 /*----------------------------------------------------------------------------*/
 
-GeVec3_d GeVec3_InterpLinear(const GeVec3_d *xa, const GeVec3_d *xb, const GeVec3_d *a, 
+GeVec3_d GeVec3_InterpLinear(const GeVec3_d *xa, const GeVec3_d *xb, const GeVec3_d *a,
 	const GeVec3_d *b, const GeVec3_d *pos)
 /* Interpolate linearly between <a> and <b>, i.e. infer value at pos on each
  * axis according to
@@ -255,7 +255,7 @@ GeVec3_d GeVec3_CrossProd(const GeVec3_d *a, const GeVec3_d *b)
 	GeVec3_X(prod,0) = a->x[1] * b->x[2] - a->x[2] * b->x[1];
 	GeVec3_X(prod,1) = a->x[2] * b->x[0] - a->x[0] * b->x[2];
 	GeVec3_X(prod,2) = a->x[0] * b->x[1] - a->x[1] * b->x[0];
-	
+
 	return prod;
 }
 
@@ -297,7 +297,7 @@ Rotation matrix about x:
 	GeMat3_X(matrix, 2, 0) = 0;
 	GeMat3_X(matrix, 2, 1) = sin(phi);
 	GeMat3_X(matrix, 2, 2) = cos(phi);
-	
+
 	return GeVec3_MatOp(vec, &matrix);
 }
 
@@ -325,7 +325,7 @@ Rotation matrix about y:
 	GeMat3_X(matrix, 2, 0) = -sin(phi);
 	GeMat3_X(matrix, 2, 1) = 0;
 	GeMat3_X(matrix, 2, 2) = cos(phi);
-	
+
 	return GeVec3_MatOp(vec, &matrix);
 }
 
@@ -353,7 +353,7 @@ Rotation matrix about z:
 	GeMat3_X(matrix, 2, 0) = 0;
 	GeMat3_X(matrix, 2, 1) = 0;
 	GeMat3_X(matrix, 2, 2) = 1;
-	
+
 	return GeVec3_MatOp(vec, &matrix);
 }
 
@@ -366,14 +366,14 @@ GeVec3_d GeVec3_Sph2Cart( GeVec3_d *SphPt)
         double theta    = SphPt->x[1];
         double phi      = SphPt->x[2];
         GeVec3_d Cartesian;
-        
+
         // x-ordinate
-        Cartesian.x[0] = R * sin(theta) * cos(phi); 
+        Cartesian.x[0] = R * sin(theta) * cos(phi);
         // y-ordiante
-        Cartesian.x[1] = R * sin(theta) * sin(phi); 
+        Cartesian.x[1] = R * sin(theta) * sin(phi);
         // z-ordinate
         Cartesian.x[2] = R * cos(theta);
-        
+
         return Cartesian;
 }
 
@@ -385,14 +385,14 @@ GeVec3_d GeVec3_Cyl2Cart( GeVec3_d *CylPt)
         double phi      = CylPt->x[1];
         double Z        = CylPt->x[2];
         GeVec3_d Cartesian;
-        
+
         // x-ordinate
-        Cartesian.x[0] = Rc * cos(phi); 
+        Cartesian.x[0] = Rc * cos(phi);
         // y-ordiante
-        Cartesian.x[1] = Rc * sin(phi); 
+        Cartesian.x[1] = Rc * sin(phi);
         // z-ordinate
         Cartesian.x[2] = Z;
-        
+
         return Cartesian;
 }
 
@@ -401,14 +401,14 @@ GeVec3_d GeVec3_Cyl2Cart( GeVec3_d *CylPt)
 GeVec3_d GeVec3_Rec2Cart( GeVec3_d *RecPt)
 {
         GeVec3_d Cartesian;
-        
+
         // x-ordinate
-        Cartesian.x[0] = RecPt->x[0]; 
+        Cartesian.x[0] = RecPt->x[0];
         // y-ordiante
-        Cartesian.x[1] = RecPt->x[1]; 
+        Cartesian.x[1] = RecPt->x[1];
         // z-ordinate
         Cartesian.x[2] = RecPt->x[2];
-        
+
         return Cartesian;
 }
 
@@ -435,7 +435,7 @@ GeVec3_d GeVec3_Geom2Cart( GEOM_TYPE geom, GeVec3_d *GeomPt)
 GeVec3_d GeSubSampPos(int i, int j, int k, double Devide_2nSamp1D, GeVox * vp)
 {
         GeVec3_d Pt;
-        
+
         switch (vp->geom){
                 case GEOM_SPH3D:
                 {
@@ -445,29 +445,29 @@ GeVec3_d GeSubSampPos(int i, int j, int k, double Devide_2nSamp1D, GeVox * vp)
                         double theta_out = vp->max.x[1];
                         double phi_in = vp->min.x[2];
                         double phi_out = vp->max.x[2];
-                        
+
                         // radius position
                         double RFrac = (double) ( 2 * i + 1 ) * Devide_2nSamp1D;
                         #define ONE_THIRD (0.3333333333333333)
-                        double R = ( R_in == 0. ) ? 
-                                R_out * pow(RFrac, ONE_THIRD) : 
+                        double R = ( R_in == 0. ) ?
+                                R_out * pow(RFrac, ONE_THIRD) :
                                 R_in * pow((1. + RFrac * (pow(R_out/R_in, 3.) - 1.)), ONE_THIRD);
                         #undef ONE_THIRD
-                                
+
                         // theta position
                         double ThetaFrac = (double) ( 2 * j + 1 ) * Devide_2nSamp1D;
                         double theta = ( theta_in == 0. ) ?
                                 acos( 1. + ThetaFrac * ( cos(theta_out) - 1. ) ) :
                                 acos( ( cos(theta_in) - 1. ) * ( 1. + ThetaFrac * ( ( cos(theta_out) - 1. ) / ( cos(theta_in) - 1. ) - 1. ) ) + 1. );
-                                
+
                         // phi position
                         double PhiFrac = (double) ( 2 * k + 1 ) * Devide_2nSamp1D;
                         double phi = phi_in + PhiFrac * ( phi_out - phi_in );
-                        
+
                         Pt.x[0] = R;
                         Pt.x[1] = theta;
                         Pt.x[2] = phi;
-                }                                               
+                }
                         break;
                 case GEOM_CYL3D:
                 {
@@ -477,19 +477,19 @@ GeVec3_d GeSubSampPos(int i, int j, int k, double Devide_2nSamp1D, GeVox * vp)
                         double phi_out = vp->max.x[1];
                         double Z_in = vp->min.x[2];
                         double Z_out = vp->max.x[2];
-                        
+
                         // radius position
                         double RcFrac = (double) ( 2 * i + 1 ) * Devide_2nSamp1D;
-                        double Rc = ( Rc_in == 0. ) ? 
-                                Rc_out * pow(RcFrac, 0.5) : 
+                        double Rc = ( Rc_in == 0. ) ?
+                                Rc_out * pow(RcFrac, 0.5) :
                                 Rc_in * pow((1. + RcFrac * (pow(Rc_out/Rc_in, 2.0) - 1.)), 0.5);
                         // phi position
                          double PhiFrac = (double) ( 2 * j + 1 ) * Devide_2nSamp1D;
-                         double phi = phi_in + PhiFrac * ( phi_out - phi_in ); 
+                         double phi = phi_in + PhiFrac * ( phi_out - phi_in );
                         // Z position
                         double ZFrac = (double) ( 2 * k + 1 ) * Devide_2nSamp1D;
                         double Z = Z_in + ZFrac * ( Z_out - Z_in );
-                        
+
                         Pt.x[0] = Rc;
                         Pt.x[1] = phi;
                         Pt.x[2] = Z;
@@ -503,19 +503,19 @@ GeVec3_d GeSubSampPos(int i, int j, int k, double Devide_2nSamp1D, GeVox * vp)
                         double y_min = vp->max.x[1];
                         double z_max = vp->min.x[2];
                         double z_min = vp->max.x[2];
-                        
+
                         // x position
                         double xFrac = (double) ( 2 * i + 1 ) * Devide_2nSamp1D;
                         double x = x_min + xFrac * ( x_max - x_min );
-                        
+
                         // x position
                         double yFrac = (double) ( 2 * j + 1 ) * Devide_2nSamp1D;
                         double y = y_min + yFrac * ( y_max - y_min );
-                        
+
                         // x position
                         double zFrac = (double) ( 2 * k + 1 ) * Devide_2nSamp1D;
                         double z = z_min + zFrac * ( z_max - z_min );
-                        
+
                         Pt.x[0] = x;
                         Pt.x[1] = y;
                         Pt.x[2] = z;
@@ -524,7 +524,7 @@ GeVec3_d GeSubSampPos(int i, int j, int k, double Devide_2nSamp1D, GeVox * vp)
                 default:
                         Deb_ASSERT(0);
         }
-        
+
         return Pt;
 }
 
@@ -552,20 +552,20 @@ GeVec3_d GeVec3_Cyl2Sph( const GeVec3_d *Cylindrical)
     double rc   = Cylindrical->x[0];
     double phi  = Cylindrical->x[1];
     double z    = Cylindrical->x[2];
-    
+
     double R = sqrt( rc * rc + z * z );
     // R must be maximum!
-    R = Num_MAX( R, Num_MAX( rc, z) ); 
-    
+    R = Num_MAX( R, Num_MAX( rc, z) );
+
     GeVec3_d Spherical;
-    
+
     // R-ordinate
     Spherical.x[0] = R;
     // theta-ordinate
     Spherical.x[1] = ( R == 0. ) ? 0. : acos( z / R );
     // phi-ordinate
     Spherical.x[2] = phi;
-    
+
     return Spherical;
 }
 /*----------------------------------------------------------------------------*/
@@ -575,13 +575,13 @@ GeVec3_d GeVec3_Cart2Sph( const GeVec3_d *Cartesian)
         double x = Cartesian->x[0];
         double y = Cartesian->x[1];
         double z = Cartesian->x[2];
-        
+
         double R = sqrt( x * x + y * y + z * z );
         // R must be maximum!
-        R = Num_MAX( R, Num_MAX( x, Num_MAX( y, z) ) ); 
-        
+        R = Num_MAX( R, Num_MAX( x, Num_MAX( y, z) ) );
+
         GeVec3_d Spherical;
-        
+
         // R-ordinate
         Spherical.x[0] = R;
         // theta-ordinate
@@ -591,10 +591,10 @@ GeVec3_d GeVec3_Cart2Sph( const GeVec3_d *Cartesian)
         // Rc must be maximum!
         Rc = Num_MAX( Rc, Num_MAX( x, y ) );
         Spherical.x[2] = ( Rc == 0. ) ?
-                0. : ( y >= 0.) ? 
-                        acos( x / Rc ) : 
+                0. : ( y >= 0.) ?
+                        acos( x / Rc ) :
                         2. * M_PI - acos( x / Rc );
-        
+
         return Spherical;
 }
 
@@ -605,23 +605,23 @@ GeVec3_d GeVec3_Cart2Cyl(const GeVec3_d *Cartesian)
         double x = Cartesian->x[0];
         double y = Cartesian->x[1];
         double z = Cartesian->x[2];
-        
+
         double Rc = sqrt( x * x + y * y);
         // Rc must be maximum!
         Rc = Num_MAX( Rc, Num_MAX( x, y ) );
 
         GeVec3_d Cylindrical;
-        
+
         // Rc-ordinate
         Cylindrical.x[0] = Rc;
         // phi-ordinate
         Cylindrical.x[1] = ( Rc == 0. ) ?
-                0. :( y >= 0.) ? 
-                        acos( x / Rc ) : 
+                0. :( y >= 0.) ?
+                        acos( x / Rc ) :
                         2.0 * M_PI - acos( x / Rc );
         // z-ordinate
         Cylindrical.x[2] = z;
-        
+
         return Cylindrical;
 }
 
@@ -743,7 +743,7 @@ where
 	#endif
 	if(Num_ISNAN(*t1))
 		*t1 = HUGE_VAL;
-	
+
 	if(Num_ISNAN(*t2))
 		*t2 = HUGE_VAL;
 
@@ -774,10 +774,10 @@ where
 {
 	double costheta = cos(theta);
 	double cos2theta = costheta * costheta;
-	double a = cos2theta - GeRay_D(*ray, 2) * GeRay_D(*ray, 2); 
+	double a = cos2theta - GeRay_D(*ray, 2) * GeRay_D(*ray, 2);
 	double b = cos2theta * 2.0 * GeVec3_DotProd(&ray->e,&ray->d) - 2.0 * GeRay_D(*ray, 2) * GeRay_E(*ray, 2);
 	double c = cos2theta * GeVec3_DotProd(&ray->e, &ray->e) - GeRay_E(*ray, 2) * GeRay_E(*ray, 2);
-	
+
 	if( cos2theta < 1e-24){
 		*t1 = -0.5*b/a;
 		*t2 = *t1;
@@ -796,12 +796,12 @@ where
 				*t2 = HUGE_VAL;
 		}
 	}
-	
+
 	#if 0
 	Deb_PRINT("solve: theta=%g, t1=%g, t2=%g\n", theta, *t1, *t2);
 	Deb_PAUSE();
 	#endif
-	
+
 	return;
 }
 
@@ -830,11 +830,11 @@ linear equaiton
 		*t=HUGE_VAL;
 	else
 		*t = a/b;
-	
+
 	/* check consistency of phi and <x>_y */
 	if( *t <= 0.0 )
 		*t = HUGE_VAL;
-	else{ 
+	else{
 		double RayPos_y = GeRay_E(*ray, 1) + GeRay_D(*ray, 1) * (*t);
 		if( phi <= M_PI ){
 			if ( RayPos_y < 0. )
@@ -861,7 +861,7 @@ and a cylinder with radius Rc in Cartesian coordinates (where <e> is OUTSIDE
 the sphere). The 3D equatin of a sphere is
 	<x>_x^2 + <x>_y^2 = Rc^2
 resulting in
-	<e>_x^2 + 2 * <d>_x * <e>_x * t + <d>_x^2 * t^2 
+	<e>_x^2 + 2 * <d>_x * <e>_x * t + <d>_x^2 * t^2
       + <e>_y^2 + 2 * <d>_y * <e>_y * t + <d>_y^2 * t^2 = Rc^2
 and the intersection between a line and a sphere can be found by solving the
 quadratic equaiton
@@ -872,7 +872,7 @@ where
 	c = <e>_x^2 + <e>_y^2 - R_c^2
 */
 {
-	double a = ray->d.x[0] * ray->d.x[0] + ray->d.x[1] * ray->d.x[1]; 
+	double a = ray->d.x[0] * ray->d.x[0] + ray->d.x[1] * ray->d.x[1];
 	double b = 2.0 * ray->d.x[0] * ray->e.x[0] + 2.0 * ray->d.x[1] * ray->e.x[1];
 	double c = ray->e.x[0] * ray->e.x[0] + ray->e.x[1] * ray->e.x[1] - Rc * Rc;
 
@@ -884,7 +884,7 @@ where
 	#endif
 	if(Num_ISNAN(*t1))
 		*t1 = HUGE_VAL;
-	
+
 	if(Num_ISNAN(*t2))
 		*t2 = HUGE_VAL;
 
@@ -956,7 +956,7 @@ int GeRay_IntersectVoxel(const GeRay *ray, const GeVox *voxel, double *tmin, siz
 		case GEOM_SPH1D:
 			hit = GeRay_IntersectVoxel_sph1d(ray, voxel, tmin, side);
 			break;
-			
+
 		case GEOM_SPH3D:
 			hit = GeRay_IntersectVoxel_sph3d(ray, voxel, tmin, side);
 			break;
@@ -964,7 +964,7 @@ int GeRay_IntersectVoxel(const GeRay *ray, const GeVox *voxel, double *tmin, siz
 		case GEOM_REC3D:
 			hit = GeRay_IntersectVoxel_rec3d(ray, voxel, tmin, side);
 			break;
-			
+
 		case GEOM_CYL3D:
 			hit = GeRay_IntersectVoxel_cyl3d(ray, voxel, tmin, side);
 			break;
@@ -995,7 +995,7 @@ If there is a hit, side would always be 1 for this routine.
         double t1, t2;
 
 	GeRay_IntersectSphere(ray, r, &t1, &t2);
-	
+
 	if(t1 < t2)
 		*tmin = t1;
 	else
@@ -1016,12 +1016,12 @@ int GeRay_IntersectVoxel_sph3d(const GeRay *ray, const GeVox *voxel, double *tmi
 	double t1, t2;
 
 	GeRay_IntersectSphere3d(ray, r, &t1, &t2);
-	
+
 	if( t1 < t2 )
 		*tmin = t1;
 	else
 		*tmin = t2;
-	
+
 
 	*side = 1;
 
@@ -1066,7 +1066,7 @@ int GeRay_IntersectVoxel_rec3d(const GeRay *ray, const GeVox *voxel, double *tmi
 			*side = i;
 		}
 	}
-	
+
 	return (*tmin < HUGE_VAL ? 1 : 0);
 }
 
@@ -1103,7 +1103,7 @@ int GeRay_IntersectVoxel_cyl3d(const GeRay *ray, const GeVox *voxel, double *tmi
         printf("%E %E %E %E %E %E\n", t[0], t[1], t[2], t[3], t[4], t[5]);
         printf("tmin = %E, side = %zu\n", *tmin, *side);
         //printf("OK\n");exit(0);
-#endif	
+#endif
 	return (*tmin < HUGE_VAL ? 1 : 0);
 }
 
@@ -1128,21 +1128,21 @@ int point_in_voxel_cyl3d(const GeVec3_d *pt, const GeVox *voxel, size_t axis)
 /* Check if coordinates of pt NOT on axis are within the limits of the voxel */
 {
 	int within_box = 1;
-        
+
         GeVec3_d CylPos;
         CylPos = GeVec3_Cart2Cyl( pt);
-        
+
 	double Rc = CylPos.x[0];
 	double phi = CylPos.x[1];
-	double Hz = CylPos.x[2]; 
-	
+	double Hz = CylPos.x[2];
+
 	switch(axis) {
 		case 0:
-			/* Pt is the intersection on cylinder with the radius Rc 
-			   It should be guaranteed that 
+			/* Pt is the intersection on cylinder with the radius Rc
+			   It should be guaranteed that
 			   Phi_min <= phi <= Phi_max &&
 			   Hz_min <= Hz <= Hz_max  */
-			
+
 			if(     phi < GeVec3_X(voxel->min, 1) ||
 				phi > GeVec3_X(voxel->max, 1) ||
 				Hz  < GeVec3_X(voxel->min, 2) ||
@@ -1150,8 +1150,8 @@ int point_in_voxel_cyl3d(const GeVec3_d *pt, const GeVox *voxel, size_t axis)
 				within_box = 0;
 			break;
 		case 1:
-			/* Pt is the intersection on horizontal plane on z=Hz 
-			   It should be guaranteed that 
+			/* Pt is the intersection on horizontal plane on z=Hz
+			   It should be guaranteed that
 			   Rc_min <= Rc <= Rc_max &&
 			   Hz_min <= Hz <= Hz_max*/
 			if( 	Rc < GeVec3_X(voxel->min, 0) ||
@@ -1161,9 +1161,9 @@ int point_in_voxel_cyl3d(const GeVec3_d *pt, const GeVox *voxel, size_t axis)
 				within_box = 0;
 				break;
 		case 2:
-			/* Pt is the intersection on horizontal plane on z=Hz 
-			   It should be guaranteed that 
-			   Rc_min <= Rc <= Rc_max && 
+			/* Pt is the intersection on horizontal plane on z=Hz
+			   It should be guaranteed that
+			   Rc_min <= Rc <= Rc_max &&
 			   Phi_min <= phi <= Phi_max  */
 			if(	Rc < GeVec3_X(voxel->min, 0) ||
 				Rc > GeVec3_X(voxel->max, 0) ||
@@ -1183,11 +1183,11 @@ void GeRay_TraverseVoxel(const GeRay *ray, const GeVox *voxel, double *tmin, siz
 		case GEOM_SPH1D:
 			GeRay_TraverseVoxel_sph1d(ray, voxel, tmin, side);
 			break;
-        
+
                 case GEOM_SPH3D:
 			GeRay_TraverseVoxel_sph3d(ray, voxel, tmin, side);
 			break;
-        
+
 		case GEOM_REC3D:
 			GeRay_TraverseVoxel_rec3d(ray, voxel, tmin, side);
 			break;
@@ -1195,7 +1195,7 @@ void GeRay_TraverseVoxel(const GeRay *ray, const GeVox *voxel, double *tmin, siz
 		case GEOM_CYL3D:
 			GeRay_TraverseVoxel_cyl3d(ray, voxel, tmin, side);
 			break;
-			
+
 		default: /* Shouldn't happen */
 			Deb_ASSERT(0);
 	}
@@ -1247,8 +1247,8 @@ Side 1: outer sphere
 		if(t_in <= 0.0)
 			t_in = HUGE_VAL;
 	}
-	
-	
+
+
 
 	/* Find final intersection */
 	if(t_in < t_out) {
@@ -1286,8 +1286,8 @@ Side 4&5: lower/upper phi
 	size_t oldside=*side;
 	static const double half_pi = 0.5*3.1415926535897932384626433832795;
 	/* Find intersections with outer sphere */
-		
-	
+
+
 	if( oldside == 0 )
 		t0=HUGE_VAL;
 	else{
@@ -1297,7 +1297,7 @@ Side 4&5: lower/upper phi
 		//if( t0 <= 0.0 ) t0=HUGE_VAL;
 		if( t0 < 0.0 ) t0=HUGE_VAL;
 	}
-	
+
 	double t10, t11;
 	GeRay_IntersectSphere3d(ray, r_out, &t10, &t11);
 	if( oldside == 1 )
@@ -1307,9 +1307,9 @@ Side 4&5: lower/upper phi
 		if(t11<=0.0) t11=HUGE_VAL;
 		t1 = Num_MIN(t10,t11);
 	}
-	
+
 	double t20, t21;
-	if( theta_in < half_pi || fabs(theta_in-half_pi) < 1e-16 ){ 
+	if( theta_in < half_pi || fabs(theta_in-half_pi) < 1e-16 ){
 		//printf("upper semi-sphere %g %g\n",fabs(half_pi-theta_out),fabs(half_pi-theta_in));
 		if( oldside == 2 )
 			t2 = HUGE_VAL;
@@ -1331,7 +1331,7 @@ Side 4&5: lower/upper phi
 			t2 = Num_MIN(t20,t21);
 		}
 	}
-	
+
 	double t30, t31;
 	if(theta_out < half_pi && fabs(theta_in-half_pi)>1e-16 ){
 		GeRay_IntersectTheta(ray, theta_out, &t30, &t31);
@@ -1354,7 +1354,7 @@ Side 4&5: lower/upper phi
 			if(t3<=0.0) t3=HUGE_VAL;
 		}
 	}
-	
+
 	if( oldside == 4 )
 		t4 = HUGE_VAL;
 	else if( sin(phi_in)*GeRay_D(*ray, 0) - cos(phi_in)*GeRay_D(*ray, 1) < 0.0 )
@@ -1368,7 +1368,7 @@ Side 4&5: lower/upper phi
 		t5 = HUGE_VAL;
 	else
 		GeRay_IntersectPhi(ray, phi_out, &t5);
-	
+
 
 	/* Init tmin */
 	*tmin = HUGE_VAL;
@@ -1397,7 +1397,7 @@ Side 4&5: lower/upper phi
 		*tmin=t5;
 		*side=5;
 	}
-	
+
 	#if 0
 	Deb_PRINT("solve: r=%g\n", r_out );
 	Deb_PRINT("solve: t0=%g, t1=%g, t2=%g, t3=%g, t4=%g, t5=%g, tmin=%g\n",  t0, t1, t2, t3, t4, t5, *tmin);
@@ -1406,15 +1406,15 @@ Side 4&5: lower/upper phi
 	Deb_PRINT("solve: theta_out=%g t30=%g t31=%g\n", theta_out,t30,t31);
 	Deb_PRINT("solve: Ex=%g Ey=%g Ez=%g\n", GeRay_E(*ray, 0),GeRay_E(*ray, 1),GeRay_E(*ray, 2));
 	Deb_PRINT("solve: Dx=%g Dy=%g Dz=%g\n", GeRay_D(*ray, 0),GeRay_D(*ray, 1),GeRay_D(*ray, 2));
-	
+
 	R=sqrt(GeRay_E(*ray, 0)*GeRay_E(*ray, 0)+GeRay_E(*ray, 1)*GeRay_E(*ray, 1)+GeRay_E(*ray, 2)*GeRay_E(*ray, 2));
 	theta=acos( GeRay_E(*ray, 2) / R );
-	
+
 	if(GeRay_E(*ray, 1) >= 0.0)
 		phi = acos(GeRay_E(*ray, 0)/sqrt(GeRay_E(*ray, 0)*GeRay_E(*ray, 0)+GeRay_E(*ray, 1)*GeRay_E(*ray, 1)));
-	else 
+	else
 		phi = 2.*pi-acos(GeRay_E(*ray, 0)/sqrt(GeRay_E(*ray, 0)*GeRay_E(*ray, 0)+GeRay_E(*ray, 1)*GeRay_E(*ray, 1)));
-	
+
 	if( oldside!=0 ){
 		if(R<r_in){
 			Deb_PRINT("solve: R_in is out of range. R=%g R_in=%g \n",R,r_in);
@@ -1427,11 +1427,11 @@ Side 4&5: lower/upper phi
 			Deb_ASSERT(0);
 		}
 	}
-	
+
 	if( oldside!=1){
 		if(R>r_out){
 			Deb_PRINT("solve: R_out is not compatible. R=%g R_out=%g\n",R,r_out);
-			Deb_ASSERT(0);			
+			Deb_ASSERT(0);
 		}
 	}
 	else{
@@ -1444,7 +1444,7 @@ Side 4&5: lower/upper phi
 	if( oldside!=2){
 		if(theta<theta_in){
 			Deb_PRINT("solve: theta_in is not compatible. theta=%g theta_in=%g\n",theta,theta_in);
-			Deb_ASSERT(0);			
+			Deb_ASSERT(0);
 		}
 	}
 	else{
@@ -1453,11 +1453,11 @@ Side 4&5: lower/upper phi
 			Deb_ASSERT(0);
 		}
 	}
-		
+
 	if( oldside!=3){
 		if(theta>theta_out){
 			Deb_PRINT("solve: theta_out is not compatible. theta=%g theta_out=%g\n",theta,theta_out);
-			Deb_ASSERT(0);			
+			Deb_ASSERT(0);
 		}
 	}
 	else{
@@ -1466,11 +1466,11 @@ Side 4&5: lower/upper phi
 			Deb_ASSERT(0);
 		}
 	}
-	
+
 	if( oldside!=4){
 		if(phi<phi_in){
 			Deb_PRINT("solve: phi_in is not compatible. phi=%g phi_in=%g\n",phi,phi_in);
-			Deb_ASSERT(0);			
+			Deb_ASSERT(0);
 		}
 	}
 	else{
@@ -1479,11 +1479,11 @@ Side 4&5: lower/upper phi
 			Deb_ASSERT(0);
 		}
 	}
-	
+
 	if( oldside!=5){
 		if(phi>phi_out){
 			Deb_PRINT("solve: phi_out is not compatible. phi=%g phi_out=%g\n",phi,phi_out);
-			Deb_ASSERT(0);			
+			Deb_ASSERT(0);
 		}
 	}
 	else{
@@ -1577,15 +1577,15 @@ Side 4&5: lower/upper Height
 */
 {
 	double t[6],
-	       Rc_in = GeVec3_X(voxel->min, 0), 
+	       Rc_in = GeVec3_X(voxel->min, 0),
 	       Rc_out = GeVec3_X(voxel->max, 0),
 	       Phi_min = GeVec3_X(voxel->min, 1),
 	       Phi_max = GeVec3_X(voxel->max, 1),
-	       Hz_l = GeVec3_X(voxel->min, 2), 
+	       Hz_l = GeVec3_X(voxel->min, 2),
 	       Hz_u = GeVec3_X(voxel->max, 2);
 	size_t oldside=*side;
-		
-	
+
+
 	/* if the ray is shooting from inside Rc */
 	if( oldside == 0 )
 		t[0]=HUGE_VAL;
@@ -1595,7 +1595,7 @@ Side 4&5: lower/upper Height
 		t[0] = Num_MIN(t00,t01);
 		if( t[0] < 0.0 ) t[0]=HUGE_VAL; /* just in case */
 	}
-	
+
 	/* if the ray is shooting from outside Rc */
 	double t10, t11;
         GeRay_IntersectRc(ray, Rc_out, &t10, &t11);
@@ -1606,7 +1606,7 @@ Side 4&5: lower/upper Height
 		if(t11<=0.0) t11=HUGE_VAL;
 		t[1] = Num_MIN(t10,t11);
 	}
-	
+
 	/* if the ray is shooting from the side of phi_min  */
 	if( oldside == 2 )
 		t[2] = HUGE_VAL;
@@ -1622,7 +1622,7 @@ Side 4&5: lower/upper Height
 		GeRay_IntersectPhi(ray, Phi_max, &t[3]);
 		if( t[3] < 0.0 ) t[3] = HUGE_VAL;
 	}
-	
+
 	/* if the ray is shooting from the side of Hz_l  */
 	if( oldside == 4 )
 		t[4] = HUGE_VAL;
@@ -1638,7 +1638,7 @@ Side 4&5: lower/upper Height
 		GeRay_IntersectHz(ray, Hz_u, &t[5]);
 		if( t[5] < 0.0 ) t[5] = HUGE_VAL;
 	}
-	
+
 
 	/* Init tmin */
 	*tmin = HUGE_VAL;
@@ -1649,7 +1649,7 @@ Side 4&5: lower/upper Height
 			*side=i;
 		}
 	}
-	
+
 	Deb_ASSERT( *tmin < HUGE_VAL);
 
 
@@ -1672,11 +1672,11 @@ GeRay GeRay_Rand(gsl_rng *rng, const GeVox *voxel)
 		case GEOM_SPH3D:
 			ray = GeRay_Rand_sph3d(rng, voxel);
 			break;
-						
+
 		case GEOM_REC3D:
 			ray = GeRay_Rand_rec3d(rng, voxel);
 			break;
-			
+
 		case GEOM_CYL3D:
 			ray = GeRay_Rand_cyl3d(rng, voxel);
 			break;
@@ -1700,7 +1700,7 @@ GeRay GeRay_Rand(gsl_rng *rng, const GeVox *voxel)
         gsl_rng_uniform_pos(rng)
 GeRay GeRay_Rand_sph1d(gsl_rng *rng, const GeVox *voxel)
 {
-	
+
 	double r, phi, cost, sint,
 		r_in = GeVec3_X(voxel->min, 0),
 		r_out = GeVec3_X(voxel->max, 0);
@@ -1714,7 +1714,7 @@ GeRay GeRay_Rand_sph1d(gsl_rng *rng, const GeVox *voxel)
 	else {
 		r = r_out * pow(PRAND(), ONE_THIRD);
 	}
-	
+
 	#undef ONE_THIRD
 
 	/* Reset ray */
@@ -1741,7 +1741,7 @@ GeRay GeRay_Rand_sph3d(gsl_rng *rng, const GeVox *voxel)
 /* Generate a randomly directed ray starting from a random position within
    the voxel */
 {
-	
+
 	double Er, Et, Ep;
 	double r_in = GeVec3_X(voxel->min, 0),
 		r_out = GeVec3_X(voxel->max, 0),
@@ -1750,14 +1750,14 @@ GeRay GeRay_Rand_sph3d(gsl_rng *rng, const GeVox *voxel)
 		phi_in = GeVec3_X(voxel->min, 2),
 		phi_out = GeVec3_X(voxel->max, 2);
 	double phi, cost, sint;
-	
-	
+
+
 
 	/* Reset ray */
         GeRay ray;
 	Mem_BZERO(&ray);
-	
-	
+
+
 
 	/* Set random ray origin in rectangular coordinates */
 	#define USE_RNG 1
@@ -1768,19 +1768,19 @@ GeRay GeRay_Rand_sph3d(gsl_rng *rng, const GeVox *voxel)
 	else
 		Er = r_out * pow(PRAND(), ONE_THIRD);
 	#undef ONE_THIRD
-        
+
         if( theta_in != 0.0)
 		Et = acos( (cos(theta_in)-1.0) * (1.0+PRAND()*((cos(theta_out)-1.0)/(cos(theta_in)-1.0)-1.0)) + 1.0 );
 	else
 		Et = acos( 1.0+PRAND()*(cos(theta_out)-1.0) );
-        
+
 	Ep = phi_in + PRAND()*(phi_out-phi_in);
 	#else
 	Er = GeVec3_X(voxel->cen, 0);
 	Et = GeVec3_X(voxel->cen, 1);
 	Ep = GeVec3_X(voxel->cen, 2);
 	#endif
-	
+
 	#if 0 //debug
 	Deb_PRINT("Er=%g r_in=%g r_out=%g\n",Er,r_in,r_out);
 	Deb_PRINT("Et=%g theta_in=%g theta_out=%g\n",Et,theta_in,theta_out);
@@ -1842,16 +1842,16 @@ GeRay GeRay_Rand_cyl3d(gsl_rng *rng, const GeVox *voxel)
 /* Generate a randomly directed ray starting from a random position within
    the voxel */
 {
-	
+
 	double ERc, Ez, Ep;
-	double 
+	double
 		Rc_in = GeVec3_X(voxel->min, 0),
 		Rc_out = GeVec3_X(voxel->max, 0),
 		phi_in = GeVec3_X(voxel->min, 1),
 		phi_out = GeVec3_X(voxel->max, 1),
 		Hz_l = GeVec3_X(voxel->min, 2),
 		Hz_u = GeVec3_X(voxel->max, 2);
-		
+
 	double phi, cost, sint;
 	#define USE_RNG 1
 
@@ -1872,7 +1872,7 @@ GeRay GeRay_Rand_cyl3d(gsl_rng *rng, const GeVox *voxel)
 	Ep = GeVec3_X(voxel->cen, 1);
 	Ez = GeVec3_X(voxel->cen, 2);
 	#endif
-	
+
 	#if 0 //debug
 	Deb_PRINT("Er=%g r_in=%g r_out=%g\n",Er,r_in,r_out);
 	Deb_PRINT("Et=%g theta_in=%g theta_out=%g\n",Et,theta_in,theta_out);
@@ -1911,11 +1911,11 @@ GeRay GeRay_QRand(const double *QRN, const GeVox *voxel)
                 case GEOM_SPH3D:
                         ray = GeRay_QRand_sph3d(QRN, voxel);
                         break;
-                                                
+
                 case GEOM_REC3D:
                         ray = GeRay_QRand_rec3d(QRN, voxel);
                         break;
-                        
+
                 case GEOM_CYL3D:
                         ray = GeRay_QRand_cyl3d(QRN, voxel);
                         break;
@@ -1932,7 +1932,7 @@ GeRay GeRay_QRand(const double *QRN, const GeVox *voxel)
 
 GeRay GeRay_QRand_sph1d(const double *QRN, const GeVox *voxel)
 {
-        
+
         double r, phi, cost, sint,
                 r_in = GeVec3_X(voxel->min, 0),
                 r_out = GeVec3_X(voxel->max, 0);
@@ -1987,19 +1987,19 @@ GeRay GeRay_QRand_sph3d(const double *QRN, const GeVox *voxel)
         else
                 Er = r_out * pow(QRN[0], ONE_THIRD);
         #undef ONE_THIRD
-        
+
         if( theta_in != 0.0)
                 Et = acos( (cos(theta_in)-1.0) * ( 1.0 + QRN[1] * ((cos(theta_out)-1.0) / (cos(theta_in)-1.0) - 1.0) ) + 1.0 );
         else
                 Et = acos( 1.0 + QRN[1] * (cos(theta_out)-1.0) );
-        
+
         Ep = phi_in + QRN[2] * (phi_out-phi_in);
         #else
         Er = GeVec3_X(voxel->cen, 0);
         Et = GeVec3_X(voxel->cen, 1);
         Ep = GeVec3_X(voxel->cen, 2);
         #endif
-        
+
         #if 0 //debug
         Deb_PRINT("Er=%g r_in=%g r_out=%g\n",Er,r_in,r_out);
         Deb_PRINT("Et=%g theta_in=%g theta_out=%g\n",Et,theta_in,theta_out);
@@ -2056,7 +2056,7 @@ GeRay GeRay_QRand_cyl3d(const double *QRN, const GeVox *voxel)
 /* Generate a randomly directed ray starting from a random position within
    the voxel */
 {
-        
+
         double ERc, Ez, Ep;
         double  Rc_in = GeVec3_X(voxel->min, 0),
                 Rc_out = GeVec3_X(voxel->max, 0),
@@ -2064,7 +2064,7 @@ GeRay GeRay_QRand_cyl3d(const double *QRN, const GeVox *voxel)
                 phi_out = GeVec3_X(voxel->max, 1),
                 Hz_l = GeVec3_X(voxel->min, 2),
                 Hz_u = GeVec3_X(voxel->max, 2);
-                
+
         double phi, cost, sint;
         #define USE_RNG 1
 
@@ -2085,7 +2085,7 @@ GeRay GeRay_QRand_cyl3d(const double *QRN, const GeVox *voxel)
         Ep = GeVec3_X(voxel->cen, 1);
         Ez = GeVec3_X(voxel->cen, 2);
         #endif
-        
+
         #if 0 //debug
         Deb_PRINT("Er=%g r_in=%g r_out=%g\n",Er,r_in,r_out);
         Deb_PRINT("Et=%g theta_in=%g theta_out=%g\n",Et,theta_in,theta_out);
@@ -2156,7 +2156,7 @@ static void GeVox_Cpgplot_rec(const GeVox *voxel, const GeCam *cam)
 	   /|   /     /|
 	  / |  /     / |
 	 /  | /     /  |
-	5----------6   |  
+	5----------6   |
 --------|---0------|---3---------Y
 	|  /|      |  /
 	| / |      | /
@@ -2220,7 +2220,7 @@ void GeVec3_Cpgline2(const GeVec3_d *v1, const GeVec3_d *v2, const GeCam *cam)
 {
 	float xbuf[2], zbuf[2];
 	GeVec3_d v11, v22;
-	
+
 	/* Optionally rotate coordinates */
 	if(cam) {
 		v11 = GeVec3_Rotate(v1, cam);
@@ -2307,7 +2307,7 @@ void GeVox_Cpgenv(const GeVox *voxel)
 
 /*----------------------------------------------------------------------------*/
 size_t GeVox_VertIndex2Pos(size_t i, size_t j, size_t k)
-/* 
+/*
             Z
 	    |
 	    |
@@ -2316,7 +2316,7 @@ size_t GeVox_VertIndex2Pos(size_t i, size_t j, size_t k)
 	   /|   /     /|
 	  / |  /     / |
 	 /  | /     /  |
-	5----------6   |  
+	5----------6   |
 --------|---0------|---3---------Y
 	|  /|      |  /
 	| / |      | /
@@ -2388,7 +2388,7 @@ void GeRay_AWInit(GeRay *ray, const GeVox *voxel)
 		GeVec3_INIT( 0,  0, -1),
 		GeVec3_INIT( 0,  0,  1)
 	};
-	
+
 
 	for(size_t i = 0; i < 3; i++) {
 		/*

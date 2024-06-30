@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rm -rf linectb.vtk 
+rm -rf linectb.vtk
 
 printf "${LIGHTCYAN}START THE MAPPING OF LINE EMISSION ${NC}\n"
 

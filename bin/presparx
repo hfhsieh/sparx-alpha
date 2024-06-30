@@ -4,7 +4,7 @@
 def usage():
         print '''
 presparx -o < Output File >
-         -e : error estimation 
+         -e : error estimation
          -p : profile plot
          -v : generate vtk file
          -c : converter
@@ -66,7 +66,7 @@ elif not isfile(ModelFile):
     print '[PRESPARX] %s not found' % ModelFile
     sys.exit(1)
 
-from sparx import pre_mesh 
+from sparx import pre_mesh
 from sparx import pre_profile
 phys = pre_profile.profile()
 if convert_mode:

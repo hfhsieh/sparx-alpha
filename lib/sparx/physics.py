@@ -141,7 +141,7 @@ def gaussian_fprofile(nu, nu0, delta_nu):
 	nu0: line center frequency
 	delta_nu: linewidth
 	nu: frequency
-	
+
 	Note that delta_nu=sqrt(2)*sigma where sigma is the half-width of the
 	corresponding Gaussian distribution.
 	see e.g. Rybicki & Lightman (1979) p. 288
@@ -224,7 +224,7 @@ class Molecule:
 
 		# Lines 7-7+NLEV: level number, level energy (cm-1), statistical weight
 		# Get quantum state label from header
-		line = fobj.readline() 
+		line = fobj.readline()
 		hdrcols = [i.strip() for i in line.split("+")]
 		self.qstate = "+".join(hdrcols[3:])
 
@@ -310,13 +310,13 @@ class Molecule:
 				self.ref = " ".join([i.strip() for i in cols[1:]])
 
 				# Lines 15+NLEV+NLIN-16+NLEV+NLIN: number of transitions for which
-				# collisional data exist (NCOL) 
+				# collisional data exist (NCOL)
 				for i in range(2):
 					line = fobj.readline()
 				self.ntrans = int(line)
 
 				# Lines 17+NLEV+NLIN-18+NLEV+NLIN: number of temperatures for which
-				# collisional data exist 
+				# collisional data exist
 				for i in range(2):
 					line = fobj.readline()
 				self.ntemp = int(line)

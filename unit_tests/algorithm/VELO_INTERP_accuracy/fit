@@ -1,4 +1,4 @@
-set logscale xy     
+set logscale xy
 
 set terminal wxt 3 enhanced font 'Verdana,10' persist
 Error="<awk '{print $1,$2,$3}' pops__interp_error.dat"
@@ -23,5 +23,5 @@ plot Error using 1:2 with point title 'interpolated L2', \
      UniformError using 1:3 with point title 'uniform L_inf', \
      a/x with lines notitle
 unset object
-     
+
 

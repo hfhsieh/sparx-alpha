@@ -198,7 +198,7 @@ Zone *Zone_GetInner(Zone *zone, const GeVec3_d *pt)
 			return Zone_GetInner(parent, pt);
 		}
 	}
-	
+
         GeVec3_d SphPt = GeVec3_Cart2Sph(pt);
         double r = SphPt.x[0];
 	if( r == 0.0 ){
@@ -252,19 +252,19 @@ Zone *Zone_GetLeaf(Zone *zone, size_t side, const GeVec3_d *pt, const GeRay *ray
 	  case GEOM_SPH1D:
 	  	leaf = Zone_GetLeaf_sph1d(zone, side);
 	  	break;
-          
+
 	  case GEOM_SPH3D:
 	  	leaf = Zone_GetLeaf_sph3d(zone, side, pt, ray);
 	  	break;
-	  
+
 	  case GEOM_REC3D:
 	  	leaf = Zone_GetLeaf_rec3d(zone, side, pt);
 	  	break;
-	  	
+
 	  case GEOM_CYL3D:
 	  	leaf = Zone_GetLeaf_cyl3d(zone, side, pt, ray);
 	  	break;
-          
+
 	  default: /* Shouldn't happen */
 	  	Deb_ASSERT(0);
 	}
@@ -306,7 +306,7 @@ Zone *Zone_GetLeaf_sph3d(Zone *zone, size_t side, const GeVec3_d *pt, const GeRa
         double theta = SphPos.x[1];
         double phi   = SphPos.x[2];
         GeVec3_s pos = GeVec3_INIT(0, 0, 0);
-        
+
 	/* Otherwise search for child containing pt */
 	for(size_t i = 0; i < 3; i++) {
 		size_t n = GeVec3_X(zone->naxes, i);
@@ -336,14 +336,14 @@ Zone *Zone_GetLeaf_sph3d(Zone *zone, size_t side, const GeVec3_d *pt, const GeRa
 			/* Do a binary search -- there MUST always be a match */
 			if(i==0){ // Radius search
 // 				Deb_PRINT("R=%g\n",R);
-				GeVec3_X(pos, i) = 
+				GeVec3_X(pos, i) =
 					gsl_interp_bsearch(array, R, (size_t)0, n);
 			}
 			else if(i==1){ // Theta search
 				if(R < RTHRESHOLD)
 					theta = acos(GeRay_D(*ray,2));
 // 				Deb_PRINT("R=%g theta=%g\n",R,theta);
-				GeVec3_X(pos, i) = 
+				GeVec3_X(pos, i) =
 					gsl_interp_bsearch(array,theta, (size_t)0, n);
 				//Deb_PRINT("solve: low=%g up=%g\n", array[GeVec3_X(pos, i)],array[GeVec3_X(pos, i)+1] );
 			}
@@ -354,10 +354,10 @@ Zone *Zone_GetLeaf_sph3d(Zone *zone, size_t side, const GeVec3_d *pt, const GeRa
                                         phi = SphDir.x[2];
 				}
 // 				Deb_PRINT("Rc=%g phi=%g\n",Rc,phi);
-				GeVec3_X(pos, i) = 
+				GeVec3_X(pos, i) =
 					gsl_interp_bsearch(array,phi,(size_t)0, n);
 			}
-	
+
 			/* Cleanup */
 			free(array);
 		}
@@ -431,9 +431,9 @@ Zone *Zone_GetLeaf_cyl3d(Zone *zone, size_t side, const GeVec3_d *pt, const GeRa
         double Rc  = CylPos.x[0];
         double phi = CylPos.x[1];
         double Hz  = CylPos.x[2];
-        
+
         size_t axis = side / 2;
-        
+
         GeVec3_s pos = GeVec3_INIT(0, 0, 0);
         /* Otherwise search for child containing pt */
         for(size_t i = 0; i < 3; i++) {
@@ -448,7 +448,7 @@ Zone *Zone_GetLeaf_cyl3d(Zone *zone, size_t side, const GeVec3_d *pt, const GeRa
                         /* Allocate array for binary search and load coordinate boundaries */
                         double *array;
                         array = Mem_CALLOC(n + 1, array);
-                        
+
                         /* The Oth element should contain the lower bound */
                         GeVec3_s idx = GeVec3_INIT(0, 0, 0);
                         Zone * child = Zone_CHILD(zone, idx);
@@ -460,31 +460,31 @@ Zone *Zone_GetLeaf_cyl3d(Zone *zone, size_t side, const GeVec3_d *pt, const GeRa
                                 child = Zone_CHILD(zone, idx);
                                 array[j + 1] = GeVec3_X(child->voxel.max, i);
                         }
-                        
- 
-                        
+
+
+
                         /* Do a binary search -- there MUST always be a match */
                         switch (i){
                           case 0: // Rc search
                                   //Deb_PRINT("Rc=%g\n",Rc);
-                                  GeVec3_X(pos, i) = 
+                                  GeVec3_X(pos, i) =
                                           gsl_interp_bsearch(array, Rc, (size_t)0, n);
                                   break;
-                        
+
                           case 1: // phi search
                                   //Deb_PRINT("Rc=%g phi=%g\n", Rc, phi);
                                   if ( Rc < RTHRESHOLD){
                                           GeVec3_d CylDirec = GeVec3_Cart2Cyl(&ray->d);
                                           phi = CylDirec.x[1];
                                   }
-                                  GeVec3_X(pos, i) = 
+                                  GeVec3_X(pos, i) =
                                           gsl_interp_bsearch(array, phi, (size_t)0, n);
                                   //Deb_PRINT("solve: low=%g up=%g\n", array[GeVec3_X(pos, i)],array[GeVec3_X(pos, i)+1] );
                                   break;
-                        
+
                           case 2: // vertical height search
                                   //Deb_PRINT("Rc=%g phi=%g\n", Rc, phi);
-                                  GeVec3_X(pos, i) = 
+                                  GeVec3_X(pos, i) =
                                           gsl_interp_bsearch(array, Hz, (size_t)0, n);
                                   //Deb_PRINT("solve: low=%g up=%g\n", array[GeVec3_X(pos, i)],array[GeVec3_X(pos, i)+1] );
                                   break;
@@ -492,13 +492,13 @@ Zone *Zone_GetLeaf_cyl3d(Zone *zone, size_t side, const GeVec3_d *pt, const GeRa
                                   /* Not a valid axis */
                                   Deb_ASSERT(0);
                         }
-                        
+
                         /* Cleanup */
                         free(array);
                 }
         }
 
-        /* pos should be at the appropriate child zone by now, 
+        /* pos should be at the appropriate child zone by now,
            recursively descend to leaf zone                     */
         return Zone_GetLeaf_cyl3d(Zone_CHILD(zone, pos), side, pt, ray);
 }
@@ -535,7 +535,7 @@ Zone *Zone_GetNext_sph3d(Zone *zone, size_t *side, const GeVec3_d *pt, const GeR
 	size_t axis = *side / 2; /* driving axis */
 	GeVec3_s idx = zone->index;
 	Zone *parent = zone->parent;
-	int step, pos;	
+	int step, pos;
 
 // 	Deb_PRINT("checkpoint: Zone_GetNext_sph3d\n");
 	/* Check for next-zones if not at root level */
@@ -561,10 +561,10 @@ Zone *Zone_GetNext_sph3d(Zone *zone, size_t *side, const GeVec3_d *pt, const GeR
 		}
 	}
 	// no parent, root zone
-	else if(axis==0){ 
+	else if(axis==0){
 		if ( *side == 0 ){
                         /* The ray has been reached inner boundary
-                           if the inner radius is 0, go peratrate. 
+                           if the inner radius is 0, go peratrate.
                            or stop if R_in is not 0 */
                         double R_in = zone->voxel.min.x[0];
                         if ( R_in == 0. )
@@ -587,14 +587,14 @@ Zone *Zone_GetNext_sph3d(Zone *zone, size_t *side, const GeVec3_d *pt, const GeR
 	}
 	else
 		/* Shouldn't happen */
-		Deb_ASSERT(0);	
+		Deb_ASSERT(0);
 
 	#if 0
 	Deb_PRINT("solve: newside=%d\n", *side);
 	Deb_PAUSE();
 	#endif
-	
-	
+
+
 }
 
 /*----------------------------------------------------------------------------*/
@@ -605,7 +605,7 @@ Zone *Zone_GetNext_rec3d(Zone *zone, size_t side, const GeVec3_d *pt)
 	GeVec3_s idx = zone->index;
 	Zone *parent = zone->parent;
 	int step, pos;
-	
+
 	/* step is the increment/decrement on the driving axis */
 	step = (side % 2 == 0) ? -1 : 1;
 
@@ -637,7 +637,7 @@ Zone *Zone_GetNext_cyl3d(Zone *zone, size_t *side, const GeVec3_d *pt, const GeR
 /* Given face and point of intersection, locate next zone to enter */
 {
 	size_t axis = *side / 2; /* driving axis */
-	Zone *parent = zone->parent;	
+	Zone *parent = zone->parent;
 
 // 	Deb_PRINT("checkpoint: Zone_GetNext_sph3d\n");
 	/* Check for next-zones if not at root level */
@@ -664,10 +664,10 @@ Zone *Zone_GetNext_cyl3d(Zone *zone, size_t *side, const GeVec3_d *pt, const GeR
 			return Zone_GetNext_cyl3d(parent, side, pt, ray);
 		}
 	}
-	
+
 	// no parent, root zone
 	switch(axis){
-          case 0 : 
+          case 0 :
                 switch (*side){
                   case 0 :
                           //Deb_PRINT("getting in!\n");
@@ -711,19 +711,19 @@ Zone *Zone_GetNext(Zone *zone, size_t *side, const GeRay *ray)
 	  case GEOM_SPH1D:
 	  	next = Zone_GetNext_sph1d(zone, side, &(ray->e));
 	  	break;
-          
+
 	  case GEOM_SPH3D:
 	  	next = Zone_GetNext_sph3d(zone, side, &(ray->e), ray);
 	  	break;
-	  
+
 	  case GEOM_REC3D:
 	  	next = Zone_GetNext_rec3d(zone, *side, &(ray->e));
 	  	break;
-	  	
-	  case GEOM_CYL3D: 
+
+	  case GEOM_CYL3D:
 	  	next = Zone_GetNext_cyl3d(zone, side, &(ray->e), ray);
 	  	break;
-          
+
 	  default: /* Shouldn't happen */
 	  	Deb_ASSERT(0);
 	}
@@ -756,7 +756,7 @@ size_t Zone_Fwrite(const Zone *zone, size_t (*DataFwrite)(void *data, FILE *fp),
 
 /*----------------------------------------------------------------------------*/
 
-Zone *Zone_Fread(void *(*DataAlloc)(const void *data_parms), const void *data_parms, 
+Zone *Zone_Fread(void *(*DataAlloc)(const void *data_parms), const void *data_parms,
 	size_t (*DataFread)(void *data, FILE *fp), FILE *fp)
 {
 	size_t i;
@@ -764,7 +764,7 @@ Zone *Zone_Fread(void *(*DataAlloc)(const void *data_parms), const void *data_pa
 
 	zone = Mem_CALLOC(1, zone);
 	Mem_FREAD(zone, 1, fp);
-	
+
 	if(zone->data) {
 		Deb_ASSERT(DataFread != NULL);
 
@@ -790,13 +790,13 @@ size_t ZoneIndex( GEOM_TYPE geom, size_t i, size_t j, size_t k, Zone * root)
 {
         // izone : to coresponding zone index
         size_t izone;
-        
+
         switch(geom){
                 case GEOM_SPH1D:
                         izone = i;
                         break;
                 case GEOM_SPH3D:
-                        izone = 
+                        izone =
                         (root->naxes.x[1]==1) ?
                                 (root->naxes.x[2]==1) ?
                                         i :
@@ -816,7 +816,7 @@ size_t ZoneIndex( GEOM_TYPE geom, size_t i, size_t j, size_t k, Zone * root)
                 default:
                         Deb_ASSERT(0);
         }
-        
+
         return izone;
 }
 

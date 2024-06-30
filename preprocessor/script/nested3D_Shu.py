@@ -73,7 +73,7 @@ def main(pfile,direc,xaxis,yaxis,zaxis,cen_xx,cen_yy,cen_zz,density,Vxx,Vyy,Vzz,
 	#Insert a new particle record
 	particle.append()
 	table.flush()
-	del table.attrs.FIELD_0_FILL 
+	del table.attrs.FIELD_0_FILL
 	del table.attrs.FIELD_1_FILL
 	del table.attrs.FIELD_2_FILL
 	del table.attrs.FIELD_3_FILL
@@ -107,12 +107,12 @@ def main(pfile,direc,xaxis,yaxis,zaxis,cen_xx,cen_yy,cen_zz,density,Vxx,Vyy,Vzz,
 	rho2=np.zeros(n2)
         Vx2=np.zeros(n2)
         Vy2=np.zeros(n2)
-        Vz2=np.zeros(n2)	
+        Vz2=np.zeros(n2)
 	for i in range(n1[0]):
 	        for j in range(n1[1]):
 	                for k in range(n1[2]):
-                                
-                                
+
+
                                 # generate subgrid
                                 dx2=(xaxis[i+1]-xaxis[i])/float(n2[0])
 				dy2=(yaxis[j+1]-yaxis[j])/float(n2[1])
@@ -135,7 +135,7 @@ def main(pfile,direc,xaxis,yaxis,zaxis,cen_xx,cen_yy,cen_zz,density,Vxx,Vyy,Vzz,
                                         cen_y2[jj]=0.5*(y2[jj]+y2[jj+1])
                                 for kk in range(n2[2]):
                                         cen_z2[kk]=0.5*(z2[kk]+z2[kk+1])
-                                        
+
 				max_rho=0.0
 				for ii in range(n2[0]):
 	                                for jj in range(n2[1]):
@@ -155,7 +155,7 @@ def main(pfile,direc,xaxis,yaxis,zaxis,cen_xx,cen_yy,cen_zz,density,Vxx,Vyy,Vzz,
                                                                         tempPhi=-0.5*pi
                                                         else:
                                                                 tempPhi=atan(cen_y2[jj]/cen_x2[ii])
-                                                        if (cen_x2[ii]<0): 
+                                                        if (cen_x2[ii]<0):
                                                                 tempPhi=tempPhi+pi
                                                         elif (tempPhi<0):
                                                                 tempPhi=tempPhi+2*pi
@@ -192,15 +192,15 @@ def main(pfile,direc,xaxis,yaxis,zaxis,cen_xx,cen_yy,cen_zz,density,Vxx,Vyy,Vzz,
 					if (level+1>cl):
 					        cl=level+1
 			                        print cl
-			                (npart,cl)=main(pfile,path,x2,y2,z2,cen_x2,cen_y2,cen_z2,rho2,Vx2,Vy2,Vz2,n2,nref,level+1,particle['POS'],pf2,npart,cl)  
+			                (npart,cl)=main(pfile,path,x2,y2,z2,cen_x2,cen_y2,cen_z2,rho2,Vx2,Vy2,Vz2,n2,nref,level+1,particle['POS'],pf2,npart,cl)
 		                else:
 			                if (tempR<=R_out):
                                                 # H2 number density (m^-3)
 			                        particle['n_H2'] = density[i,j,k]
 			                        # velocity at cell center (m/s)
 			                        particle['V_cen'] = [Vxx[i,j,k],Vyy[i,j,k],Vzz[i,j,k]]
-        		                        # magnetic field at cell center 
-        		                        # unit : Guass, used in Zeeman effect 
+        		                        # magnetic field at cell center
+        		                        # unit : Guass, used in Zeeman effect
         		                        # but the magnitude doesn't matter when calculating dust polarization
         		                        particle['B_cen'] = [0.,0.,0.]
         		                        # kinetic temperature (Kelvin)
@@ -212,7 +212,7 @@ def main(pfile,direc,xaxis,yaxis,zaxis,cen_xx,cen_yy,cen_zz,density,Vxx,Vyy,Vzz,
                                 # Insert a new particle record
         	                particle.append()
 	table.flush()
-	del table.attrs.FIELD_0_FILL 
+	del table.attrs.FIELD_0_FILL
 	del table.attrs.FIELD_1_FILL
 	del table.attrs.FIELD_2_FILL
 	del table.attrs.FIELD_3_FILL
@@ -241,7 +241,7 @@ def main(pfile,direc,xaxis,yaxis,zaxis,cen_xx,cen_yy,cen_zz,density,Vxx,Vyy,Vzz,
 	# Write Grid for visualization
 	if (writegrid):
         	fname='multiblock/post_'+str(npart)+'.vtr'
-	        f=open(fname,'w')                
+	        f=open(fname,'w')
                 # write in VTR format
                 print >>f,'<?xml version="1.0"?>'
                 print >>f,'<VTKFile type="RectilinearGrid" version="0.1" byte_order="LittleEndian">'
@@ -277,7 +277,7 @@ def main(pfile,direc,xaxis,yaxis,zaxis,cen_xx,cen_yy,cen_zz,density,Vxx,Vyy,Vzz,
                 f.close()
                 print >>pf2,'    <DataSet group="%(0)d" dataset="0" file="%(1)s"/>'%{'0':npart,'1':fname}
         return (npart+1,cl)
- 
+
 
 
 
@@ -287,9 +287,9 @@ dx=Lx/float(naxe[0]);dy=Ly/float(naxe[1]);dz=Lz/float(naxe[2])
 x=[];y=[];z=[]
 for i in range(naxe[0]+1):
         x.append(-0.5*Lx+float(i)*dx)
-for j in range(naxe[1]+1):        
+for j in range(naxe[1]+1):
         y.append(-0.5*Ly+float(j)*dy)
-for k in range(naxe[2]+1):        
+for k in range(naxe[2]+1):
         z.append(-0.5*Lz+float(k)*dz)
 cen_x=np.zeros(naxe[0])
 cen_y=np.zeros(naxe[1])
@@ -322,7 +322,7 @@ for i in range(naxe[0]):
                                         tempPhi=-0.5*pi
                         else:
                                 tempPhi=atan(cen_y[j]/cen_x[i])
-                        if (x[i]<0): 
+                        if (x[i]<0):
                                 tempPhi=tempPhi+pi
                         elif (tempPhi<0):
                                 tempPhi=tempPhi+2*pi
@@ -331,7 +331,7 @@ for i in range(naxe[0]):
                                 tempVr=-v_max * (tempR/r0)**-0.5
                                 Vx[i,j,k]=sin(tempTheta)*cos(tempPhi)*tempVr
                                 Vy[i,j,k]=sin(tempTheta)*sin(tempPhi)*tempVr
-                                Vz[i,j,k]=cos(tempTheta)*tempVr 
+                                Vz[i,j,k]=cos(tempTheta)*tempVr
 current_level=0
 
 # Open a file in "w"rite mode
@@ -344,7 +344,7 @@ h5file.delNodeAttr("/", "PYTABLES_FORMAT_VERSION", name=None)
 h5file.setNodeAttr("/", "molec", molec, name=None)
 h5file.setNodeAttr("/", "T_cmb", T_cmb, name=None)
 h5file.setNodeAttr("/", "gas_to_dust", gas_to_dust, name=None)
-h5file.setNodeAttr("/", "velfield", "grid ", name=None) 
+h5file.setNodeAttr("/", "velfield", "grid ", name=None)
 if (writegrid):
         fmb=open('multiblock.pvd', mode = "w")
         print >>fmb,'<?xml version="1.0"?>'

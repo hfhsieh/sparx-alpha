@@ -363,7 +363,7 @@ static void GenZone_sph1d(Zone *zp)
 	/* Add central continuum source */
 	if(GeVec3_X(zp->voxel.cen, 0) <= glb.rcen) {
 		pp->T_ff = glb.tcen;
-		snprintf(pp->kapp_ff, ZoneH5_KAPPLEN, "powerlaw,%10.3e,%10.3e,%10.3e", 
+		snprintf(pp->kapp_ff, ZoneH5_KAPPLEN, "powerlaw,%10.3e,%10.3e,%10.3e",
 			PHYS_CONST_MKS_LIGHTC / 1.1e-3,
 			glb.kcen,
 			2.0);

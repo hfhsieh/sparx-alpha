@@ -12,11 +12,11 @@ class error:
             print 'Mass Error of the Gridding : %e %%' %MassError
         else:
             print 'Total mass = %e MSun' %phys.mass
-            
+
         print 'Largest Velocity Dispersion to Turbulent Velocity : %e' %phys.MVD2Vt
         print 'Largest Dispersion occurs at spatial index = ', phys.MVD2Vt_index
 
-    
+
     def calc_exact_mass(self,mesh,phys):
         gr = mesh.grid
         md = phys.model
@@ -26,4 +26,4 @@ class error:
         r = Symbol('r')
         self.exact_mass = integrate(md.Density1D(r) * 4.*pi*r**2,(r,r_min,r_max))
         self.exact_mass *= volume_pc2m * MeanMolecularMass * kg2Msun
-        
+

@@ -56,21 +56,21 @@ class GUIPlotter:
 		self.f = mpfig.Figure(figsize=figsize, dpi=100)
 		self.ax = self.f.add_subplot(111)
 		self.ax.set_position(position)
- 
+
 		# Instantiate canvas
 		self.canvas = canvas = mpTkAgg.FigureCanvasTkAgg(self.f, self.window)
- 
+
 		# Pack canvas into window
 		canvas.get_tk_widget().pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
 		canvas._tkcanvas.pack(side=Tk.TOP, fill=Tk.BOTH, expand=1)
- 
+
 		# Instantiate and pack toolbar
 		self.toolbar = toolbar = mpTkAgg.NavigationToolbar2TkAgg(canvas, self.window)
- 
+
 		# Instantiate and pack quit button
 		#self.button = button = Tk.Button(self.window, text='Quit', command=sys.exit)
 		#button.pack(side=Tk.BOTTOM)
- 
+
 		# Show canvas and toolbar
 		toolbar.update()
 		canvas.show()

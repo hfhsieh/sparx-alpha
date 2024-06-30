@@ -9,7 +9,7 @@ module add miriad
 
 # module add openmpi/2.0.1_ic16.0
 # module add fftw/3.3.4_openmpi_2.0.1_ic16.0
-# module add hdf5/1.8.16_openmpi_2.0.1_ic16.0 
+# module add hdf5/1.8.16_openmpi_2.0.1_ic16.0
 # module add gsl/2.1_ic16.0
 # module add icc/16.0
 

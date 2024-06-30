@@ -12,7 +12,7 @@ nr = 64
 Rin = 0.0
 
 # outer radius (pc)
-Rout = 0.1 
+Rout = 0.1
 
 # stretching ratio from inner radius to outer radius
 stretch_ratio_r = 1.02

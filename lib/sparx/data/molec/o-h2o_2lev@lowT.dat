@@ -14,7 +14,7 @@
 ! NUMBER OF COLLISION PARTNERS
 2
 ! COLLISION PARTNER
-2 oH2O - pH2 from Dubernet & Grosjean (2002) and Phillips et al. (1996) for T>20K       
+2 oH2O - pH2 from Dubernet & Grosjean (2002) and Phillips et al. (1996) for T>20K
 ! NUMBER OF COLLISIONAL TRANSITIONS
 1
 ! NUMBER OF COLLISION TEMPERATURES
@@ -24,7 +24,7 @@
 ! TRANS + UP + LOW + RATE COEFFS(cm^3 s^-1)
     1    2   1   8.2E-12 1.2E-11 1.6E-11 1.8E-11 1.9E-11 1.6E-11 1.9E-11 2.2E-11 2.4E-11 2.7E-11 3.0E-11
 ! COLLISION PARTNER
-3 oH2O - oH2 from Grosjean et al. (2003) and Phillips et al. (1996) for T>20K        
+3 oH2O - oH2 from Grosjean et al. (2003) and Phillips et al. (1996) for T>20K
 ! NUMBER OF COLLISIONAL TRANSITIONS
 1
 ! NUMBER OF COLLISION TEMPERATURES

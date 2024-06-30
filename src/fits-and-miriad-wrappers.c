@@ -211,14 +211,14 @@ MirFile *MirXY_Open_new(const char *name, size_t nx, size_t ny, size_t nv)
 {
     MirFile *fp = Mem_CALLOC(1, fp);
 	fp->name = Mem_STRDUP(name);
-    
+
     #if Sp_MIRSUPPORT
     int nsize[3] = {(int)nx, (int)ny, (int)nv};
     int tno;
 	xyopen_c(&tno, name, "new", 3, nsize);
     fp->tno = tno;
     #endif
-	
+
 	return fp;
 }
 
@@ -353,7 +353,7 @@ MirFile *MirXY_Open_old(const char *name, size_t *nx, size_t *ny, size_t *nv)
 	MirFile *fp;
 
 	xyopen_c(&tno, name, "old", 3, nsize);
-	
+
 	*nx = (size_t)nsize[0];
 	*ny = (size_t)nsize[1];
 	*nv = (size_t)nsize[2];
@@ -687,7 +687,7 @@ void MirImg_UVResamp(MirImg *image, MirFile *uvin, MirFile *uvout)
 
 	/* Channel width is minus Doppler-shifted velocity width */
 	dfreq = -(Phys_DoppShiftFreq(restfreq, image->v.delt) - restfreq);
-	
+
 	/* Channel 1 frequency is restfreq + bw/2:
 	 * high-freq --> blueshift --> negative velocity
 	 * low-freq  --> redshift  --> positive velocity
@@ -806,13 +806,13 @@ void FITSoutput( MirFile *fp, MirImg *image, MirImg *StokesQ, MirImg *StokesU, c
         /* output FITS file  */
         int status = 0;
         fitsfile *fptr;       /* pointer to the FITS file; defined in fitsio.h */
-        
+
         char FileName[32];
         sprintf(FileName,"%s.fits", fp->name);
-        
+
         /* createing new FITS file  */
         // if the file exist, remove it.
-        if(access( FileName, F_OK ) != -1){ 
+        if(access( FileName, F_OK ) != -1){
                 fits_delete_file( fptr, &status);
                 status = 0;
         }
@@ -822,9 +822,9 @@ void FITSoutput( MirFile *fp, MirImg *image, MirImg *StokesQ, MirImg *StokesU, c
         long naxis;
         if (Stokes) naxis = 4;
         else naxis =3;
-        
+
         long naxes[naxis];
-        
+
         naxes[0] = (long) image->x.n;
         naxes[1] = (long) image->y.n;
         naxes[2] = (long) image->v.n;
@@ -833,7 +833,7 @@ void FITSoutput( MirFile *fp, MirImg *image, MirImg *StokesQ, MirImg *StokesU, c
         for (int i = 0; i < naxis; i++)
                 nelements *= naxes[i];
 
-        char 
+        char
         ctype1[32],
         ctype2[32],
         ctype3[32],
@@ -844,11 +844,11 @@ void FITSoutput( MirFile *fp, MirImg *image, MirImg *StokesQ, MirImg *StokesU, c
         sprintf(ctype3,"VELO-LSR");
         sprintf(ctype4,"STOKES");
         sprintf(cellscal,"1/F     ");
-        
-        double 
+
+        double
         crpix1 = image->x.crpix + 1. ,
         crpix2 = image->y.crpix + 1. ,
-        crpix3 = image->v.crpix + 1. , 
+        crpix3 = image->v.crpix + 1. ,
         crpix4 = 1.,
         cdelt1 = 180. / M_PI * image->x.delt,
         cdelt2 = 180. / M_PI * image->y.delt,
@@ -862,11 +862,11 @@ void FITSoutput( MirFile *fp, MirImg *image, MirImg *StokesQ, MirImg *StokesU, c
         restfreq = image->restfreq;
 
         double *array = Mem_CALLOC(nelements, array);;
-        
+
         fits_create_img(fptr, DOUBLE_IMG, naxis, naxes, &status);
         Deb_ASSERT(status == 0);
             /* Write a keyword; must pass the ADDRESS of the value */
-         
+
         fits_write_key(fptr,TSTRING,"CTYPE1",&ctype1,"Type of first axis",&status);
         fits_write_key(fptr,TDOUBLE,"CRPIX1",&crpix1,"Reference of first axis",&status);
         fits_write_key(fptr,TDOUBLE,"CDELT1",&cdelt1,"Increment value of first axis",&status);
@@ -880,13 +880,13 @@ void FITSoutput( MirFile *fp, MirImg *image, MirImg *StokesQ, MirImg *StokesU, c
         fits_write_key(fptr,TDOUBLE,"CDELT3",&cdelt3,"Increment value of third axis",&status);
         fits_write_key(fptr,TDOUBLE,"CRVAL3",&crval,"Offset of third axis ",&status);
         if(Stokes){
-            fits_write_key(fptr,TSTRING,"CTYPE4", &ctype4, 
+            fits_write_key(fptr,TSTRING,"CTYPE4", &ctype4,
                            "Type of third axis", &status);
             fits_write_key(fptr,TINT,   "CRPIX4", &crpix4,
                            "Reference of third axis", &status);
-            fits_write_key(fptr,TINT,   "CDELT4", &cdelt4, 
+            fits_write_key(fptr,TINT,   "CDELT4", &cdelt4,
                            "Increment value of third axis",&status);
-            fits_write_key(fptr,TINT,   "CRVAL4", &crval4, 
+            fits_write_key(fptr,TINT,   "CRVAL4", &crval4,
                            "Offset of third axis ",&status);
         }
         fits_write_key(fptr,TDOUBLE,"BMAJ",     &beam,"Major beam axis",&status);
@@ -898,24 +898,24 @@ void FITSoutput( MirFile *fp, MirImg *image, MirImg *StokesQ, MirImg *StokesU, c
         fits_write_key(fptr,TSTRING,"BUNIT",    bunit,"",&status);
         fits_write_key(fptr,TSTRING,"CELLSCAL", &cellscal,"",&status);
         Deb_ASSERT(status == 0);
-        
-        
+
+
         if(Stokes) {
-                for (int iv = 0; iv < naxes[2]; iv++) 
-                 for (int iy = 0; iy < naxes[1]; iy++)      
+                for (int iv = 0; iv < naxes[2]; iv++)
+                 for (int iy = 0; iy < naxes[1]; iy++)
                   for (int ix = 0; ix < naxes[0]; ix++) {
                         int idx = ( ( 0 * naxes[2] + iv) * naxes[1] + iy) * naxes[0] + ix;
                         array[idx] = scale * MirImg_PIXEL( *image, iv, ix, iy);
                 }
-                for (int iv = 0; iv < naxes[2]; iv++) 
-                 for (int iy = 0; iy < naxes[1]; iy++) 
+                for (int iv = 0; iv < naxes[2]; iv++)
+                 for (int iy = 0; iy < naxes[1]; iy++)
                   for (int ix = 0; ix < naxes[0]; ix++) {
-                        
+
                         int idx = ( ( 1 * naxes[2] + iv) * naxes[1] + iy) * naxes[0] + ix;
                         array[idx] = scale * MirImg_PIXEL( *StokesQ, iv, ix, iy);
                 }
-                for (int iv = 0; iv < naxes[2]; iv++) 
-                 for (int iy = 0; iy < naxes[1]; iy++) 
+                for (int iv = 0; iv < naxes[2]; iv++)
+                 for (int iy = 0; iy < naxes[1]; iy++)
                   for (int ix = 0; ix < naxes[0]; ix++) {
                         int idx = ( ( 2 * naxes[2] + iv) * naxes[1] + iy) * naxes[0] + ix;
                         array[idx] = scale * MirImg_PIXEL( *StokesU, iv, ix, iy);
@@ -929,7 +929,7 @@ void FITSoutput( MirFile *fp, MirImg *image, MirImg *StokesQ, MirImg *StokesU, c
                         array[idx] = scale * MirImg_PIXEL(*image, iv, ix, iy);
                 }
         }
-        
+
         Deb_ASSERT(status == 0);
         long *fpixel;
         if (Stokes){
@@ -940,12 +940,12 @@ void FITSoutput( MirFile *fp, MirImg *image, MirImg *StokesQ, MirImg *StokesU, c
                 fpixel = Mem_CALLOC( 3, fpixel);
                 fpixel[0] = fpixel[1] = fpixel[2] = 1;
         }
-        
+
         fits_write_pix(fptr, TDOUBLE, fpixel, nelements, array, &status);
         free(fpixel);
         fits_close_file(fptr, &status);            /* close the file */
         Deb_ASSERT(status == 0);
-        
+
         free(array);
 
         return;

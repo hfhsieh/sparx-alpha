@@ -116,19 +116,19 @@ int SpTask_PyGrid(void)
             glb.model.parms.gas_to_dust = gas_to_dust;
             glb.model.parms.T_cmb = T_cmb;
             SpModel_InitGrid(&glb.model, geom, min, max, ndiv);
-            
+
             for(i = 0; i < GeVec3_X(ndiv, 0); i++) {
                 for(j = 0; j < GeVec3_X(ndiv, 1); j++) {
                     for(k = 0; k < GeVec3_X(ndiv, 2); k++) {
                         zone = Zone_CHILD2(glb.model.grid, i, j, k);
                         pp = zone->data;
-                        
+
                         #define ARRAY(obj, i, j, k)\
                         (*((double *)PyWrArray_GetPtr3((obj), (i), (j), (k))))
-                        
+
                         #define ARRAY_STR(obj, i, j, k)\
                         ((char *)PyWrArray_GetPtr3((obj), (i), (j), (k)))
-                        
+
                         zone->voxel = GeVox_Init(
                             geom,
                             ARRAY(min_i, i, j, k),
@@ -138,7 +138,7 @@ int SpTask_PyGrid(void)
                                                  ARRAY(max_j, i, j, k),
                                                  ARRAY(max_k, i, j, k)
                         );
-                        
+
                         pp->n_H2 = ARRAY(n_H2, i, j, k);
                         pp->X_mol = ARRAY(X_mol, i, j, k);
                         pp->X_pH2 = ARRAY(X_pH2, i, j, k);
@@ -151,17 +151,17 @@ int SpTask_PyGrid(void)
                         pp->T_ff = ARRAY(T_ff, i, j, k);
                         pp->T_bb = ARRAY(T_bb, i, j, k);
                         pp->V_t = ARRAY(V_t, i, j, k);
-                        
+
                         GeVec3_X(pp->v_cen, 0) = ARRAY(V_i, i, j, k); /* m/s */
                         GeVec3_X(pp->v_cen, 1) = ARRAY(V_j, i, j, k); /* m/s */
                         GeVec3_X(pp->v_cen, 2) = ARRAY(V_k, i, j, k); /* m/s */
-                        
+
                         strncpy(pp->kapp_d, ARRAY_STR(kapp_d, i, j, k), ZoneH5_KAPPLEN);
                         strncpy(pp->kapp_ff, ARRAY_STR(kapp_ff, i, j, k), ZoneH5_KAPPLEN);
-                        
+
                         #undef ARRAY
                         #undef ARRAY_STR
-                        
+
                         /* Set initial pops to either optically thin or LTE */
                         if(pp->mol) {
                             for(l = 0; l < pp->mol->nlev; l++) {
@@ -173,7 +173,7 @@ int SpTask_PyGrid(void)
                     }
                 }
             }
-            
+
             /* Write model to file */
             Sp_PRINT("Wrote model to `%s'\n", glb.outf->name);
             sts = SpIO_FwriteModel(glb.outf, glb.model);

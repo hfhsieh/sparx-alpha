@@ -11,4 +11,4 @@ nr = 64
 Rin = 0.0
 
 # outer radius (pc)
-Rout = 0.1 
+Rout = 0.1

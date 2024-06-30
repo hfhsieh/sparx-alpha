@@ -28,7 +28,7 @@ int SpTask_Pops2ASCII(void)
 {
     Mem_BZERO(&glb);
     int sts = 0;
-    
+
     // 1. GET PARAMETERS FROM PYTHON
     PyObject *o;
     /*    1-1 those are the general parameters */
@@ -38,7 +38,7 @@ int SpTask_Pops2ASCII(void)
         glb.FileName = Sp_PYSTR(o);
         SpPy_XDECREF(o);
     }
-    
+
 
     /*    1-2 read the source model */
     /* source */
@@ -50,7 +50,7 @@ int SpTask_Pops2ASCII(void)
     /* 2. I/O : OUTPUT */
     if(!sts){
         Zone *root = glb.model.grid, *zp;
-        
+
         FILE * fp = fopen( glb.FileName, "w");
         for(zp = Zone_GetMinLeaf(root); zp; zp = Zone_AscendTree(zp)) {
             SpPhys *pp = zp->data;
@@ -59,7 +59,7 @@ int SpTask_Pops2ASCII(void)
                 if(pp->X_mol > 0) {
                     /* This zone contains tracer molecules */
                     GeVec3_d SphPos = GeVec3_Geom2Sph( glb.model.parms.geom, &zp->voxel.cen);
-                    
+
                     fprintf(fp,"%g %g %g", SphPos.x[0], SphPos.x[1], SphPos.x[2]);
                     for (size_t l=0; l < glb.model.parms.mol->nlev; l++)
                         fprintf(fp," %g", pp->pops_preserve[l]);
@@ -68,9 +68,9 @@ int SpTask_Pops2ASCII(void)
             }
         }
         fclose(fp);
-        
+
     }
-    
+
 /* 3. Cleanup */
 
 SpModel_Cleanup(glb.model);

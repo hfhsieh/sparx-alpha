@@ -1,10 +1,10 @@
 ! MOLECULE
-p-NH3 rotation-inversion spectrum up to 300 cm-1 above ground                   
+p-NH3 rotation-inversion spectrum up to 300 cm-1 above ground
 ! MASS
 17.
 ! NUMBER OF ENERGY LEVELS
 24
-! LEVEL + ENERGY(CM-1) + WEIGHT + QUANTUM NOS. J,K,v 
+! LEVEL + ENERGY(CM-1) + WEIGHT + QUANTUM NOS. J,K,v
   1    16.11949    6.0  1_1_s
   2    16.90986    6.0  1_1_a
   3    44.58440   10.0  2_2_s
@@ -63,7 +63,7 @@ p-NH3 rotation-inversion spectrum up to 300 cm-1 above ground
 ! NUMBER OF COLLISION PARTNERS
 1
 ! COLLISION PARTNER
-1 p-NH3 on p-H2: Danby et al 1988, MNRAS 235, 229                                 
+1 p-NH3 on p-H2: Danby et al 1988, MNRAS 235, 229
 ! NUMBER OF COLLISIONAL TRANSITIONS
 276
 ! NUMBER OF COLLISION TEMPERATURES

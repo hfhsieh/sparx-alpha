@@ -18,7 +18,7 @@
 #            tau = alpha_nu * D
 #                = ((h * nu)/(4 * pi)) * (n1 * B12 - n2 * B21) * phi(nu) * D
 #
-# where h is Planck's constant, B12 and B21 are the Einstein B coefficients, and phi(nu) 
+# where h is Planck's constant, B12 and B21 are the Einstein B coefficients, and phi(nu)
 # the line profile function, usually assumed to be Gaussian
 #        phi(nu) = (1 / (delta_nu * sqrt(pi))) * exp(-(nu - nu0)**2 / delta_nu**2))
 #

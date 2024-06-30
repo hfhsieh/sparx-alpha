@@ -1,4 +1,4 @@
-# Model Type : Function / Constant / TABLE / ZEUS 
+# Model Type : Function / Constant / TABLE / ZEUS
 ModelType = 'Function'
 
 # Molecule
@@ -14,7 +14,7 @@ T_cmb = 2.73
 from sparx_xl.pre_unit import Msun2kg, mH2, yr2sec, AU2pc, m2pc, pc2m
 
 # Mass Loss Rate (Msun yr-1 to H2 number per second)
-massloss = (1e-5 * Msun2kg / mH2) / yr2sec 
+massloss = (1e-5 * Msun2kg / mH2) / yr2sec
 
 # Radius of the star
 R_star = 1. * AU2pc
@@ -33,27 +33,27 @@ class model:
         def __init__(self,r):
                 # Gas Density (number/m^3)
                 self.n_H2 = Density1D(r)
-                
+
                 self._Tgas1D(r)
-                
+
                 self.Vr = V_wind
                 # turbulent speed (m/s)
                 self.Vt = 800.
-                
+
                 self._MolecAbd1D(r)
-                
+
                 # fraction of para-H2
                 self.X_pH2 = 0.25
-                
+
                 # fraction of ortho-H2
                 self.X_oH2 = 0.75
-                
+
                 # gas-to-dust ratio
                 self.dust_to_gas = 0.01
-                
+
                 # dust temperature
                 self.T_d = self.T_k
-                
+
                 # dust kappa
                 self.kapp_d = 'table,jena_thin_e5'
 
@@ -69,7 +69,7 @@ class model:
         def _MolecAbd1D(self,r):
                 # molecular abundance at inner boundary
                 X0 = 3e-5
-                self.X_mol = X0 
+                self.X_mol = X0
 
 
 

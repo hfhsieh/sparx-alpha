@@ -21,7 +21,7 @@ cd $PBS_O_WORKDIR
 source ~/.load_sparx_module
 
 
-rm -rf pops* history.log 
+rm -rf pops* history.log
 
 if [ -n "$PBS_NODEFILE" ]; then
   if [ -f $PBS_NODEFILE ]; then

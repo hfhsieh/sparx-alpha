@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-rm -rf map/ tau/ map.fits tau.fits 
+rm -rf map/ tau/ map.fits tau.fits
 #rm -rf contribution_*.vtk
 #rm -rf vfield.vtk
 rm -rf vis.vtk

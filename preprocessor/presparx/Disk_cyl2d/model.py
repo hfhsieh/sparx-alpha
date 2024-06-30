@@ -2,7 +2,7 @@
 # The model of disk and envelope (Keto&Zhang 2010) #
 ####################################################
 
-# Model Type : Function / Constant / TABLE / ZEUS 
+# Model Type : Function / Constant / TABLE / ZEUS
 ModelType = 'Function'
 
 # Molecule
@@ -58,7 +58,7 @@ def CubicEq(x):
 
 from scipy.optimize import brentq
 
-class model:        
+class model:
         def __init__(self, Rc, z):
                 self.Rc         = Rc
                 self.z          = z
@@ -66,7 +66,7 @@ class model:
                 self.sin_theta  = Rc / self.r
                 self.cos_theta  = z / self.r
                 self.theta      = acos( self.cos_theta )
-                
+
                 global pp,qq
                 pp = self.r / Rd - 1.
                 qq = -self.cos_theta * self.r / Rd
@@ -80,9 +80,9 @@ class model:
                 self._DustToGasCyl2D()
                 self._TdustCyl2D()
                 self._kappa_d_Cyl2D()
-        
 
-        
+
+
         # Gas Density (number/m^3)
         def _DensityCyl2D(self):
                 # envelope density
@@ -90,7 +90,7 @@ class model:
                         self.n_H2_env = rho_e0 * ((self.r/Rd)**(-1.5)) * ((1. + self.cos_theta / self.cos_theta0)**(-0.5)) * ((1 + ((self.r/Rd)**(-1)) * (3 * self.cos_theta0**2 - 1.0))**(-1))
                 else:
                         self.n_H2_env = 0.0
-                
+
                 # disk density
                 if (self.r<=Rd and disk==1):
                         rho_0 = rho_d0*(Rd/self.Rc)**2.25
@@ -98,11 +98,11 @@ class model:
                         self.n_H2_disc = rho_0 * exp(-(self.r*self.r-self.Rc*self.Rc)/(2.*H*H))
                 else:
                         self.n_H2_disc = 0.0
-                
+
                 # total density
                 self.n_H2 = self.n_H2_env + self.n_H2_disc
 
-        
+
         # Temperature (Kelvin)
         def _TgasCyl2D(self):
                 if ( self.n_H2 != 0.0 ):
@@ -118,19 +118,19 @@ class model:
                 Vkep = sqrt(G*Mt/self.r)
                 # disk velocity (km/s)
                 Vp_disc = sqrt(G*Mt/self.Rc)
-                
+
                 Vr_env = -Vkep * sqrt( 1. + self.cos_theta / self.cos_theta0 )
-                
+
                 if self.sin_theta == 0. or self.cos_theta0 == 0.:
                         print self.r, self.theta, self.sin_theta, self.cos_theta0
                         import sys
                         sys.exit(0)
                 Vt_env = Vkep * ( (self.cos_theta0 - self.cos_theta)/ self.sin_theta ) * sqrt( 1. + self.cos_theta / self.cos_theta0 )
                 Vp_env = Vkep * ( sqrt( 1. - self.cos_theta0 * self.cos_theta0) / self.sin_theta ) * sqrt( 1. + self.cos_theta / self.cos_theta0 )
-                
+
                 Vrc_env = Vr_env * self.sin_theta + Vt_env * self.cos_theta
                 Vz_env  = Vr_env * self.cos_theta - Vt_env * self.sin_theta
-                
+
                 if self.n_H2 != 0.:
                         Vrc = (self.n_H2_env * Vrc_env) / self.n_H2
                         Vz  = (self.n_H2_env * Vz_env) / self.n_H2
@@ -139,7 +139,7 @@ class model:
                         Vrc = 0.0
                         Vz  = 0.0
                         Vp  = 0.0
-                
+
                 self.V_cen = [ km2m*Vrc, km2m*Vp, km2m*Vz]
 
         # turbulent speed (m/s)

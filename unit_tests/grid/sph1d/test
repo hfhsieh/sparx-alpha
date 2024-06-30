@@ -8,7 +8,7 @@ rm -rf model
 
 # generating AGB 1D model
 printf "${LIGHTBLUE}GENERATING SPH1D GRID : Shu Model\n"
-#sparx run task_agb1d out=model 
+#sparx run task_agb1d out=model
 
 \cp ../../preprocessor/presparx/Shu1D/* ./
 presparx -o model

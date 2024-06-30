@@ -1,5 +1,5 @@
 !MOLECULE
-p-C3H2 energies from JPL, A re-scaled to mu=3.27 D                      
+p-C3H2 energies from JPL, A re-scaled to mu=3.27 D
 !MOLECULAR WEIGHT
   38.
 ! NUMBER OF ENERGY LEVELS
@@ -1353,7 +1353,7 @@ p-C3H2 energies from JPL, A re-scaled to mu=3.27 D
 ! E-levels from JPL and A-coeff have been re-scaled to mu=3.27 D
 ! Freq's are of spectroscopic accuracy
 ! COMMENTS:
-! c038002.cat                                                             
+! c038002.cat
 ! Q(300)=  13229.4775
 ! NOTE: new number of lines =  154
 ! Degrees of freedom in partition fn.=  3

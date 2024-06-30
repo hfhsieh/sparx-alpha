@@ -10,4 +10,4 @@ out=map \
 line=1 \
 tau=tau \
 npix="[31,31]" \
-chan="[31,'0.1kms^-1']" 
+chan="[31,'0.1kms^-1']"

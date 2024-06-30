@@ -181,10 +181,10 @@ typedef struct SpPhys {
     /* Fractional density of each level */
     *pops_preserve,
     *pops_update,
-    
+
     //*popsold, /* old level population */
     //*J_bar, /* mean intensity */
-    
+
     *cmat, /* nlev x nlev matrix of collisional rates */
     *tau, /* nrad array of average tau */
     ds, /* Path length averaged over all directions */
@@ -200,16 +200,16 @@ typedef struct SpPhys {
     const Zone *zp; /* Zone containing this set of parameters */
     /* Strings describing continuum opacities: meant to be accessed by SpIO_LoadKappa(),
      must *be either 'powerlaw,%10.3e,%10.3e,%10.3e' or 'table,<filename>' */
-    char kapp_d[ZoneH5_KAPPLEN]; /* Dust opacity */ 
-    
-    
+    char kapp_d[ZoneH5_KAPPLEN]; /* Dust opacity */
+
+
     double diff;
-    
+
 } SpPhys;
 
 
 typedef struct SourceData{
-    double 
+    double
     temperature,
     theta,
     phi,
@@ -456,9 +456,9 @@ int SpPy_GetInput_sizt(const char *name, size_t *value);
 int SpPy_GetInput_dbl(const char *name, double *value);
 int SpPy_GetInput_bool(const char *name, int *value);
 int SpPy_GetInput_model(
-        const char *SourceName, 
-        const char *PopsName, 
-        SpModel *model, 
+        const char *SourceName,
+        const char *PopsName,
+        SpModel *model,
         int *read_pops,
         const int task_id );
 int SpPy_GetInput_molec(const char *name, Molec **molec);
@@ -472,16 +472,16 @@ int SpPy_GetInput_mirxy_new(const char *name, size_t nx, size_t ny, size_t nv, M
 void SpImgTrac_InitRay(Zone *root, double *dx, double *dy, GeRay *ray, SpTelsim *tel_parms);
 size_t SpImgTrac_Init_nsub(size_t ix, size_t iy, SpTelsim *tel_parms,
                            MirImg_Axis *x, MirImg_Axis *y);
-void SpImgTrac_InitSubPixel( double *dx, 
-                           double *dy, 
-                           size_t ix, 
-                           size_t iy, 
-                           size_t isub, 
-                           size_t jsub, 
+void SpImgTrac_InitSubPixel( double *dx,
+                           double *dy,
+                           size_t ix,
+                           size_t iy,
+                           size_t isub,
+                           size_t jsub,
                            size_t nsub,
                            MirImg_Axis *x, MirImg_Axis *y
 );
-void SpImgTrac_IntensityBC( size_t side, double *I_nu, double *tau_nu, GeRay *ray, 
+void SpImgTrac_IntensityBC( size_t side, double *I_nu, double *tau_nu, GeRay *ray,
                                    int geom, size_t vn, double I_in, double I_cmb, SpPhysParm * parms);
 void SpImgTrac_InitLOSCoord( double *dx, double *dy, GeRay *ray, GeVec3_d *z, GeVec3_d *n, GeVec3_d *e, SpTelsim * tel_parms);
 

@@ -273,7 +273,7 @@ class Task_AMC(Task):
 	## Task procedures
 	##
 	def main(self):
-                class obs: 
+                class obs:
                         task = 'amc'
 		return
 
@@ -290,86 +290,86 @@ install_task(Task_AMC("task_amc"))
 
 # postprocessing keys are for all post tasks, including telsim, contribution, and model2vtk
 postprocess_keys = [
-    Key("source", Type.OldFile, None, 
+    Key("source", Type.OldFile, None,
         "Input source model (HDF5 file), must contain dust information"
         )
 ]
 
 # observer keys are for all post tasks except model2vtk
 observer_keys = [
-    Key("dist", Type.Length, "1kpc", 
+    Key("dist", Type.Length, "1kpc",
         "Distance to source"
         ),
-    Key("rotate", Type.Custom([Type.Angle, Type.Angle, Type.Angle]), 
-        "['0deg', '0deg', '0deg']", 
+    Key("rotate", Type.Custom([Type.Angle, Type.Angle, Type.Angle]),
+        "['0deg', '0deg', '0deg']",
         "Rotation of model about its x, y and z axes, in x-y-z order."
         )
 ]
 
 # for lineobs, zeeman, contobs, coldens
 telsim_keys = [
-    Key("out", Type.NewFile, None, 
+    Key("out", Type.NewFile, None,
         "Name of output image (FITS image dataset)"
         ),
-    Key("dist", Type.Length, "1kpc", 
+    Key("dist", Type.Length, "1kpc",
         "Distance to source"
         ),
-    Key("cell", Type.Custom([Type.Angle, Type.Angle]), "['1asec', '1asec']", 
+    Key("cell", Type.Custom([Type.Angle, Type.Angle]), "['1asec', '1asec']",
         "Angular size of each pixel"
         ),
-    Key("npix", Type.Custom([Type.PosInt, Type.PosInt]), "[128, 128]", 
+    Key("npix", Type.Custom([Type.PosInt, Type.PosInt]), "[128, 128]",
         "Image dimensions in number of pixels"
         ),
-    Key("rotate", Type.Custom([Type.Angle, Type.Angle, Type.Angle]), 
-        "['0deg', '0deg', '0deg']", 
+    Key("rotate", Type.Custom([Type.Angle, Type.Angle, Type.Angle]),
+        "['0deg', '0deg', '0deg']",
         "Rotation of model about its x, y and z axes, in x-y-z order."
         ),
-    Key("subres", 
-        Type.Custom([[Type.Angle, Type.Angle, Type.Angle, Type.Angle, Type.PosInt]]), 
-        Type.Optional, 
+    Key("subres",
+        Type.Custom([[Type.Angle, Type.Angle, Type.Angle, Type.Angle, Type.PosInt]]),
+        Type.Optional,
         "Boxed regions for sub-resolution averaging. Meaning of values are [[blc_x, blc_y, trc_x, trc_y, nsub], ...]"
         )
 ]
 
 # for lineobs, contobs, zeeman
 radiation_keys = [
-    Key("unit", Type.Option(['JY/PIXEL', 'K']), "JY/PIXEL", 
+    Key("unit", Type.Option(['JY/PIXEL', 'K']), "JY/PIXEL",
         "Image brightness unit"
         ),
-    Key("tau", Type.NewFile, Type.Optional, 
+    Key("tau", Type.NewFile, Type.Optional,
         "Name of output tau cube (Miriad image dataset)"
         )
 ]
-    
+
 # for linectb, contctb, zeemanctb
 contribution_keys = [
-    Key("unit", Type.Option(['JY/PC', 'K/PC']), "K/PC", 
+    Key("unit", Type.Option(['JY/PC', 'K/PC']), "K/PC",
         "Intensity contribution per length"
         )
 ]
 
 # for linectb, contctb, and vtk
 vtk_keys = [
-    Key("slice", Type.Bool, "False", 
+    Key("slice", Type.Bool, "False",
         "Slice cut at X-Y plane, only used in sph1d model"
         ),
-    Key("out", Type.NewFile, None, 
+    Key("out", Type.NewFile, None,
         "Name of output VTK file "
         )
 ]
 
 # for lineobs, zeeman, and linectb
 line_keys = [
-    Key("line", Type.Index, None, 
+    Key("line", Type.Index, None,
             "Line index of observing line"
             ),
-    Key("overlap", Type.Velo, '0kms^-1', 
+    Key("overlap", Type.Velo, '0kms^-1',
             "line overlaping calculation"
             ),
-    Key("chan", Type.Custom([Type.PosInt, Type.Velo]), "[64, '0.1kms^-1']", 
+    Key("chan", Type.Custom([Type.PosInt, Type.Velo]), "[64, '0.1kms^-1']",
             "Number of spectral channels and width of each channel (in velocity units)"
             ),
-    Key("lte", Type.Bool, "False", 
+    Key("lte", Type.Bool, "False",
             "Init model to LTE pops of Molec"
             )
 ]
@@ -379,20 +379,20 @@ cont_keys = [
     Key("chan", Type.Custom([Type.PosInt, Type.Velo]), "[1, '0.1kms^-1']",
         "Number of spectral channels and width of each channel (in velocity units)"
         ),
-    Key("wavelen", Type.Length, None, 
+    Key("wavelen", Type.Length, None,
         "Wavelength of observation"
         )
 ]
 
 # for coldens
 coldens_keys = [
-    Key("chan", Type.Custom([Type.PosInt, Type.Velo]), "[1, '0.1kms^-1']", 
+    Key("chan", Type.Custom([Type.PosInt, Type.Velo]), "[1, '0.1kms^-1']",
         "Number of spectral channels and width of each channel (in velocity units)"
         ),
-    Key("unit", Type.Option(['MKS', 'CGS']), "MKS", 
+    Key("unit", Type.Option(['MKS', 'CGS']), "MKS",
         "Image brightness unit"
         ),
-    Key("tracer", Type.Bool, "False", 
+    Key("tracer", Type.Bool, "False",
         "Molecular tracer"
         )
 ]
@@ -426,8 +426,8 @@ class Task_ContObs(Task):
 		# Create 'obs' class used by C code (consider changing this
 		# eventually)
 		class obs:
-                        # Enable continuum mode 
-			task = 'cont' 
+                        # Enable continuum mode
+			task = 'cont'
 			wavelen = INP_DICT['wavelen']
 		INP_DICT["obs"] = obs
 		return
@@ -544,11 +544,11 @@ class Task_ColDens(Task):
 		# Create 'obs' class used by C code (consider changing this
 		# eventually)
 		class obs:
-			# Enable coldens mode 
+			# Enable coldens mode
 			task='coldens'
 		INP_DICT["obs"] = obs
-		
-		
+
+
 		return
 
 install_task(Task_ColDens("task_coldens"))
@@ -689,7 +689,7 @@ class Task_Pops2ASCII(Task):
 
 		# Keys
 		self.keys = postprocess_keys + [
-                    Key("out", Type.NewFile, None, 
+                    Key("out", Type.NewFile, None,
                         "Name of output file (.dat)"
                         )
                     ]
@@ -737,7 +737,7 @@ install_task(Task_Pops2ASCII("task_pops2ascii"))
 ############################################
 class Task_LineFitting(Task):
 	"""
-	Line Fitting module 
+	Line Fitting module
 	"""
 	##
 	## Task configuration
@@ -762,44 +762,44 @@ class Task_LineFitting(Task):
 	##
 	## Task procedures
 	##
-	
-	
+
+
 
 	def main(self):
 		global target,molecule
-		
+
 		target=INP_DICT["target"]
 		kmax=INP_DICT["kmax"]
 		X0=INP_DICT["X0"]
 		molecule=INP_DICT["molecule"]
 		StopNR=INP_DICT["StopNR"]
-		
+
 		def ProduceXmol(BestX,FurnaceTemperature):
 			import random
 			from math import tan,pi,exp
-			
-			RandomFloat = random.uniform(-1.0, 1.0) 
+
+			RandomFloat = random.uniform(-1.0, 1.0)
 			RandomDistribution = FurnaceTemperature * tan( 0.5 * pi * RandomFloat )
 			factor = exp( RandomDistribution )
-			
+
 			Xmol = BestX * factor
 			if ( Xmol > 1.0):
 				Xmol=ProduceXmol(BestX,FurnaceTemperature)
 			return Xmol
-		
-		
+
+
 		def SimulatedAnnealing(StopNR,kmax,X0):
 			global target,molecule
 			global targetFrequency,targetFlux
 			from os import remove
 			from os.path import exists
-			
+
 			#from sparx.plotter import GUIPlotter, mainloop
-			#pltr = GUIPlotter()	
-			
+			#pltr = GUIPlotter()
+
 			if exists('fitting_log.dat'):
 				remove('fitting_log.dat')
-	
+
 			# load target spectrum
 			targetFrequency=[]
 			targetFlux=[]
@@ -814,29 +814,29 @@ class Task_LineFitting(Task):
 			for i in range(len(targetFrequency)):
 				signal += targetFlux[i]
 			signal /= len(targetFrequency)
-			
+
 
 			# iteration variables
 
 			#IterArray=[]
 			#ErrorArray=[]
-			
+
 			MinimumError=float("inf")
 			BestX=X0
-			
-			
+
+
 			for iteration in range(kmax):
 				# initialize the abundance
 				if (iteration == 0):
 					Xmol=BestX
 				else:
 					# the Furnace temperature represen the range of the sampling abundance, and it's related to the noise to signal ratio
-					FurnaceTemperature = NoiseRatio 
+					FurnaceTemperature = NoiseRatio
 					Xmol=ProduceXmol(BestX,FurnaceTemperature)
-					
+
 				# call the physical simulation routine
 				FSAE=ModelToSpectrumProcess(Xmol)
-				  
+
 				# update the best result if it is
 				if (FSAE<MinimumError):
 					BestX=Xmol
@@ -850,8 +850,8 @@ class Task_LineFitting(Task):
 				print >>LOGfile,"%(0)d %(1)e %(2)e %(3)e %(4)e" %{ '0':iteration, '1':FSAE/signal, '2':NoiseRatio, '3':Xmol,'4':BestX}
 				LOGfile.close()
 				#IterArray.append(iteration)
-				#ErrorArray.append(error)	
-	
+				#ErrorArray.append(error)
+
 				#pltr.plot(
 				#	IterArray,
 				#	ErrorArray,
@@ -865,7 +865,7 @@ class Task_LineFitting(Task):
 				#	lsty="-",
 				#	msty="o"
 				#)
-		
+
 				#pltr.show()
 				#mainloop()
 
@@ -876,10 +876,10 @@ class Task_LineFitting(Task):
 			from os import remove
 			from os.path import exists
 			import shutil
-			
+
 			fwhm=10
 			freq=89.9
-			
+
 			if exists('model'):
 				remove('model')
 			if exists('pops'):
@@ -894,7 +894,7 @@ class Task_LineFitting(Task):
 				shutil.rmtree('conv/')
 			if exists('convK/'):
 				shutil.rmtree('convK/')
-			
+
 			# generate physical model
 			TASK_DICT["task_shu1d"].run([
 				"out=model",
@@ -908,7 +908,7 @@ class Task_LineFitting(Task):
 			#	"molec="+molecule,
 			#	"lte=True",
 			#	"tolerance=5e-3"
-			#])		
+			#])
 			# compute line image
 			TASK_DICT["task_lineobs"].run([
 				#"source=pops",
@@ -917,11 +917,11 @@ class Task_LineFitting(Task):
 				"molec="+molecule,
 				"out=mapJY",
 				"line=0",
-				"dist=100pc",			
+				"dist=100pc",
 				"subres=[['-20asec', '-20asec', '20asec', '20asec', 4]]",
 				"chan=[100, '0.02kms^-1']"
 			])
-			# subtract continuum emission 
+			# subtract continuum emission
 			subprocess.call(
 				"contsub in=mapJY out=subJY cont=contJY contchan='(1,5),(96,100)' mode=mean",
 				shell=True
@@ -961,13 +961,13 @@ class Task_LineFitting(Task):
 					error += diff * diff
 			error /= len(modelFrequency)
 			error = sqrt(error)
-			
-			
-			
+
+
+
 			return error
-		
+
 		SimulatedAnnealing(StopNR,kmax,X0)
-		
+
 		return
 
 install_task(Task_LineFitting("task_linefitting"))

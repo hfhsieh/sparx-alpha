@@ -5,7 +5,7 @@
 # The available cases are #
 # AMC/P2A/LTE/Q-PARA      #
 ###########################
-CASE=${1} 
+CASE=${1}
 
 # the color label
 LIGHTBLUE='\033[1;34m'
@@ -30,8 +30,8 @@ case $CASE in
         #source ../benchmark/2002_p2a_benchmark/test $SAVE_LOG
         \cp ../../preprocessor/presparx/P2A/* ./
         presparx -o model -p
-        
-        
+
+
         # generating non-LTE level population
         printf "${YELLOW}RUNNING AMC${NC}\n"
         POPSFILE='pops_sparx'
@@ -41,18 +41,18 @@ case $CASE in
         out=$POPSFILE \
         trace=1 \
         dat='True'
-        
+
         \cp ../benchmark/2002_p2a_benchmark/model_1.d ./
         \cp ../benchmark/2002_p2a_benchmark/pops_ratran.dat ./
         gnuplot ../benchmark/2002_p2a_benchmark/plot
-        
+
         ;;
     "P2B")
         #source ../benchmark/2002_p2a_benchmark/test $SAVE_LOG
         \cp ../../preprocessor/presparx/P2B/* ./
         presparx -o model -p
-        
-        
+
+
         # generating non-LTE level population
         printf "${YELLOW}RUNNING AMC${NC}\n"
         POPSFILE='pops_sparx'
@@ -62,11 +62,11 @@ case $CASE in
         out=$POPSFILE \
         trace=1 \
         dat='True'
-        
+
         \cp ../benchmark/2002_p2b_benchmark/model_2.d ./
         \cp ../benchmark/2002_p2b_benchmark/pops_ratran.dat ./
         gnuplot ../benchmark/2002_p2b_benchmark/plot
-        
+
         ;;
 # preprocessing
     "SHU1D")
@@ -87,20 +87,20 @@ case $CASE in
         ;;
     "N1333")
         \cp ../../preprocessor/presparx/N1333I4A/* ./
-        presparx -o model 
+        presparx -o model
         ;;
     "COMET2D")
         \cp ../../preprocessor/presparx/comet2D/* ./
         presparx -o model -epv
         ;;
-        
+
     "ZEUS")
         rm -f converter.py converter.pyc
         \cp ../presparx_zeus/zeus_parameter.py ./
         presparx -o model -epz
         ;;
-        
-        
+
+
 # AMC solver
     "AMC")
 ###########################
@@ -145,7 +145,7 @@ case $CASE in
     "SOURCE")
         source ../telsim/OuterSource/test     $SAVE_LOGG
         ;;
-        
+
 # Algorithm testing
     "QMC")
         source ../algorithm/AMC_accuracy/test       $SAVE_LOG
@@ -166,28 +166,28 @@ case $CASE in
         #gnuplot ../algorithm/VELO_INTERP_accuracy/fit  $SAVE_LOG
         ;;
 
-#  parallelization and queuing system 
+#  parallelization and queuing system
     "Q-PARA")
         qsub ../parallel_job/test
         while [ 1 ]; do clear;qstat -u $USER;tail -n 20 history.log;sleep 5;done
         ;;
 
-        
+
 # visualization
     "LINECTB")
         source ../visual/linectb/sph1d/test       $SAVE_LOG
         ;;
     "CONTCTB")
-        source ../visual/contctb/sph1d/test       $SAVE_LOG        
+        source ../visual/contctb/sph1d/test       $SAVE_LOG
         ;;
     "MODEL2VTK")
-        source ../visual/model2vtk/sph1d/test       $SAVE_LOG   
+        source ../visual/model2vtk/sph1d/test       $SAVE_LOG
         ;;
-        
+
     "POPS")
-        source ../pops2ascii/test       $SAVE_LOG   
+        source ../pops2ascii/test       $SAVE_LOG
         ;;
-# defualt : exit        
+# defualt : exit
   *)
         exit 1
         ;;

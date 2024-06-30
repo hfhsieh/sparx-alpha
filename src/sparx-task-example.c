@@ -48,7 +48,7 @@ int SpTask_Example(void)
 
 	if(!status && !(glb.outf = SpInp_GetKey_spfile("out", Sp_NEW)))
 		status = 1;
-			
+
 	/* Generate model */
 	if(!status)
 		status = GenModel();

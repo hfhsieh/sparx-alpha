@@ -1,10 +1,10 @@
 #TEST PROBLEM 2: HCO+ in inside-out collapse model: high abundance
-#Species = HCO+ 
+#Species = HCO+
 #Ncell   = 50               NOTE: negative radial velocity ----> infall
 #
-#     r/cm         n(h2)/cc     [mol]/[H2]     T_gas/K        radial      microturb 
+#     r/cm         n(h2)/cc     [mol]/[H2]     T_gas/K        radial      microturb
 #                                                            velocity      / km/s
-#                                                            / km/s       
+#                                                            / km/s
  4.628400E+17  1.122970E+03  1.000000E-08  1.390000E+01  0.000000E+00  1.500000E-01
  4.280040E+17  1.313610E+03  1.000000E-08  1.361030E+01  0.000000E+00  1.489640E-01
  3.957910E+17  1.537290E+03  1.000000E-08  1.344790E+01  0.000000E+00  1.483530E-01

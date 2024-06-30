@@ -162,17 +162,17 @@ void SpPhys_InitCollRates(SpPhys *pp)
 		for(size_t j = i + 1; j < NLEV; j++) {
 			CMAT(i, j) = CMAT(j, i) * SpPhys_BoltzRatio(pp->mol, j, i, pp->T_k);
 		}
-                
+
                 /* Diagonal terms are minus the sums of the rates from all
                  * collisional transitions `out of' state i */
                 for (size_t j = 0; j < NLEV; j++){
                         if( j != i )
                                 CMAT(i,i) -= CMAT(i,j);
                 }
-               
+
 	}
 
-        /* matrix transpose 
+        /* matrix transpose
          * Off-diagonal terms are sums of rates from state j
          * `into' state i */
         for(size_t i = 0; i < NLEV; i++) {
@@ -227,7 +227,7 @@ void SpPhys_AddContinuum(SpPhys *pp, int cont, double T_bb, const Kappa *kap, do
 		pp->cont[i].k += k_nu;
 	}
 
-	
+
 
 
 	return;
@@ -278,10 +278,10 @@ void SpPhys_AddContinuum_ff(SpPhys *pp, int cont)
                 double nu = cont ? pp->cont[i].freq : pp->mol->rad[i]->freq;
                 double T = pp->T_k;
                 double N_e = pp->n_H2 * pp->X_e;
-                double N_i = N_e; /* numbers of ions and electrons are equal, 
+                double N_i = N_e; /* numbers of ions and electrons are equal,
                                      ideal MHD approximation       */
-                
-/* 
+
+/*
 
 Absorption coeffiecient for H II region
 
@@ -291,7 +291,7 @@ adopts from the numerical equation in Gordon's book :
 http://link.springer.com/book/10.1007%2F978-0-387-09691-9
 
 The CGS numerical coefficient kappa_ff is
-kappa_ff = 0.2120 * N_e * N_i * nu^-2.1 * T^-1.35 (cm^-1) 
+kappa_ff = 0.2120 * N_e * N_i * nu^-2.1 * T^-1.35 (cm^-1)
 where nu in unit Hz, N_e and N_i in unit cm^-3
 
 For MKS version, the coeffient becomes
@@ -604,8 +604,8 @@ void SpPhys_ProcLamda(Molec *mol)
 		 */
 		//nu = rad->freq = (E_u - E_l) / h;
                 double nu = rad->freq *= 1e9;
-               
-                
+
+
 		/* Einstein B coefficient for stimulated emission:
 		 * 	B_ul = A_ul * c^2 / (2.0 * h * nu^3)
 		 *
@@ -714,7 +714,7 @@ GeVec3_d SpPhys_GetVgas(const GeVec3_d *pos, const Zone *zone)
 	#define USE_LVG 0
 	#define USE_CONST 0
         #define INTERPOLATION 0
-        
+
 	GeVec3_d v_gas;
 
         #if USE_CONST
@@ -738,16 +738,16 @@ GeVec3_d SpPhys_GetVgas(const GeVec3_d *pos, const Zone *zone)
                         {
                         GeVec3_d SphPos = GeVec3_Cart2Sph(pos);
                         double r_pos = SphPos.x[0];
-                        
+
                         double r_zone = zone->voxel.cen.x[0];
                         double v_zone = GeVec3_X(pp->v_cen, 0);
-                        
+
                         Zone *zp = zone;
-                        
-                        Zone *zp_near = ( r_pos < r_zone ) ? 
+
+                        Zone *zp_near = ( r_pos < r_zone ) ?
                                 Zone_GetInner(zp, pos) :
                                 Zone_GetOuter(zp) ;
-                        
+
                         double v_near, r_near;
                         if (zp_near){
                                 SpPhys *pp_near = zp_near->data;
@@ -756,7 +756,7 @@ GeVec3_d SpPhys_GetVgas(const GeVec3_d *pos, const Zone *zone)
                         }
                         else{
                                 v_near = GeVec3_X(pp->v_cen, 0);
-                                r_near = ( zp->pos == 0 ) ? 
+                                r_near = ( zp->pos == 0 ) ?
                                         zone->voxel.min.x[0] :
                                         zone->voxel.max.x[0] ;
                         }
@@ -775,12 +775,12 @@ GeVec3_d SpPhys_GetVgas(const GeVec3_d *pos, const Zone *zone)
 			v_gas = GeVec3_Scale(&v_gas, GeVec3_X(pp->v_cen, 0));
 			#endif
 			break;
-			
+
 		case GEOM_SPH3D:{
 			/* Project radial velocity onto position vector */
 			/* get normalized vr, vt vp */
                         GeVec3_d vr = GeVec3_Normalize(pos);
-                        
+
                         GeVec3_d vp;
                         GeVec3_d CylPos;
                         CylPos = GeVec3_Cart2Cyl(pos);
@@ -792,23 +792,23 @@ GeVec3_d SpPhys_GetVgas(const GeVec3_d *pos, const Zone *zone)
 			else{
 				GeVec3_X(vp,0) = -pos->x[1];
 				GeVec3_X(vp,1) = pos->x[0];
-				GeVec3_X(vp,2) = 0.0;	
+				GeVec3_X(vp,2) = 0.0;
 				vp = GeVec3_Normalize(&vp);
 			}
 
 			GeVec3_d vt = GeVec3_CrossProd(&vp,&vr);
-                        
+
 			/* Project directional velocity onto the normalized vector */
 			vr = GeVec3_Scale(&vr, GeVec3_X(pp->v_cen, 0));
 			vt = GeVec3_Scale(&vt, GeVec3_X(pp->v_cen, 1));
 			vp = GeVec3_Scale(&vp, GeVec3_X(pp->v_cen, 2));
-                        
+
 			/* add vr, vt, vp to get v_gas */
 			v_gas = GeVec3_Add(&vr,&vt);
 			v_gas = GeVec3_Add(&v_gas,&vp);
-                
+
 			break;
-                }        
+                }
 		case GEOM_REC3D:
 			#if USE_LVG
 			/* Analytic expression for LVG expanding cloud */
@@ -842,7 +842,7 @@ GeVec3_d SpPhys_GetVgas(const GeVec3_d *pos, const Zone *zone)
 			else{
 				GeVec3_X(vp,0) = -pos->x[1];
 				GeVec3_X(vp,1) = pos->x[0];
-				GeVec3_X(vp,2) = 0.0;	
+				GeVec3_X(vp,2) = 0.0;
 				vp = GeVec3_Normalize(&vp);
 			}
 
@@ -850,7 +850,7 @@ GeVec3_d SpPhys_GetVgas(const GeVec3_d *pos, const Zone *zone)
 			GeVec3_X(vz,0) = 0.0;
 			GeVec3_X(vz,1) = 0.0;
 			GeVec3_X(vz,2) = 1.0;
-			
+
 			/* Project directional velocity onto the normalized vector */
 			vRc = GeVec3_Scale(&vRc, GeVec3_X(pp->v_cen, 0));
 			vp = GeVec3_Scale(&vp, GeVec3_X(pp->v_cen, 1));
@@ -902,9 +902,9 @@ GeVec3_d SpPhys_GetBgas(const GeVec3_d *pos, const Zone *zone)
 			b_gas = GeVec3_Scale(&b_gas, GeVec3_X(pp->b_cen, 0));
 			#endif
 			break;
-			
+
 		case GEOM_SPH3D:
-			
+
 			#if USE_LVG
 			/* Analytic expression for LVG expanding cloud */
 			b_gas = GeVec3_Sub(&zone->root->voxel.cen, pos);
@@ -928,7 +928,7 @@ GeVec3_d SpPhys_GetBgas(const GeVec3_d *pos, const Zone *zone)
 			else{
 				GeVec3_X(bp,0) = -pos->x[1];
 				GeVec3_X(bp,1) = pos->x[0];
-				GeVec3_X(bp,2) = 0.0;	
+				GeVec3_X(bp,2) = 0.0;
 				bp = GeVec3_Normalize(&bp);
 			}
 			bt = GeVec3_CrossProd(&bp,&br);
@@ -962,7 +962,7 @@ GeVec3_d SpPhys_GetBgas(const GeVec3_d *pos, const Zone *zone)
 			break;
 
 		case GEOM_CYL3D:
-			
+
 			/* Project radial velocity onto position vector */
 			/* get normalized vr, vt vp */
 			bRc = *pos;
@@ -977,29 +977,29 @@ GeVec3_d SpPhys_GetBgas(const GeVec3_d *pos, const Zone *zone)
 			else{
 				GeVec3_X(bp,0) = -pos->x[1];
 				GeVec3_X(bp,1) = pos->x[0];
-				GeVec3_X(bp,2) = 0.0;	
+				GeVec3_X(bp,2) = 0.0;
 				bp = GeVec3_Normalize(&bp);
 			}
-			
+
 			GeVec3_X(bz,0) = 0.0;
 			GeVec3_X(bz,1) = 0.0;
 			GeVec3_X(bz,2) = 1.0;
-			
+
 			/* Project directional velocity onto the normalized vector */
 			bRc = GeVec3_Scale(&bRc, GeVec3_X(pp->b_cen, 0));
 			bp = GeVec3_Scale(&bp, GeVec3_X(pp->b_cen, 1));
 			bz = GeVec3_Scale(&bz, GeVec3_X(pp->b_cen, 2));
-			
+
 			/* add vr, vt, vp to get v_gas */
 			b_gas = GeVec3_Add(&bRc,&bz);
 			b_gas = GeVec3_Add(&b_gas,&bp);
 
 			break;
-		
+
 		default: /* Shouldn't reach here */
 			Deb_ASSERT(0);
-			
-			
+
+
 	}
 
 	return b_gas;
@@ -1047,7 +1047,7 @@ double SpPhys_GetVfac(const GeRay *ray, double dt, double v_los, const Zone *zon
 
 	/* Number of steps is
 	 * 	delta_v / width
-	 * 
+	 *
 	 * where delta_v = |v_1 - v_1|
 	 *       width = local gaussian line width
 	 */
@@ -1137,7 +1137,7 @@ GeVec3_d SpPhys_GetVfac2(const GeRay *ray, double dt, const Zone *zone, int debu
 		double s_1 = dt * (double)(i + 1) / (double)n_step;
 		v_0 = SpPhys_GetVfunc(ray, s_0, zone);
 		v_1 = SpPhys_GetVfunc(ray, s_1, zone);
-                
+
                 V_Mag = GeVec3_Mag(&v_0);
                 if (V_Mag == 0.)
                         n_avg = 1;
@@ -1182,7 +1182,7 @@ GeVec3_d SpPhys_GetBfac(const GeRay *ray, double dt, const Zone *zone, int debug
 
 	/* Number of steps is
 	 * 	delta_v / width
-	 * 
+	 *
 	 * where delta_v = |v_1 - v_1|
 	 *       width = local gaussian line width
 	 */
@@ -1190,7 +1190,7 @@ GeVec3_d SpPhys_GetBfac(const GeRay *ray, double dt, const Zone *zone, int debug
 	GeVec3_d b_1 = SpPhys_GetBfunc(ray, dt, zone);
 
 // 	Deb_PRINT("dt=%g, v_0=%g, v_1=%g\n", dt, v_0, v_1);
-        
+
         double B_Mag = GeVec3_Mag(&b_0);
         size_t n_step;
         if ( B_Mag == 0. )
@@ -1342,7 +1342,7 @@ double SpPhys_CalcPopsDiff(const double *stack, size_t nstack, size_t nlev, doub
 	/* Find Maximum variance of entire stack */
 	Num_Qsort_d(max_diffs, nlev);
 	double max_diff = max_diffs[nlev - 1];
-	
+
 	free(pops);
 	free(diffs);
 	free(max_diffs);

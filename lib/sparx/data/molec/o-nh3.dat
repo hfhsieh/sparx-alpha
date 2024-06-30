@@ -1,5 +1,5 @@
 ! MOLECULE
-o-NH3 rotation-inversion spectrum up to 400 cm-1 above ground                   
+o-NH3 rotation-inversion spectrum up to 400 cm-1 above ground
 ! MASS
 17.
 ! NUMBER OF ENERGY LEVELS
@@ -45,7 +45,7 @@ o-NH3 rotation-inversion spectrum up to 400 cm-1 above ground
 ! NUMBER OF COLLISION PARTNERS
 1
 ! COLLISION PARTNER
-1 o-NH3 on p-H2: Danby et al 1988, MNRAS 235, 229                                 
+1 o-NH3 on p-H2: Danby et al 1988, MNRAS 235, 229
 ! NUMBER OF COLLISIONAL TRANSITIONS
 136
 ! NUMBER OF COLLISION TEMPERATURES

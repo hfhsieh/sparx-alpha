@@ -34,7 +34,7 @@ fo.close()
 
 ##
 ## Gather information for setting up the package
-##                              
+##
 
 
 # Get Python paths

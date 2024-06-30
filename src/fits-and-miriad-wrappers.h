@@ -51,7 +51,7 @@ typedef struct MirFile {
 		(crval) /* double, value of reference pixel */\
 	}
 
-	
+
 MirVar *MirVar_ListLookup(MirVar vars[], const char *name);
 void MirVar_ListRead(MirVar vars[], MirFile *fp);
 void MirVar_ListWrite(MirVar vars[], MirFile *fp);

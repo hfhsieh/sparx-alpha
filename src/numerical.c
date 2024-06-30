@@ -250,12 +250,12 @@ void Num_LUDecompSolve(double *A, size_t N, const double *b, double *x)
                 bb = gsl_vector_const_view_array(b, N);
         gsl_vector
                 *xx = gsl_vector_alloc(N);
-        gsl_permutation 
+        gsl_permutation
                 *p = gsl_permutation_alloc (N);
         int s;
 
         gsl_linalg_LU_decomp(&LU.matrix, p, &s);
-        
+
         gsl_linalg_LU_solve(&LU.matrix, p, &bb.vector, xx);
 
         for(size_t i = 0; i < N; i++)
@@ -273,12 +273,12 @@ void Num_EigenSolver(double *A, size_t N, double *eigen_value)
 {
         gsl_vector *eval = gsl_vector_alloc (N);
         gsl_matrix *evec = gsl_matrix_alloc (N, N);
-        
-        gsl_matrix_view 
+
+        gsl_matrix_view
                 m = gsl_matrix_view_array(A, N, N);
-        gsl_eigen_symm_workspace 
+        gsl_eigen_symm_workspace
                 * w = gsl_eigen_symmv_alloc(N);
-                
+
         gsl_eigen_symmv (&m.matrix, eval, evec, w);
 
         gsl_eigen_symmv_free (w);
@@ -288,7 +288,7 @@ void Num_EigenSolver(double *A, size_t N, double *eigen_value)
         for (int i = 0; i < N; i++){
                 double eval_i = gsl_vector_get (eval, i);
                 eigen_value[i] = eval_i;
-                gsl_vector_view 
+                gsl_vector_view
                         evec_i = gsl_matrix_column (evec, i);
 
                 printf ("eigenvalue = %g\n", eval_i);
@@ -298,7 +298,7 @@ void Num_EigenSolver(double *A, size_t N, double *eigen_value)
 
         gsl_vector_free (eval);
         gsl_matrix_free (evec);
-        
+
         return;
 }
 
@@ -314,7 +314,7 @@ void Num_Qsort_d(double array[], size_t n)
 /*----------------------------------------------------------------------------*/
 
 void Num_QuadraticRoots(double a, double b, double c, double *x1, double *x2)
-/* 
+/*
 Solve the quadratic equation a * x^2 + b * x + c = 0 and store the roots in
 x1 and x2.
 
@@ -322,7 +322,7 @@ Note: In Numerical Recipes in Pascal (Press, etal. , Cambridge University
 Press, 1989) - section 5.5, there is a better way to compute the roots of
 the quadratic equation.
 
-The normal way:  x = [-b (+/-) (b2 - 4ac).5]/2a 
+The normal way:  x = [-b (+/-) (b2 - 4ac).5]/2a
 If either a or c small then we get -b (+/-) b' with b' ~ b and this may
 give a numerical error. A better way is: q = -0.5 [b +sgn(b) (b2 - 4ac) .5]
 then  x1 = q/a;  x2 = c/q;
@@ -563,7 +563,7 @@ double Num_GaussNormal(double x, double width)
 	//igau = (size_t)round(fac * fabs(x) / width);
         xp = fac * fabs(x) / width;
 	igau = (size_t)xp;
-	
+
 	beta =  xp-(double)igau;
 	alpha = 1.0-beta;
 	/* If igau is >= MAXGAU, it is greater than 4*width, so return 0.

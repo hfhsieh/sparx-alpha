@@ -78,7 +78,7 @@ def cmd_help(parser, opts, args):
 				if x.min_freq < y.min_freq: return -1
 				elif x.min_freq > y.min_freq: return 1
 				else: return 0
-			#molec_list.sort(freq_comp) 
+			#molec_list.sort(freq_comp)
 			import os, re
 			Mesg.Raw("Keyword type 'Molec' accepts the following molecules:\n")
 			Mesg.Raw("%-20s\t%-20s\t%6s\t%6s\t%20s\t%6s\t%s\n" % ("Molecule", "Chemical Name", "Levs", "Lines", "LowFreq", "Trans", "Partners"))
@@ -137,7 +137,7 @@ def setup_parser():
 	# Disable interspersed argument parsing so that commands and tasks
 	# can have options of their own
 	parser.disable_interspersed_args()
-	 
+
 	# Setup options
 	parser.add_option("-d", "--debug", dest="debug", default=False, action="store_true", help="Show traceback on exception")
 
@@ -155,7 +155,7 @@ def setup_parser():
 if __name__ == "__main__":
 	# Setup parser
 	parser = setup_parser()
-     
+
 	# Call parser
 	opts, args = parser.parse_args()
 

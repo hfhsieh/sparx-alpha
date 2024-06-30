@@ -10,7 +10,7 @@ else
  	exit 1
 fi
 
- 
+
 sudo apt-get install \
 	libpython2.7-dev \
 	libgsl0-dev \
@@ -31,10 +31,10 @@ elif [ $CODENAME == 'xenial' ] || [ $CODENAME == 'trusty' ]; then
 fi
 
 
-# ENVIRONMENT VARIABLES  
+# ENVIRONMENT VARIABLES
 export C_INCLUDE_PATH=$C_INCLUDE_PATH:/usr/include/hdf5/openmpi:/usr/lib/openmpi/include
-export LIBRARY_PATH=$LIBRARY_PATH:/usr/lib/x86_64-linux-gnu/hdf5/openmpi  
-  
+export LIBRARY_PATH=$LIBRARY_PATH:/usr/lib/x86_64-linux-gnu/hdf5/openmpi
+
 if [ $CODENAME == 'bionic' ]; then
   MPI_INCLUDE='--with-include=/usr/lib/x86_64-linux-gnu/openmpi/include'
 elif  [ $CODENAME == 'xenial' -o $CODENAME == 'loki' ]; then

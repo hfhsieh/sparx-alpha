@@ -113,7 +113,7 @@ SpFile *SpIO_OpenFile(const char *fname, int mode)
 {
 	SpFile *sfp = 0;
 	hid_t file_id = 0;
-	
+
 	switch(mode) {
 		case Sp_NEW:
 			file_id = H5Fcreate(fname, H5F_ACC_EXCL, H5P_DEFAULT, H5P_DEFAULT);
@@ -130,7 +130,7 @@ SpFile *SpIO_OpenFile(const char *fname, int mode)
 		default: /* No such mode */
 			Deb_ASSERT(0);
 	}
-	
+
 	if(file_id >= 0) {
 		sfp = Mem_CALLOC(1, sfp);
 		sfp->name = Mem_STRDUP(fname);
@@ -179,7 +179,7 @@ void SpIO_CloseFile(SpFile *sfp)
 int SpIO_FwriteModel(SpFile *sfp, SpModel model)
 {
 	int status = 0;
-	
+
 	herr_t hstatus;
 
         /* Write the version of format */
@@ -211,7 +211,7 @@ int SpIO_FwriteModel(SpFile *sfp, SpModel model)
                 if(hstatus < 0)
                         status = 1;
         }
-        
+
 
         /* Write molecule name */
         if(!status) {
@@ -220,7 +220,7 @@ int SpIO_FwriteModel(SpFile *sfp, SpModel model)
                 if(hstatus < 0)
                         status = 1;
         }
-	
+
 	/* Write pops-switch */
         if(!status) {
                 hstatus = H5LTset_attribute_int(sfp->h5f_id, "/", "pops", &model.parms.pops, (size_t)1);
@@ -237,8 +237,8 @@ int SpIO_FwriteModel(SpFile *sfp, SpModel model)
         /* Write polariz-switch */
         if(!status) {
                 hstatus = H5LTset_attribute_int(sfp->h5f_id, "/", "polariz", &model.parms.polariz, (size_t)1);
-                
-                
+
+
                 if(hstatus < 0)
                         status = 1;
         }
@@ -249,33 +249,33 @@ int SpIO_FwriteModel(SpFile *sfp, SpModel model)
                         status = 1;
         }
 
-        
+
         /* Write Outer_Source */
         if(!status) {
             int nSource = model.parms.Outer_Source;
             hstatus = H5LTset_attribute_int(sfp->h5f_id, "/", "Outer_Source", &nSource, (size_t)1);
             if(hstatus < 0)
                 status = 1;
-        
+
             if (nSource != 0){
-                ZoneH5_Record_Source *data; 
-                /* Allocate table data */ 
-                data = Mem_CALLOC( (size_t)nSource, data); 
-                /* Load data values */ 
-                for(size_t i = 0; i < (size_t)nSource; i++) 
-                    data[i] = SpIO_SourceToH5Record( &model.parms.source[i] ); 
-                /* Create and write grid data */ 
-                if(!status) 
-                    status = ZoneH5_FwriteTable_Source( sfp->h5f_id, data, (size_t)nSource); 
-                /* Free table data */ 
-                free(data); 
+                ZoneH5_Record_Source *data;
+                /* Allocate table data */
+                data = Mem_CALLOC( (size_t)nSource, data);
+                /* Load data values */
+                for(size_t i = 0; i < (size_t)nSource; i++)
+                    data[i] = SpIO_SourceToH5Record( &model.parms.source[i] );
+                /* Create and write grid data */
+                if(!status)
+                    status = ZoneH5_FwriteTable_Source( sfp->h5f_id, data, (size_t)nSource);
+                /* Free table data */
+                free(data);
             }
         }
 
 	/* Write grid */
 	if(!status)
-		status = SpIO_H5WriteGrid(sfp->h5f_id, model.grid, &model.parms);        
-        
+		status = SpIO_H5WriteGrid(sfp->h5f_id, model.grid, &model.parms);
+
 	if(status)
 		status = printf("Error writing model to file `%s'\n", sfp->name);
 
@@ -295,7 +295,7 @@ int SpIO_FreadModel(const SpFile *sfp, const SpFile *popsfp, SpModel *model, int
         if(!status){
                 const char *default_format = "SPARX format v3";
                 char *format = NULL;
-                
+
                 status = SpIO_H5GetAttribute_string(sfp->h5f_id, "/", "format", &format);
 
                 if(strncmp(format, default_format, strlen(default_format))){
@@ -304,7 +304,7 @@ int SpIO_FreadModel(const SpFile *sfp, const SpFile *popsfp, SpModel *model, int
                 }
                 free(format);
         }
-#endif 
+#endif
 
         /* Read molecule name */
         if(!status){
@@ -318,22 +318,22 @@ int SpIO_FreadModel(const SpFile *sfp, const SpFile *popsfp, SpModel *model, int
             }
             free(mol_name);
         }
-        
+
         /* Read coordinate name */
         if(!status){
-                char *coordinate = NULL; 
+                char *coordinate = NULL;
                 status = SpIO_H5GetAttribute_string(sfp->h5f_id, "/", "geom", &coordinate);
 
                 /* Load molecule if present */
                 if(strlen(coordinate) > 0) {
 
                     DatINode *geom = Dat_IList_NameLookup(GEOM_TYPES, coordinate);
-     
+
                     model->parms.geom = geom->idx;
                 }
                 free(coordinate);
         }
-        
+
         herr_t hstatus;
 
         /* Read T_cmb */
@@ -348,34 +348,34 @@ int SpIO_FreadModel(const SpFile *sfp, const SpFile *popsfp, SpModel *model, int
                 if(hstatus < 0)
                         status = 1;
         }
-	
-        
+
+
 
         /* Read number of outer source */
         if(!status) {
             hstatus = H5LTget_attribute_int(sfp->h5f_id, "/", "Outer_Source", &model->parms.Outer_Source);
-            
+
             if(hstatus < 0)
                 status = 1;
             size_t nSource = (size_t) model->parms.Outer_Source;
             if (nSource != 0){
-                ZoneH5_Record_Source *data; 
+                ZoneH5_Record_Source *data;
                 data = Mem_CALLOC( nSource, data);
 
-                if(!status) 
-                    status = ZoneH5_FreadTable_Source(sfp->h5f_id, data); 
+                if(!status)
+                    status = ZoneH5_FreadTable_Source(sfp->h5f_id, data);
 
-                model->parms.source = Mem_CALLOC( nSource, model->parms.source); 
-                if(!status) { 
+                model->parms.source = Mem_CALLOC( nSource, model->parms.source);
+                if(!status) {
                     for(size_t i = 0; i < nSource; i++)
 //                         printf("OK %e \n", model->parms.source[i].temperature);
-                        SpIO_SourceFromH5Record( &model->parms.source[i], data[i]); 
-                } 
-                free(data); 
+                        SpIO_SourceFromH5Record( &model->parms.source[i], data[i]);
+                }
+                free(data);
             }
-            
+
         }
-        
+
         /* Read pops-switch */
         if(!status) {
                 hstatus = H5LTget_attribute_int(sfp->h5f_id, "/", "pops", &model->parms.pops);
@@ -400,9 +400,9 @@ int SpIO_FreadModel(const SpFile *sfp, const SpFile *popsfp, SpModel *model, int
                 if(hstatus < 0)
                         status = 1;
         }
-        
 
-#if 0 
+
+#if 0
 	/* Set velocity field: the "velfield" attribute is expected
 	 * to contain a Python function named "Vgas((x1,x2,x3),(min1,min2,min3),(max1,max2,max3)" where
 	 * (x1,x2,x3) are the three coordinates of the ray position, (min1,min2,min3) are the lower
@@ -431,27 +431,27 @@ int SpIO_FreadModel(const SpFile *sfp, const SpFile *popsfp, SpModel *model, int
 				status = 1;
 			}
 		}
-		
+
 		free(velfield);
 	}
 #endif
 
-	/* Load grid */	
+	/* Load grid */
 	if(!status)
-		status = 
-		SpIO_H5ReadGrid( 
-                        sfp->h5f_id, 
-                        (*read_pops) ? popsfp->h5f_id : NULL, 
-                        &model->grid, 
-                        &model->parms, 
+		status =
+		SpIO_H5ReadGrid(
+                        sfp->h5f_id,
+                        (*read_pops) ? popsfp->h5f_id : NULL,
+                        &model->grid,
+                        &model->parms,
                         read_pops
                 );
-	/* Cleanup */	
-        
+	/* Cleanup */
+
 
 	if(status)
 		printf( "Error reading model from file `%s'\n", sfp->name);
-        
+
 	return status;
 }
 
@@ -471,18 +471,18 @@ int SpIO_OpenModel(const char *sourcefname, const char *popsfname, SpModel *mode
                 if( !popsfp )
                         status = 1;
         }
-        
+
         if(!status)
 		status = SpIO_FreadModel(sfp, popsfp, model, read_pops);
-        
-        
+
+
         /* clean-up file */
         if(sfp)
                 SpIO_CloseFile(sfp);
 
         if (*read_pops)
                 SpIO_CloseFile(popsfp);
-        
+
 	return status;
 }
 
@@ -496,21 +496,21 @@ Molec *SpIO_FreadMolec(const char *molname)
 
 	path = Mem_Sprintf("%s/%s.dat", Sp_parm.molec_path, molname);
 	fp = fopen(path, "r");
-        
-        
+
+
 	if(!fp) {
 		printf("File `%s' could not be opened\n", path);
         }
 	else {
-                
+
 		mol = Mol_ReadLamda(fp, path, molname);
 
 		if(!mol)
 			printf("Error loading molecule from `%s'\n", path);
 		else
-			SpPhys_ProcLamda(mol);	
+			SpPhys_ProcLamda(mol);
 	}
-    
+
 	if(fp)
 		fclose(fp);
 	free(path);
@@ -592,7 +592,7 @@ ZoneH5_Record_Grid SpIO_GridToH5Record(const Zone *zone)
 {
         ZoneH5_Record_Grid grid_data;
         Mem_BZERO(&grid_data);
-        
+
         SpPhys *pp = zone->data;
         grid_data.level = zone->level;
         grid_data.pos = (long int)zone->pos;
@@ -625,7 +625,7 @@ ZoneH5_Record_Molec SpIO_MolecToH5Record(const Zone *zone)
 {
         ZoneH5_Record_Molec molec_data;
         Mem_BZERO(&molec_data);
-        
+
         SpPhys *pp = zone->data;
 
         #define CPYPP(attr) (molec_data.attr = pp->attr)
@@ -641,7 +641,7 @@ ZoneH5_Record_Dust SpIO_DustToH5Record(const Zone *zone)
 {
         ZoneH5_Record_Dust dust_data;
         Mem_BZERO(&dust_data);
-        
+
         SpPhys *pp = zone->data;
 
         #define CPYPP(attr) (dust_data.attr = pp->attr)
@@ -660,7 +660,7 @@ ZoneH5_Record_Polariz SpIO_PolarizToH5Record(const Zone *zone)
 {
         ZoneH5_Record_Polariz polariz_data;
         Mem_BZERO(&polariz_data);
-        
+
         SpPhys *pp = zone->data;
 
         #define CPYPP(attr) (polariz_data.attr = pp->attr)
@@ -680,7 +680,7 @@ ZoneH5_Record_Source SpIO_SourceToH5Record(const SourceData *source)
 {
     ZoneH5_Record_Source source_data;
     Mem_BZERO(&source_data);
-    
+
     #define CPYPP(attr) (source_data.attr = source->attr)
     CPYPP(temperature);
     CPYPP(theta);
@@ -688,7 +688,7 @@ ZoneH5_Record_Source SpIO_SourceToH5Record(const SourceData *source)
     CPYPP(radius);
     CPYPP(distance);
     #undef CPYPP
-    
+
     return source_data;
 }
 
@@ -697,12 +697,12 @@ ZoneH5_Record_Source SpIO_SourceToH5Record(const SourceData *source)
 void SpIO_ZoneFromH5Record(Zone *zone, ZoneH5_Record_Zone record)
 {
 	zone->level = record.level;
-        
+
         GeVec3_d min, max;
 	Mem_MEMCPY(max.x, record.max, 3);
 	Mem_MEMCPY(min.x, record.min, 3);
         zone->voxel = GeVox_Init2(zone->voxel.geom, min, max);
-        
+
 	zone->nchildren = (size_t)record.nchildren;
 	for( size_t i = 0; i < 3; i++) {
 		GeVec3_X(zone->naxes, i) = (size_t)record.naxes[i];
@@ -717,12 +717,12 @@ void SpIO_GridFromH5Record(Zone *zone, ZoneH5_Record_Grid record)
         SpPhys *pp = zone->data;
         zone->level = record.level;
         zone->pos = (size_t)record.pos;
-      
+
         GeVec3_d min, max;
         Mem_MEMCPY(max.x, record.max, 3);
         Mem_MEMCPY(min.x, record.min, 3);
         zone->voxel = GeVox_Init2(zone->parent->voxel.geom, min, max);
-        
+
         #define CPYPP(attr) (pp->attr = record.attr)
         CPYPP(n_H2);
         CPYPP(T_k);
@@ -765,7 +765,7 @@ void SpIO_DustFromH5Record(Zone *zone, ZoneH5_Record_Dust record)
         CPYPP(T_d);
         CPYPP(dust_to_gas);
         #undef CPYPP
-        
+
         strncpy(pp->kapp_d, record.kapp_d, ZoneH5_KAPPLEN);
 
         return;
@@ -779,7 +779,7 @@ void SpIO_PolarizFromH5Record(Zone *zone, ZoneH5_Record_Polariz record)
         #define CPYPP(attr) (pp->attr = record.attr)
         CPYPP(alpha);
         #undef CPYPP
-        
+
         Mem_MEMCPY(pp->b_cen.x, record.b_cen, 3);
 
         return;
@@ -794,7 +794,7 @@ void SpIO_SourceFromH5Record(SourceData *source, ZoneH5_Record_Source record)
     CPYPP(phi);
     CPYPP(radius);
     CPYPP(distance);
-    #undef CPYPP    
+    #undef CPYPP
     return;
 }
 /*----------------------------------------------------------------------------*/
@@ -819,9 +819,9 @@ int SpIO_H5WriteGrid(hid_t h5f_id, const Zone *zone, const SpPhysParm *parms)
                         status = ZoneH5_FwriteTable_Type(h5f_id, data, zone->nchildren); \
                 /* Free table data */ \
                 free(data); \
-            }        
-        
-        
+            }
+
+
         COPY_TYPE_TO_RECORD(ZoneH5_Record_Grid, ZoneH5_FwriteTable_Grid, SpIO_GridToH5Record);
         /* if any children of the zone is leaf (zp->nchildren = 0) then write all radiative-relatied attributes */
         int write_attr = 0;
@@ -831,7 +831,7 @@ int SpIO_H5WriteGrid(hid_t h5f_id, const Zone *zone, const SpPhysParm *parms)
                     break;
 		}
 	}
-        
+
         if (write_attr){
             /* Create and write pops if present */
             if(parms->mol){
@@ -890,7 +890,7 @@ int SpIO_H5ReadGrid(hid_t h5f_id, hid_t popsh5f_id, Zone **zone, SpPhysParm *par
                 // root zone initialization
 		*zone = SpZone_ALLOC(parms);
 		//*zone = Zone_Alloc(pos, parent, SpPhys_Alloc, parms);
-                
+
                 // root zone's coordinate is the definition in parms
                 (*zone)->voxel.geom = parms->geom;
         }
@@ -906,7 +906,7 @@ int SpIO_H5ReadGrid(hid_t h5f_id, hid_t popsh5f_id, Zone **zone, SpPhysParm *par
 	}
 
 
-        
+
 
 	#define COPY_TYPE_FROM_RECORD(DataType, ZoneH5_FreadTable_Type, SpIO_Type ) \
 	{   DataType *data; \
@@ -928,7 +928,7 @@ int SpIO_H5ReadGrid(hid_t h5f_id, hid_t popsh5f_id, Zone **zone, SpPhysParm *par
                 break;
             }
         }
-        
+
         if (read_leaf){
             if(parms->mol)
                 COPY_TYPE_FROM_RECORD(ZoneH5_Record_Molec, ZoneH5_FreadTable_Molec, SpIO_MolecFromH5Record);
@@ -952,16 +952,16 @@ int SpIO_H5ReadGrid(hid_t h5f_id, hid_t popsh5f_id, Zone **zone, SpPhysParm *par
                     hid_t group_id = H5Gopen(h5f_id, grid_idx, H5P_DEFAULT);
                     hid_t popsgroup_id = (*read_pops) ? H5Gopen(popsh5f_id, grid_idx, H5P_DEFAULT) : NULL;
                     status = SpIO_H5ReadGrid(
-                        group_id, 
-                        popsgroup_id, 
-                        &(*zone)->children[i], 
-                        parms, 
+                        group_id,
+                        popsgroup_id,
+                        &(*zone)->children[i],
+                        parms,
                         read_pops);
 
                 }
             }
         }
-        
+
 	return status;
 }
 
@@ -1066,7 +1066,7 @@ int SpIO_H5ReadPops(hid_t h5f_id, Zone *zone)
 		field_offsets[i] = i * sizeof(double);
 		field_sizes[i] = sizeof(double);
 	}
-	
+
 	/* Read pops table */
 	hstatus = H5TBread_table(h5f_id, "POPS", record_size, field_offsets, field_sizes, pops);
 	if(hstatus < 0)
@@ -1226,13 +1226,13 @@ int SpIO_H5GetAttribute_string(hid_t h5f_id, const char *obj_name, const char *a
 
 	if(hstatus >= 0)
 		hstatus = H5LTget_attribute_info(h5f_id, obj_name, attr_name, &dims, &class, &size);
-        
+
 	if(hstatus >= 0) {
 		*attribute = Mem_CALLOC(size+1, *attribute);
 		hstatus = H5LTget_attribute_string(h5f_id, obj_name, attr_name, *attribute);
 	}
-	
-        
+
+
 	if(hstatus < 0) {
 		printf( "Error getting attribute '%s' from '%s'\n", attr_name, obj_name);
 		status = 1;

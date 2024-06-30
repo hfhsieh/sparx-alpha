@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rm -rf linectb.vtk tau.vtk 
+rm -rf linectb.vtk tau.vtk
 
 printf "${LIGHTCYAN}START TASK OF CONTINUUM CONTRIBUTION ${NC}\n"
 

@@ -200,7 +200,7 @@ class ParmSpace:
 		if self.ondisk:
 			# Search in current directory for directories with names following
 			# the pattern "prm-[0-9]+" and build parameter space on the fly.
-			# These are directories that contain the "PARMS" text file and 
+			# These are directories that contain the "PARMS" text file and
 			# any other data defined by the user pipeline
 			from os.path import exists, isdir
 			import re
