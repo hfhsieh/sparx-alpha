@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "sparx"
+version = "3.2.1-alpha"
+dependencies = [
+    'numpy',
+    'scipy',
+    'matplotlib',
+    'sympy',
+    'tables',
+    'importlib-metadata; python_version>="3.0"',
+]
+authors = [
+  {name = "Eric Chung"},
+  {email = "schung@asiaa.sinica.edu.tw"},
+  {name = "I-Ta Hsieh"},
+  {email = "ita.hsieh@gmail.com"},
+]
+description = "SPARX Platform for Astrophysical Radiative Xfer"
+#license = {file = "LICENSE"}
+license = {text = "GNU GPLv3"}
+
+
+[tool.setuptools.packages.find]
+where = ["lib"]
