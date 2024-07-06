@@ -150,11 +150,11 @@ int SpInp_CheckKeys(void);
 #define Sp_PYDBL(o)\
 	PyFloat_AsDouble(o)
 #define Sp_PYINT(o)\
-	(int)PyInt_AsLong(o)
+	(int)PyLong_AsLong(o)
 #define Sp_PYSIZE(o)\
-	(size_t)PyInt_AsLong(o)
+	(size_t)PyLong_AsLong(o)
 #define Sp_PYSTR(o)\
-	PyString_AsString(o)
+	( (o == Py_None) ? NULL : PyUnicode_AsUTF8(o) )
 
 /* sparx-argp routines */
 void SpArg_Parse(int argc, char *argv[], SpParm *Sp_parm);

@@ -53,113 +53,113 @@ sigma = 5.67037321e-8 # Stefan-Boltzmann constant (W m^-2 K^-4)
 pp = 0.0
 qq = 0.0
 def CubicEq(x):
-        global pp,qq
-        return x*x*x + pp*x + qq
+    global pp,qq
+    return x*x*x + pp*x + qq
 
 from scipy.optimize import brentq
 
 class model:
-        def __init__(self, Rc, z):
-                self.Rc         = Rc
-                self.z          = z
-                self.r          = sqrt( Rc*Rc + z*z )
-                self.sin_theta  = Rc / self.r
-                self.cos_theta  = z / self.r
-                self.theta      = acos( self.cos_theta )
+    def __init__(self, Rc, z):
+        self.Rc     = Rc
+        self.z      = z
+        self.r      = sqrt( Rc*Rc + z*z )
+        self.sin_theta  = Rc / self.r
+        self.cos_theta  = z / self.r
+        self.theta      = acos( self.cos_theta )
 
-                global pp,qq
-                pp = self.r / Rd - 1.
-                qq = -self.cos_theta * self.r / Rd
-                self.cos_theta0 = brentq(CubicEq, -1.,1.)
+        global pp,qq
+        pp = self.r / Rd - 1.
+        qq = -self.cos_theta * self.r / Rd
+        self.cos_theta0 = brentq(CubicEq, -1.,1.)
 
-                self._DensityCyl2D()
-                self._TgasCyl2D()
-                self._VeloCyl2D()
-                self._VtCyl2D()
-                self._MolecAbdCyl2D()
-                self._DustToGasCyl2D()
-                self._TdustCyl2D()
-                self._kappa_d_Cyl2D()
-
-
-
-        # Gas Density (number/m^3)
-        def _DensityCyl2D(self):
-                # envelope density
-                if (env == 1):
-                        self.n_H2_env = rho_e0 * ((self.r/Rd)**(-1.5)) * ((1. + self.cos_theta / self.cos_theta0)**(-0.5)) * ((1 + ((self.r/Rd)**(-1)) * (3 * self.cos_theta0**2 - 1.0))**(-1))
-                else:
-                        self.n_H2_env = 0.0
-
-                # disk density
-                if (self.r<=Rd and disk==1):
-                        rho_0 = rho_d0*(Rd/self.Rc)**2.25
-                        H=H0*(self.Rc/Rt)**1.2
-                        self.n_H2_disc = rho_0 * exp(-(self.r*self.r-self.Rc*self.Rc)/(2.*H*H))
-                else:
-                        self.n_H2_disc = 0.0
-
-                # total density
-                self.n_H2 = self.n_H2_env + self.n_H2_disc
+        self._DensityCyl2D()
+        self._TgasCyl2D()
+        self._VeloCyl2D()
+        self._VtCyl2D()
+        self._MolecAbdCyl2D()
+        self._DustToGasCyl2D()
+        self._TdustCyl2D()
+        self._kappa_d_Cyl2D()
 
 
-        # Temperature (Kelvin)
-        def _TgasCyl2D(self):
-                if ( self.n_H2 != 0.0 ):
-                        T_env = Tt*(Rt/(2.*self.r))**(2./(4+p))
-                        T_disc = BT * ( (3.*G*Mt*Mar/(4.*pi * pc2km*pc2km * (self.Rc**3) * sigma)) * (1.-sqrt(Rt/self.Rc)) )**0.25
-                        self.T_k = ( self.n_H2_disc*T_disc + self.n_H2_env*T_env ) / self.n_H2
-                else:
-                        self.T_k = 0.0
 
-        # Velocity (m/s)
-        def _VeloCyl2D(self):
-                # Keplerian velocity (km/s)
-                Vkep = sqrt(G*Mt/self.r)
-                # disk velocity (km/s)
-                Vp_disc = sqrt(G*Mt/self.Rc)
+    # Gas Density (number/m^3)
+    def _DensityCyl2D(self):
+        # envelope density
+        if (env == 1):
+            self.n_H2_env = rho_e0 * ((self.r/Rd)**(-1.5)) * ((1. + self.cos_theta / self.cos_theta0)**(-0.5)) * ((1 + ((self.r/Rd)**(-1)) * (3 * self.cos_theta0**2 - 1.0))**(-1))
+        else:
+            self.n_H2_env = 0.0
 
-                Vr_env = -Vkep * sqrt( 1. + self.cos_theta / self.cos_theta0 )
+        # disk density
+        if (self.r<=Rd and disk==1):
+            rho_0 = rho_d0*(Rd/self.Rc)**2.25
+            H=H0*(self.Rc/Rt)**1.2
+            self.n_H2_disc = rho_0 * exp(-(self.r*self.r-self.Rc*self.Rc)/(2.*H*H))
+        else:
+            self.n_H2_disc = 0.0
 
-                if self.sin_theta == 0. or self.cos_theta0 == 0.:
-                        print self.r, self.theta, self.sin_theta, self.cos_theta0
-                        import sys
-                        sys.exit(0)
-                Vt_env = Vkep * ( (self.cos_theta0 - self.cos_theta)/ self.sin_theta ) * sqrt( 1. + self.cos_theta / self.cos_theta0 )
-                Vp_env = Vkep * ( sqrt( 1. - self.cos_theta0 * self.cos_theta0) / self.sin_theta ) * sqrt( 1. + self.cos_theta / self.cos_theta0 )
+        # total density
+        self.n_H2 = self.n_H2_env + self.n_H2_disc
 
-                Vrc_env = Vr_env * self.sin_theta + Vt_env * self.cos_theta
-                Vz_env  = Vr_env * self.cos_theta - Vt_env * self.sin_theta
 
-                if self.n_H2 != 0.:
-                        Vrc = (self.n_H2_env * Vrc_env) / self.n_H2
-                        Vz  = (self.n_H2_env * Vz_env) / self.n_H2
-                        Vp  = (self.n_H2_env * Vp_env + self.n_H2_disc * Vp_disc) / self.n_H2
-                else:
-                        Vrc = 0.0
-                        Vz  = 0.0
-                        Vp  = 0.0
+    # Temperature (Kelvin)
+    def _TgasCyl2D(self):
+        if ( self.n_H2 != 0.0 ):
+            T_env = Tt*(Rt/(2.*self.r))**(2./(4+p))
+            T_disc = BT * ( (3.*G*Mt*Mar/(4.*pi * pc2km*pc2km * (self.Rc**3) * sigma)) * (1.-sqrt(Rt/self.Rc)) )**0.25
+            self.T_k = ( self.n_H2_disc*T_disc + self.n_H2_env*T_env ) / self.n_H2
+        else:
+            self.T_k = 0.0
 
-                self.V_cen = [ km2m*Vrc, km2m*Vp, km2m*Vz]
+    # Velocity (m/s)
+    def _VeloCyl2D(self):
+        # Keplerian velocity (km/s)
+        Vkep = sqrt(G*Mt/self.r)
+        # disk velocity (km/s)
+        Vp_disc = sqrt(G*Mt/self.Rc)
 
-        # turbulent speed (m/s)
-        def _VtCyl2D(self):
-                self.Vt = 200.
+        Vr_env = -Vkep * sqrt( 1. + self.cos_theta / self.cos_theta0 )
 
-        # Molecular Abundance (fraction)
-        def _MolecAbdCyl2D(self):
-                self.X_mol = 1e-9
+        if self.sin_theta == 0. or self.cos_theta0 == 0.:
+            print(self.r, self.theta, self.sin_theta, self.cos_theta0)
+            import sys
+            sys.exit(0)
+        Vt_env = Vkep * ( (self.cos_theta0 - self.cos_theta)/ self.sin_theta ) * sqrt( 1. + self.cos_theta / self.cos_theta0 )
+        Vp_env = Vkep * ( sqrt( 1. - self.cos_theta0 * self.cos_theta0) / self.sin_theta ) * sqrt( 1. + self.cos_theta / self.cos_theta0 )
 
-        # gas-to-dust ratio
-        def _DustToGasCyl2D(self):
-                self.dust_to_gas = 0.01
+        Vrc_env = Vr_env * self.sin_theta + Vt_env * self.cos_theta
+        Vz_env  = Vr_env * self.cos_theta - Vt_env * self.sin_theta
 
-        # Dust Temperature (Kelvin)
-        def _TdustCyl2D(self):
-                self.T_d = self.T_k
+        if self.n_H2 != 0.:
+            Vrc = (self.n_H2_env * Vrc_env) / self.n_H2
+            Vz  = (self.n_H2_env * Vz_env) / self.n_H2
+            Vp  = (self.n_H2_env * Vp_env + self.n_H2_disc * Vp_disc) / self.n_H2
+        else:
+            Vrc = 0.0
+            Vz  = 0.0
+            Vp  = 0.0
 
-        # dust kappa
-        def _kappa_d_Cyl2D( self):
-                self.kapp_d = 'table,jena_thin_e5'
-                #kappa_d = 'powerlaw, 1.874e+12, 2.300e-02,-2.0'
+        self.V_cen = [ km2m*Vrc, km2m*Vp, km2m*Vz]
+
+    # turbulent speed (m/s)
+    def _VtCyl2D(self):
+        self.Vt = 200.
+
+    # Molecular Abundance (fraction)
+    def _MolecAbdCyl2D(self):
+        self.X_mol = 1e-9
+
+    # gas-to-dust ratio
+    def _DustToGasCyl2D(self):
+        self.dust_to_gas = 0.01
+
+    # Dust Temperature (Kelvin)
+    def _TdustCyl2D(self):
+        self.T_d = self.T_k
+
+    # dust kappa
+    def _kappa_d_Cyl2D( self):
+        self.kapp_d = 'table,jena_thin_e5'
+        #kappa_d = 'powerlaw, 1.874e+12, 2.300e-02,-2.0'
 

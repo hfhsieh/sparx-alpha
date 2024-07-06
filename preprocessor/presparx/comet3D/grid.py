@@ -14,6 +14,6 @@ from model import R_star
 Rin = R_star
 
 # outer radius (pc)
-from sparx_tc.pre_unit import m2pc
+from sparx.pre_unit import m2pc
 Rout = 3.0e8 * m2pc
 

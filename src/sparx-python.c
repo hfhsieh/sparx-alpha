@@ -93,7 +93,7 @@ int SpPy_GetInput_int(const char *name, int *value)
 
 	status = SpPy_GetInput_PyObj(name, &obj);
 	if(!status) {
-		*value = (int)PyInt_AsLong(obj);
+		*value = (int)PyLong_AsLong(obj);
 		Py_DECREF(obj);
 	}
 
@@ -110,7 +110,7 @@ int SpPy_GetInput_sizt(const char *name, size_t *value)
 
 	status = SpPy_GetInput_PyObj(name, &obj);
 	if(!status) {
-		*value = (size_t)PyInt_AsLong(obj);
+		*value = (size_t)PyLong_AsLong(obj);
 		Py_DECREF(obj);
 	}
 

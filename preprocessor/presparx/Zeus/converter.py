@@ -55,7 +55,7 @@ elif    ZeusPar.GridType == 'CYL':
 elif    ZeusPar.GridType == 'REC':
     GridType = "REC3D"
 else:
-    print 'GridType in zeus_parameter.py is not recognized. It should be SPH/CYL/REC .'
+    print('GridType in zeus_parameter.py is not recognized. It should be SPH/CYL/REC .')
     exit(1)
 
 # Pre-check : data type
@@ -64,7 +64,7 @@ if ZeusPar.DataType == 'BINARY':
 elif ZeusPar.DataType == 'ASCII':
     read_mode = 'r'
 else:
-    print 'DataType in zeus_parameter.py is not recognized. It should be BINARY/ASCII'
+    print('DataType in zeus_parameter.py is not recognized. It should be BINARY/ASCII')
     exit(1)
 
 
@@ -76,7 +76,7 @@ def FetchZeusData(filename):
             data = np.fromfile(f, dtype=np.float64)
         return data
     else:
-        print 'no %s data' % filename
+        print('no %s data' % filename)
         return None
 
 
@@ -181,7 +181,7 @@ def Sph_MirrorNTrimR(
     # Padding, mirroring, or leaving as is
 
     if (np.abs(Theta_max - 1.0) <= 0.01):
-        print "[ZeusConverter] Only one quadrant exists. Generate the other quardrant. Mirror into two opposite quadrants."
+        print("[ZeusConverter] Only one quadrant exists. Generate the other quardrant. Mirror into two opposite quadrants.")
         naxes_new = [ naxes[0], naxes[1]*2, naxes[2] ]
         T_bounds = np.concatenate( (T_ap[Ngz:-Ngz+1], np.pi - T_ap[-Ngz-1:Ngz-1:-1] ) )
         T_cells =  np.concatenate( (T_bp[Ngz:-Ngz],   np.pi - T_bp[-Ngz-1:Ngz-1:-1] ) )
@@ -220,7 +220,7 @@ def Sph_MirrorNTrimR(
         Bp_bounds =     ConcatenateQuadrant(Bp)
 
     elif (np.abs(Theta_max - 2.0) <= 0.01):
-        print "[ZeusConverter] Two quadrants exist. No need for mirroring."
+        print("[ZeusConverter] Two quadrants exist. No need for mirroring.")
         naxes_new = naxes
         T_bounds = T_ap[Ngz:-Ngz+1]
         T_cells =  T_bp[Ngz:-Ngz]
@@ -339,7 +339,7 @@ def Sph_MirrorNTrimR(
 
 # Replicate ZeusTW output to form a full two-quadrant matrix if needed
 naxes = [ n1 - 2*Ngz, n2 - 2*Ngz, n3 if n3 == 1 else n3 - 2*Ngz]  # sizes of the active zones from the ZeusTW data
-print "[ZeusConverter] Total number of cells is %d x %d x %d = %d" % (naxes[0], naxes[1], naxes[2], np.prod(naxes))
+print("[ZeusConverter] Total number of cells is %d x %d x %d = %d" % (naxes[0], naxes[1], naxes[2], np.prod(naxes)))
 
 
 if ZeusPar.GridType == 'SPH':
@@ -355,7 +355,7 @@ if ZeusPar.GridType == 'SPH':
     Rmax = CheckAbdSetAtrr('Rmax_AU')
     if Rmax is not None:
         Rmax *= AU2cm
-        print "[ZeusConverter] Include the inner R = %d AU into SPARX HDF5 table" % Rmax
+        print("[ZeusConverter] Include the inner R = %d AU into SPARX HDF5 table" % Rmax)
 
     naxes, x1, x2, x3, n_H2, T_k, v1, v2, v3, b1, b2, b3 = \
         Sph_MirrorNTrimR( naxes,

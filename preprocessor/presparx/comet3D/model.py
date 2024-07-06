@@ -19,11 +19,11 @@ OuterSource = [[5500., 0., 0., angle_of_view]]
 
 
 # Mass Loss Rate (Msun yr-1 to H2 number per second)
-#from sparx_tc.pre_unit import Msun2kg, mH2, yr2sec
+#from sparx.pre_unit import Msun2kg, mH2, yr2sec
 #massloss = (1e-5 * Msun2kg / mH2) / yr2sec
 
 # Radius of the star
-from sparx_tc.pre_unit import m2pc
+from sparx.pre_unit import m2pc
 R_star = 2.0e4 * m2pc
 
 # velocity of the wind
@@ -31,7 +31,7 @@ V_wind = 1.2 * 1e3 # (ms^-1)
 
 
 from sympy import pi, exp
-from sparx_tc.pre_unit import pc2m
+from sparx.pre_unit import pc2m
 # Gas Density (number/m^3)
 def Density1D(r):
     factor = r / R_star

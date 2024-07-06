@@ -241,7 +241,7 @@ size_t SpInp_GetKey_size_t(const char *name)
 
 	/* Convert to integer */
 	if(o != Py_None)
-		size = (size_t)PyInt_AsLong(o);
+		size = (size_t)PyLong_AsLong(o);
 	else
 		size = 0;
 
@@ -268,7 +268,7 @@ int SpInp_GetKey_TF(const char *name)
 
 	/* Convert to integer */
 	if(o != Py_None) {
-		intgr = (int)PyInt_AsLong(o);
+		intgr = (int)PyLong_AsLong(o);
 	}
 
 	Py_DECREF(Inputs);
@@ -294,7 +294,7 @@ int SpInp_GetKey_int(const char *name)
 
 	/* Convert to integer */
 	if(o != Py_None)
-		intgr = (int)PyInt_AsLong(o);
+		intgr = (int)PyLong_AsLong(o);
 	else
 		intgr = 0;
 

@@ -11,7 +11,7 @@ SpParm Sp_parm;
 
 /* Function prototypes */
 //PyMODINIT_FUNC PY_MOD_INIT_FUNC(void);
-PyMODINIT_FUNC init_sparx (void);
+PyMODINIT_FUNC PyInit__sparx (void);
 static PyObject *get_prog(PyObject *self, PyObject *args);
 static PyObject *set_prog(PyObject *self, PyObject *args);
 static PyObject *get_mpi_info(PyObject *self, PyObject *args);
@@ -66,7 +66,18 @@ static PyMethodDef _SPARXMethods[] = {
 
 /*----------------------------------------------------------------------------*/
 
-PyMODINIT_FUNC init_sparx (void)
+static struct PyModuleDef SPARXModule =
+{
+    PyModuleDef_HEAD_INIT,
+    "_sparx",     /* name of module */
+    NULL,         /* module documentation, may be NULL */
+    -1,           /* size of per-interpreter state of the module, or -1 if the module keeps state in global variables. */
+    _SPARXMethods
+};
+
+/*----------------------------------------------------------------------------*/
+
+PyMODINIT_FUNC PyInit__sparx (void)
 /* Module init function */
 {
 	PyObject *o, *mod, *dic, *sparx;
@@ -91,7 +102,7 @@ PyMODINIT_FUNC init_sparx (void)
           malloc(1 + strlen(Sp_SPARX_VERSION) + strlen(static_library) );
         strcpy(static_library_path, Sp_SPARX_VERSION);
         strcat(static_library_path, static_library);
-        mod = Py_InitModule( static_library_path, _SPARXMethods);
+        mod = PyModule_Create(&SPARXModule);
         free(static_library_path);
 	/* Necessary for NumPy */
 	import_array();
@@ -125,7 +136,7 @@ PyMODINIT_FUNC init_sparx (void)
 	/* Cleanup */
 	Py_DECREF(sparx);
 
-	return;
+	return mod;
 }
 
 /*----------------------------------------------------------------------------*/

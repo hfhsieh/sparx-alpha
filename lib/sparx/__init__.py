@@ -18,9 +18,9 @@ import re
 MOLEC_DIR = ROOT_DIR+"/data/molec" # Used by C modules, DO NOT RENAME!
 MOLEC_LIST = []
 for i in os.listdir(MOLEC_DIR):
-	match = re.match("(.*).dat", i)
-	if match is not None:
-		MOLEC_LIST.append(match.groups()[0])
+    match = re.match("(.*).dat", i)
+    if match is not None:
+        MOLEC_LIST.append(match.groups()[0])
 MOLEC_LIST.sort()
 
 ##
@@ -30,9 +30,9 @@ import re
 KAPPA_DIR = ROOT_DIR+"/data/opacity" # Used by C modules, DO NOT RENAME!
 KAPPA_LIST = []
 for i in os.listdir(KAPPA_DIR):
-	match = re.match("(.*).tab", i)
-	if match is not None:
-		KAPPA_LIST.append(match.groups()[0])
+    match = re.match("(.*).tab", i)
+    if match is not None:
+        KAPPA_LIST.append(match.groups()[0])
 KAPPA_LIST.sort()
 
 

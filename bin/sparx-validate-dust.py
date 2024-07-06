@@ -35,87 +35,87 @@
 import sparx.physics as phys
 
 def Estimate():
-	# Constants
-	amu = phys.Units.amu # kg
-	pc = phys.Units.pc # m
+    # Constants
+    amu = phys.Units.amu # kg
+    pc = phys.Units.pc # m
 
-	# Cloud properties
-	Tk = 100 # [K] Cloud kinetic temperature
-	gas2dust = 100.0 # Gas to dust ratio
-	kappa = 0.1 / gas2dust # [m^2kg^-1] Dust mass opacity
-	n_H2 = 1e4 * 1e6 # [m^-3] Molecular gas number density
-	D = 2 * 0.1 * pc # [m] Cloud diameter
+    # Cloud properties
+    Tk = 100 # [K] Cloud kinetic temperature
+    gas2dust = 100.0 # Gas to dust ratio
+    kappa = 0.1 / gas2dust # [m^2kg^-1] Dust mass opacity
+    n_H2 = 1e4 * 1e6 # [m^-3] Molecular gas number density
+    D = 2 * 0.1 * pc # [m] Cloud diameter
 
-	# Calculate tau at center of cloud
-	tau = kappa * n_H2 * D * 2.8 * amu
+    # Calculate tau at center of cloud
+    tau = kappa * n_H2 * D * 2.8 * amu
 
-	# Calculate brightness temperature at center of cloud
-	Tb = Tk * tau
+    # Calculate brightness temperature at center of cloud
+    Tb = Tk * tau
 
-	return Tb, tau
+    return Tb, tau
 
 ##
 ## Main
 ##
 if __name__ == "__main__":
-	# Some necessary imports
-	from sparx import tasks, utils, inputs
-	from glob import glob
+    # Some necessary imports
+    from sparx import tasks, utils, inputs
+    from glob import glob
 
-	# Remove old files
-	name = "uniform"
-	if not utils.confirm_remove_files(glob("./%s.*"%name)):
-		print "Aborted"
-		exit()
+    # Remove old files
+    name = "uniform"
+    if not utils.confirm_remove_files(glob("./%s.*"%name)):
+        print("Aborted")
+        exit()
 
-	# Generate 1D model
-	src1d = "%s1d.src"%(name)
-	src3d = "%s3d.src"%(name)
-	tasks.task_valdust1d(out=src1d)
-	tasks.task_valdust3d(out=src3d)
+    # Generate 1D model
+    src1d = "%s1d.src"%(name)
+    src3d = "%s3d.src"%(name)
+    tasks.task_valdust1d(out=src1d)
+    tasks.task_valdust3d(out=src3d)
 
-	# Table header
-	table = ['# %20s %20s %20s %20s %20s %20s %20s %20s %20s'%('Lambda(mm)', 'Tau_S1D', 'Tau_S3D', 'Tau_Est', 'Tau_Diff(%)', 'Tb_S1D(K)', 'Tb_S3D(K)', 'Tb_Est(K)', 'Tb_Diff(%)')]
+    # Table header
+    table = ['# %20s %20s %20s %20s %20s %20s %20s %20s %20s'%('Lambda(mm)', 'Tau_S1D', 'Tau_S3D', 'Tau_Est', 'Tau_Diff(%)', 'Tb_S1D(K)', 'Tb_S3D(K)', 'Tb_Est(K)', 'Tb_Diff(%)')]
 
-	# Calculate image for different wavelengths
-	for wavlen in 0.1, 1, 10, 100, 1000, 10000:
-		# Setup file names
-		out1d = "%s1d.%7.2emm.xyv"%(name, wavlen)
-		tau1d = "%s1d.%7.2emm.tau"%(name, wavlen)
-		out3d = "%s3d.%7.2emm.xyv"%(name, wavlen)
-		tau3d = "%s3d.%7.2emm.tau"%(name, wavlen)
+    # Calculate image for different wavelengths
+    for wavlen in 0.1, 1, 10, 100, 1000, 10000:
+        # Setup file names
+        out1d = "%s1d.%7.2emm.xyv"%(name, wavlen)
+        tau1d = "%s1d.%7.2emm.tau"%(name, wavlen)
+        out3d = "%s3d.%7.2emm.xyv"%(name, wavlen)
+        tau3d = "%s3d.%7.2emm.tau"%(name, wavlen)
 
-		# Reset inputs (safer)
-		inputs.reset_inputs()
+        # Reset inputs (safer)
+        inputs.reset_inputs()
 
-		# Generate synthetic dust observations
-		tasks.task_contobs(source=src1d, out=out1d, tau=tau1d, wavelen="%7.2emm"%wavlen, cell="['0.5asec', '0.5asec']", unit='K', chan="[32, '0.2kms^-1']")
-		tasks.task_contobs(source=src3d, out=out3d, tau=tau3d, wavelen="%7.2emm"%wavlen, cell="['0.5asec', '0.5asec']", unit='K', chan="[32, '0.2kms^-1']")
+        # Generate synthetic dust observations
+        tasks.task_contobs(source=src1d, out=out1d, tau=tau1d, wavelen="%7.2emm"%wavlen, cell="['0.5asec', '0.5asec']", unit='K', chan="[32, '0.2kms^-1']")
+        tasks.task_contobs(source=src3d, out=out3d, tau=tau3d, wavelen="%7.2emm"%wavlen, cell="['0.5asec', '0.5asec']", unit='K', chan="[32, '0.2kms^-1']")
 
-		from subprocess import Popen, PIPE
-		# Extract brightness temperature
-		p = Popen("imspec in=%s options=eformat,nohead region='rel,box(0,0,0,0)' plot=sum | head -n 2 | tail -n 1 | awk '{print $3}'"%out1d, shell=True, stdout=PIPE, stderr=PIPE)
-		Tb_s1d = float(p.communicate()[0])
+        from subprocess import Popen, PIPE
+        # Extract brightness temperature
+        p = Popen("imspec in=%s options=eformat,nohead region='rel,box(0,0,0,0)' plot=sum | head -n 2 | tail -n 1 | awk '{print $3}'"%out1d, shell=True, stdout=PIPE, stderr=PIPE)
+        Tb_s1d = float(p.communicate()[0])
 
-		p = Popen("imspec in=%s options=eformat,nohead region='rel,box(0,0,0,0)' plot=sum | head -n 2 | tail -n 1 | awk '{print $3}'"%out3d, shell=True, stdout=PIPE, stderr=PIPE)
-		Tb_s3d = float(p.communicate()[0])
+        p = Popen("imspec in=%s options=eformat,nohead region='rel,box(0,0,0,0)' plot=sum | head -n 2 | tail -n 1 | awk '{print $3}'"%out3d, shell=True, stdout=PIPE, stderr=PIPE)
+        Tb_s3d = float(p.communicate()[0])
 
-		# Get peak tau
-		p = Popen("imspec in=%s options=eformat,nohead region='rel,box(0,0,0,0)' plot=sum | head -n 2 | tail -n 1 | awk '{print $3}'"%tau1d, shell=True, stdout=PIPE, stderr=PIPE)
-		tau_s1d = float(p.communicate()[0])
+        # Get peak tau
+        p = Popen("imspec in=%s options=eformat,nohead region='rel,box(0,0,0,0)' plot=sum | head -n 2 | tail -n 1 | awk '{print $3}'"%tau1d, shell=True, stdout=PIPE, stderr=PIPE)
+        tau_s1d = float(p.communicate()[0])
 
-		p = Popen("imspec in=%s options=eformat,nohead region='rel,box(0,0,0,0)' plot=sum | head -n 2 | tail -n 1 | awk '{print $3}'"%tau3d, shell=True, stdout=PIPE, stderr=PIPE)
-		tau_s3d = float(p.communicate()[0])
+        p = Popen("imspec in=%s options=eformat,nohead region='rel,box(0,0,0,0)' plot=sum | head -n 2 | tail -n 1 | awk '{print $3}'"%tau3d, shell=True, stdout=PIPE, stderr=PIPE)
+        tau_s3d = float(p.communicate()[0])
 
-		Tb_est, tau_est = Estimate()
-		Tb_diff = 100 * abs(Tb_s3d - Tb_s1d) / Tb_s1d
-		tau_diff = 100 * abs(tau_s3d - tau_s1d) / tau_s1d
+        Tb_est, tau_est = Estimate()
+        Tb_diff = 100 * abs(Tb_s3d - Tb_s1d) / Tb_s1d
+        tau_diff = 100 * abs(tau_s3d - tau_s1d) / tau_s1d
 
-		table += ['  %20g %20.5e %20.5e %20.5e %20.5e %20.5e %20.5e %20.5e %20.5f'%(wavlen, tau_s1d, tau_s3d, tau_est, tau_diff, Tb_s1d, Tb_s3d, Tb_est, Tb_diff)]
+        table += ['  %20g %20.5e %20.5e %20.5e %20.5e %20.5e %20.5e %20.5e %20.5f'%(wavlen, tau_s1d, tau_s3d, tau_est, tau_diff, Tb_s1d, Tb_s3d, Tb_est, Tb_diff)]
 
 # Print out results
 for i in table:
-	print i
+    print(i)
 
 
 

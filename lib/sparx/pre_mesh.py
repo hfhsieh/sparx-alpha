@@ -186,13 +186,13 @@ class mesh:
                     dt = dt0 * stretch_ratio_t**(nt/2)
 
             # north semi-sphere
-            for j in range(nt/2):
+            for j in range(nt//2):
                 theta_p[j+1] = theta_p[j] + dt
                 theta_c[j] = theta_p[j] + 0.5 * dt
                 dt /= stretch_ratio_t
             # south semi-sphere
             dt = dt0
-            for j in range(nt/2,nt):
+            for j in range(nt//2,nt):
                 theta_p[j+1] = theta_p[j] + dt
                 theta_c[j] = theta_p[j] + 0.5 * dt
                 dt *= stretch_ratio_t
@@ -234,13 +234,13 @@ class mesh:
             dp0 = dp
 
             # back semi-sphere
-            for k in range(np/2):
+            for k in range(np//2):
                 phi_p[k+1] = phi_p[k] + dp
                 phi_c[k] = phi_p[k] + 0.5 * dp
                 dt *= stretch_ratio_p
             # front semi-sphere
             dp = dp0
-            for j in range(np/2,np):
+            for j in range(np//2,np):
                 phi_p[k+1] = phi_p[k] + dp
                 phi_c[k] = phi_p[k] + 0.5 * dp
                 dp /= stretch_ratio_p
@@ -252,74 +252,74 @@ class mesh:
         self.phi_c = phi_c
 
     def _gen_mesh_cyl2d(self):
-            gr = self.grid
+        gr = self.grid
 
-            nrc = gr.nrc
-            nz = gr.nz
-            Rc_in = gr.Rc_in
-            Rc_out = gr.Rc_out
-            z_max = gr.z_max
+        nrc = gr.nrc
+        nz = gr.nz
+        Rc_in = gr.Rc_in
+        Rc_out = gr.Rc_out
+        z_max = gr.z_max
 
-            Rc_p = zeros(nrc+1)
-            Rc_c = zeros(nrc)
-            Rc_p[0] = Rc_in
+        Rc_p = zeros(nrc+1)
+        Rc_c = zeros(nrc)
+        Rc_p[0] = Rc_in
 
-            z_p = zeros(nz+1)
-            z_c = zeros(nz)
-            z_p[0] = - z_max
+        z_p = zeros(nz+1)
+        z_c = zeros(nz)
+        z_p[0] = - z_max
 
 
-            spacing = gr.spacing
-            if ( spacing == 'uniform' ):
-                    drc = (Rc_out-Rc_in)/nrc
-                    for i in range(1,nrc+1):
-                            Rc_p[i] =  Rc_p[i-1] + drc
-                            Rc_c[i-1] = Rc_p[i-1] + 0.5 * drc
+        spacing = gr.spacing
+        if ( spacing == 'uniform' ):
+            drc = (Rc_out-Rc_in)/nrc
+            for i in range(1,nrc+1):
+                Rc_p[i] =  Rc_p[i-1] + drc
+                Rc_c[i-1] = Rc_p[i-1] + 0.5 * drc
 
-                    dz = pi / nt
-                    for j in range(1,nz+1):
-                            z_p[j] = z_p[j-1] + dz
-                            z_c[j-1] = z_p[j-1] + 0.5 * dz
+            dz = pi / nt
+            for j in range(1,nz+1):
+                z_p[j] = z_p[j-1] + dz
+                z_c[j-1] = z_p[j-1] + 0.5 * dz
 
-            elif ( spacing == 'stretch'):
-                    stretch_ratio_rc = gr.stretch_ratio_rc
-                    drc = (Rc_out-Rc_in)*(stretch_ratio_rc-1.)/(stretch_ratio_rc**(nrc)-1.)
-                    for i in range(1,nrc+1):
-                            Rc_p[i] =  Rc_p[i-1] + drc
-                            Rc_c[i-1] = Rc_p[i-1] + 0.5 * drc
-                            drc *= stretch_ratio_rc
+        elif ( spacing == 'stretch'):
+            stretch_ratio_rc = gr.stretch_ratio_rc
+            drc = (Rc_out-Rc_in)*(stretch_ratio_rc-1.)/(stretch_ratio_rc**(nrc)-1.)
+            for i in range(1,nrc+1):
+                Rc_p[i] =  Rc_p[i-1] + drc
+                Rc_c[i-1] = Rc_p[i-1] + 0.5 * drc
+                drc *= stretch_ratio_rc
 
-                    stretch_ratio_z = gr.stretch_ratio_z
-                    # resolution is even
-                    if nz % 2 == 0:
-                            dz0 = z_max * (stretch_ratio_z - 1.) / (stretch_ratio_z**(nz/2) - 1.)
-                            dz = dz0 * stretch_ratio_z**(nz/2-1)
-                    # resolution is odd
-                    else:
-                            dz0 = 2.0 * z_max * (stretch_ratio_z - 1.) / (2 * stretch_ratio_z**(nz/2) - stretch_ratio_z - 1.)
-                            dz = dz0 * stretch_ratio_z**(nz/2)
-
-                    # north semi-sphere
-                    for j in range(1,nz/2+1):
-                            z_p[j] = z_p[j-1] + dz
-                            z_c[j-1] = z_p[j-1] + 0.5 * dz
-                            dz /= stretch_ratio_z
-                    # south semi-sphere
-                    dz = dz0
-                    for j in range(nz/2+1,nz+1):
-                            z_p[j] = z_p[j-1] + dz
-                            z_c[j-1] = z_p[j-1] + 0.5 * dz
-                            dz *= stretch_ratio_z
-
+            stretch_ratio_z = gr.stretch_ratio_z
+            # resolution is even
+            if nz % 2 == 0:
+                dz0 = z_max * (stretch_ratio_z - 1.) / (stretch_ratio_z**(nz/2) - 1.)
+                dz = dz0 * stretch_ratio_z**(nz/2-1)
+            # resolution is odd
             else:
-                    raise RuntimeError('Spacing Type not defined : %s' % spacing)
-                    sys.exit(2)
+                dz0 = 2.0 * z_max * (stretch_ratio_z - 1.) / (2 * stretch_ratio_z**(nz/2) - stretch_ratio_z - 1.)
+                dz = dz0 * stretch_ratio_z**(nz/2)
 
-            phi_p = [0., 2. * pi]
-            phi_c = [pi]
-            self.Rc_p = Rc_p
-            self.Rc_c = Rc_c
-            self.phi_p = phi_p
-            self.phi_c = phi_c
-            self.z_p = z_p
-            self.z_c = z_c
+            # north semi-sphere
+            for j in range(1,nz//2+1):
+                z_p[j] = z_p[j-1] + dz
+                z_c[j-1] = z_p[j-1] + 0.5 * dz
+                dz /= stretch_ratio_z
+        # south semi-sphere
+            dz = dz0
+            for j in range(nz//2+1,nz+1):
+                z_p[j] = z_p[j-1] + dz
+                z_c[j-1] = z_p[j-1] + 0.5 * dz
+                dz *= stretch_ratio_z
+
+        else:
+            raise RuntimeError('Spacing Type not defined : %s' % spacing)
+            sys.exit(2)
+
+        phi_p = [0., 2. * pi]
+        phi_c = [pi]
+        self.Rc_p = Rc_p
+        self.Rc_c = Rc_c
+        self.phi_p = phi_p
+        self.phi_c = phi_c
+        self.z_p = z_p
+        self.z_c = z_c

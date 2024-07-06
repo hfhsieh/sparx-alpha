@@ -2,27 +2,27 @@
 
 # usage
 def usage():
-        print '''
+    print('''
 presparx -o < Output File >
          -e : error estimation
          -p : profile plot
          -v : generate vtk file
          -c : converter
          -z : ZeusTW interface
-'''
+''')
 
 # parser
 import sys, getopt
 argv = sys.argv[1:]
 
 if not argv:
-        usage()
-        sys.exit(2)
+    usage()
+    sys.exit(2)
 
 try:
     opts, args = getopt.getopt( argv, "o:cvpez", [ "--out", "out=", "--converter", "--plot", "--vtk", "--error", "--zeus"] )
 except getopt.GetoptError:
-    print 'can not recognize option : ', args
+    print('can not recognize option : ', args)
     usage()
     sys.exit(2)
 
@@ -52,18 +52,18 @@ ModelFile=  'model.py'
 if convert_mode:
     if zeus:
         if not isfile(ZeusPars):
-            print '[PRESPARX] %s not found' % ZeusPars
+            print('[PRESPARX] %s not found' % ZeusPars)
             sys.exit(1)
         sys.path.append(expanduser('~/sparx-alpha/preprocessor/presparx/Zeus'))
     else:
         if not isfile(Converter):
-            print '[PRESPARX] %s not found' % Converter
+            print('[PRESPARX] %s not found' % Converter)
             sys.exit(1)
 elif not isfile(GridFile):
-    print '[PRESPARX] %s not found' % GridFile
+    print('[PRESPARX] %s not found' % GridFile)
     sys.exit(1)
 elif not isfile(ModelFile):
-    print '[PRESPARX] %s not found' % ModelFile
+    print('[PRESPARX] %s not found' % ModelFile)
     sys.exit(1)
 
 from sparx import pre_mesh
@@ -84,23 +84,23 @@ else:
 
 # double check the error of the model
 if error:
-        from sparx import pre_error
-        pre_error.error(mesh,phys)
+    from sparx import pre_error
+    pre_error.error(mesh,phys)
 
 # visualization
 if plot:
-        from sparx import pre_visual
-        pre_visual.plot(mesh,phys)
+    from sparx import pre_visual
+    pre_visual.plot(mesh,phys)
 
 if vtk:
-        from sparx import pre_visual
-        pre_visual.vtk_output(mesh,phys)
+    from sparx import pre_visual
+    pre_visual.vtk_output(mesh,phys)
 
 # export HDF
 if OutputFile:
-        from sparx import pre_hdf
-        pre_hdf.export(mesh,phys,OutputFile)
-        print '[PRESPARX] wrote out "%s"' %OutputFile
+    from sparx import pre_hdf
+    pre_hdf.export(mesh,phys,OutputFile)
+    print('[PRESPARX] wrote out "%s"' %OutputFile)
 
 
 
