@@ -12,6 +12,7 @@ dependencies = [
     'matplotlib',
     'sympy',
     'tables',
+    'packaging',
     'importlib-metadata; python_version>="3.0"',
 ]
 authors = [

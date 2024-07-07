@@ -1,7 +1,7 @@
 from tables import __version__ as TablesVersion
 from tables import *
-from distutils.version import LooseVersion
-TablesVersionGreaterThan3 = LooseVersion(TablesVersion) >= LooseVersion('3')
+from packaging.version import Version, parse
+TablesVersionGreaterThan3 = Version(TablesVersion) >= parse("3")
 
 
 # Define a user record to characterize some kind of particles
