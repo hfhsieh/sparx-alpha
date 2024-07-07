@@ -6,8 +6,7 @@
 
 import os
 import sys
-import time
-from subprocess import Popen, PIPE
+import re
 from argparse import ArgumentParser
 
 import numpy as np
@@ -256,20 +255,19 @@ include_paths = include_paths[::-1]
 library_paths = library_paths[::-1]
 
 
-### get svn revision and generate VERSION
+### generate the version.py
+version_pattern = r"^version\s*=\s*['\"]([^'\"]*)['\"]"
+
 with open("pyproject.toml", "r") as f:
-    for line in f:
-        if "version =" in line:
-            SPARX_VER = line.split()[-1].strip("\"")
+    version = re.search(version_pattern, f.read(), re.M)
 
-p   = Popen("svnversion", shell=True, stdout=PIPE)
-REV = p.communicate()[0].strip()
+if version:
+    fn_version = os.path.join("lib", "sparx", "version.py")
 
-fn_out = os.path.join("lib", "sparx", "VERSION")
-
-with open(fn_out, "w") as f:
-    text = "{:s} (r{:s}, {:s})".format(SPARX_VER, str(REV), time.asctime())
-    f.write(text)
+    with open(fn_version, "w") as f:
+        f.write("__version__ = \"{}\"".format(version.group(1)))
+else:
+    raise RuntimeError ("Unable to find version string in pyproject.toml")
 
 
 ### generate setup.py

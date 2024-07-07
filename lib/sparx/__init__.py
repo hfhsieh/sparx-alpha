@@ -6,6 +6,7 @@
 import os
 from math import sqrt, exp
 
+from .version import __version__
 
 
 # Get root package directory
