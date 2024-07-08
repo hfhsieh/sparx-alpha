@@ -1,110 +1,110 @@
 #!/usr/bin/env python
 
-# usage
-def usage():
-    print('''
-presparx -o < Output File >
-         -e : error estimation
-         -p : profile plot
-         -v : generate vtk file
-         -c : converter
-         -z : ZeusTW interface
-''')
 
-# parser
-import sys, getopt
-argv = sys.argv[1:]
+from sys import argv, path
+from os.path import isfile, expanduser, splitext
+from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 
-if not argv:
-    usage()
-    sys.exit(2)
 
-try:
-    opts, args = getopt.getopt( argv, "o:cvpez", [ "--out", "out=", "--converter", "--plot", "--vtk", "--error", "--zeus"] )
-except getopt.GetoptError:
-    print('can not recognize option : ', args)
-    usage()
-    sys.exit(2)
+### helper functions
+def print_presparx(string):
+    print("[PRESPARX] {}".format(string))
 
-OutputFile = ''
-convert_mode = plot = vtk = error = zeus = False
-for opt, arg in opts:
-    if   opt in ("-o", "--out"):
-        OutputFile = arg
-    elif opt in ("-c", "--converter "):
-        convert_mode = True
-    elif opt in ("-p", "--plot "):
-        plot = True
-    elif opt in ("-v", "--visual"):
-        vtk = True
-    elif opt in ("-e", "--error"):
-        error = True
-    elif opt in ("-z", "--zeus"):
-        zeus = True
-        convert_mode = True
 
-# pre-check
-from os.path import isfile, expanduser
-Converter = 'converter.py'
-ZeusPars =  'zeus_parameter.py'
-GridFile=   'grid.py'
-ModelFile=  'model.py'
-if convert_mode:
-    if zeus:
-        if not isfile(ZeusPars):
-            print('[PRESPARX] %s not found' % ZeusPars)
-            sys.exit(1)
-        sys.path.append(expanduser('~/sparx-alpha/preprocessor/presparx/Zeus'))
-    else:
-        if not isfile(Converter):
-            print('[PRESPARX] %s not found' % Converter)
-            sys.exit(1)
-elif not isfile(GridFile):
-    print('[PRESPARX] %s not found' % GridFile)
-    sys.exit(1)
-elif not isfile(ModelFile):
-    print('[PRESPARX] %s not found' % ModelFile)
-    sys.exit(1)
+### parser
+parser = ArgumentParser(description = "Prepare models for the SPARX code and post-process the generated models",
+                        formatter_class = ArgumentDefaultsHelpFormatter)
 
+parser.add_argument("-o", "--output",    default = None,       help = "specify the output HDF5 file")
+parser.add_argument("-c", "--converter", default = None,       help = "specify the Python script for data conversion")
+parser.add_argument("-z", "--zeus",      default = None,       help = "specify the Python script for data conversion for the ZeusTW code")
+parser.add_argument("-g", "--grid",      default = "grid.py",  help = "specify the Python script for grid configuration")
+parser.add_argument("-m", "--model",     default = "model.py", help = "specify the Python script for model configuration")
+
+parser.add_argument("-v", "--vtk",   action = "store_true", help = "generate the VTK files")
+parser.add_argument("-p", "--plot",  action = "store_true", help = "visualize the generated model")
+parser.add_argument("-e", "--error", action = "store_true", help = "estimate the error")
+
+
+if len(argv) == 1:
+    # print help if no arguments given
+    parser.print_help()
+    parser.exit()
+else:
+    args = parser.parse_args()
+
+
+### sanity checks
+if   args.converter is not None:
+    assert isfile(args.converter), print_presparx("{} not found!".format(args.converter))
+
+elif args.zeus is not None:
+    assert isfile(args.zeus), print_presparx("{} not found!".format(args.zeus))
+
+    # adopted from the SPARX v3.1.3
+    # --> unknown usage, not verified yet...
+    sys.path.append(expanduser('~/sparx-alpha/preprocessor/presparx/Zeus'))
+
+else:
+    assert isfile(args.grid),  print_presparx("{} not found!".format(args.grid))
+    assert isfile(args.model), print_presparx("{} not found!".format(args.model))
+
+
+### add the current working directory to the search path if it is not already included
+if "" not in path:
+    path.insert(0, "")
+
+
+### execution
 from sparx import pre_mesh
 from sparx import pre_profile
+
 phys = pre_profile.profile()
-if convert_mode:
-    import converter as cvt
-    mesh = pre_mesh.from_dataset(cvt)
-    phys.from_dataset(mesh,cvt)
+
+
+### generate the model
+if args.converter is not None:
+    # generate the model using the converter
+    module = splitext(args.converter)[0]
+
+    exec("import {} as converter".format(module))
+
+    mesh = pre_mesh.from_dataset(converter)
+    phys.from_dataset(mesh, converter)
+
 else:
-    import grid as gr
-    import model as md
-    # generate mesh
-    mesh = pre_mesh.mesh(gr)
-    # mapping physical model
-    phys.from_model(mesh,md)
+    # generate the model from the specified configurations
+    module_grid  = splitext(args.grid)[0]
+    module_model = splitext(args.model)[0]
+
+    exec("import {} as grid".format(module_grid))
+    exec("import {} as model".format(module_model))
+
+    mesh = pre_mesh.mesh(grid)
+    phys.from_model(mesh, model)
 
 
-# double check the error of the model
-if error:
+### miscellaneous
+if args.error:
     from sparx import pre_error
-    pre_error.error(mesh,phys)
 
-# visualization
-if plot:
+    pre_error.error(mesh, phys)
+
+
+if args.plot:
     from sparx import pre_visual
-    pre_visual.plot(mesh,phys)
 
-if vtk:
+    pre_visual.plot(mesh, phys)
+
+
+if args.vtk:
     from sparx import pre_visual
-    pre_visual.vtk_output(mesh,phys)
 
-# export HDF
-if OutputFile:
+    pre_visual.vtk_output(mesh, phys)
+
+
+if args.output is not None:
     from sparx import pre_hdf
-    pre_hdf.export(mesh,phys,OutputFile)
-    print('[PRESPARX] wrote out "%s"' %OutputFile)
 
-
-
-
-
-
-
+    pre_hdf.export(mesh, phys, args.output)
+    print_presparx("wrote out {}!".format(args.output))

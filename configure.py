@@ -300,13 +300,8 @@ setup(
                                ]
                    },
     url = "https://sparx.tiara.sinica.edu.tw",
-    scripts = ["bin/presparx",                 # SPARX preprocessor
-               "bin/sparx",                    # Main sparx command line driver
-               "bin/sparx-plot",               # Model plotter
-               "bin/sparx-plot.py",            # Model plotter
-               "bin/sparx-validate-dust.py",   # Script for validating dust radiative transfer
-               "bin/sparx-validate-line.py",   # Script for validating line radiative transfer
-               "bin/sparx-validate-leiden.py", # Script for validating with the Leiden 2004 benchmark problems
+    scripts = ["bin/presparx", # SPARX preprocessor
+               "bin/sparx",    # Main sparx command line driver
               ]
 )
 
