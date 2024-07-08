@@ -10,7 +10,13 @@ import numpy as np
 import array
 from math import *
 from tables import *
+from tables import __version__ as TablesVersion
 from tables.nodes import filenode
+from packaging.version import Version, parse
+
+if Version(TablesVersion) >= parse("3"):
+    openFile = open_file
+
 writegrid=1
 
 # Physical parameter

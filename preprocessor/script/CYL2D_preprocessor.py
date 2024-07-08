@@ -6,6 +6,12 @@
 
 
 from tables import *
+from tables import __version__ as TablesVersion
+from packaging.version import Version, parse
+
+if Version(TablesVersion) >= parse("3"):
+    openFile = open_file
+
 from numpy import *
 from math import *
 from scipy import optimize

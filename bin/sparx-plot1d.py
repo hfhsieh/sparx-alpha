@@ -1,6 +1,13 @@
 #! /usr/bin/env python
 
-from tables import openFile
+from tables import __version__ as TablesVersion
+from packaging.version import Version, parse
+
+if Version(TablesVersion) >= parse("3"):
+    from tables import open_file as openFile
+else:
+    from tables import openFile
+
 from numpy import ndarray, ndenumerate, concatenate, array, min
 from math import sqrt, log10
 

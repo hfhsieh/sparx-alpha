@@ -180,7 +180,14 @@ class SPARXH5(object):
         self.fname = fname
 
         # Open file
-        from tables import openFile
+        from tables import __version__ as TablesVersion
+        from packaging.version import Version, parse
+
+        if Version(TablesVersion) >= parse("3"):
+            from tables import open_file as openFile
+        else:
+            from tables import openFile
+
         self.h5f = openFile(fname)
 
         # Load parameters for root zone (although there is only one
