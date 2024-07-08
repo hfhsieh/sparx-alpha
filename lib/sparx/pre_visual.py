@@ -58,7 +58,7 @@ class plot:
         X_mol_min = amin(phys.X_mol)
         X_mol_max = amax(phys.X_mol)
         if X_mol_min == X_mol_max:
-            plt.axis([0,0,0.1*amin(phys.X_mol),10.*amax(phys.X_mol)])
+            plt.axis([amin(r),amax(r),0.1*amin(phys.X_mol),10.*amax(phys.X_mol)])
             plt.autoscale(True,'x',False)
         plt.xscale('log')
         plt.yscale('log')
