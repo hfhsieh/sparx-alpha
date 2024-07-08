@@ -3,7 +3,7 @@
 # Usage:
 #   1. Configure the paths to the required software
 #      --> C compiler (required)
-#          MPI compiler (optional, for paralle execution)
+#          MPI compiler (optional, for parallel execution)
 #          HDF5 (required)
 #          FFTW3 (required)
 #          GSL (required, for generating random number)
@@ -18,35 +18,17 @@
 #
 
 ### setting the environment variables
-## XL
-#MPI_DIR=/cluster/gcc-4.8.5/openmpi-4.1.2
-#HDF5_DIR=/home/hfhsieh/miniconda3/envs/py39
-#FFTW_DIR=/cluster/gcc-4.8.5/fftw-3.3.10_openmpi4
-##GSL_DIR=/home/hfhsieh/opt/gsl
-#CFITSIO_DIR=/home/hfhsieh/opt/cfitsio
-
-## KAWAS
-#MPI_DIR=$OPENMPI_DIR
-#HDF5_DIR=$HDF5_DIR
-#FFTW_DIR=$FFTW_DIR
-#GSL_DIR=/tiara/home/hfhsieh/opt/gsl_2.8
-#CFITSIO_DIR=$CFITSIO_DIR
-#PGPLOT_DIR=$PGPLOT_DIR
-
-## NCTS
-CC_LIB=/cluster/gcc-11.2.0/gcc/lib64
-MPI_DIR=/cluster/gcc-11.2.0/openmpi-4.1.2
-HDF5_DIR=/home/hfhsieh/miniconda3/envs/py39
-FFTW_DIR=/cluster/gcc-11.2.0/fftw-3.3.10_openmpi4
-GSL_DIR=/home/hfhsieh/opt/gsl
-CFITSIO_DIR=/home/hfhsieh/opt/cfitsio
-PGPLOT_DIR=/home/hfhsieh/opt/pgplot
-#MIR_INC=/home/hfhsieh/src/miriad/inc
-#MIR_LIB=/home/hfhsieh/src/miriad/linux64/lib
+CCLIB=$GCC_DIR
+MPI_DIR=$OPENMPI_DIR
+HDF5_DIR=$HDF5_DIR
+FFTW_DIR=$FFTW_DIR
+GSL_DIR=/tiara/home/hfhsieh/opt/gsl_2.8
+CFITSIO_DIR=$CFITSIO_DIR
+PGPLOT_DIR=/tiara/home/hfhsieh/opt/pgplot
 
 
 ### generate setup.py
-python configure.py \
+python3 configure.py \
 --cc-lib=$CCLIB \
 --mpi=$MPI_DIR \
 --hdf5=$HDF5_DIR \

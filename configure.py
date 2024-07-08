@@ -7,6 +7,7 @@
 import os
 import sys
 import re
+from collections import OrderedDict
 from argparse import ArgumentParser
 
 import numpy as np
@@ -180,9 +181,18 @@ for key in ["mpi", "hdf5", "fftw", "gsl", "cfitsio", "pgplot", "miriad"]:
 
 
 ### update the include and library paths
-# enviornment variables
+# environment variables
+C_INCLUDE_PATH = os.getenv("C_INCLUDE_PATH")
+if C_INCLUDE_PATH:
+    # handle multiple occurrences of the delimiter :
+    C_INCLUDE_PATH = C_INCLUDE_PATH.replace(":", " ")
+    include_paths += C_INCLUDE_PATH.strip().split()
+
 LD_LIBRARY_PATH = os.getenv("LD_LIBRARY_PATH")
-library_paths += LD_LIBRARY_PATH.split(":")
+if LD_LIBRARY_PATH:
+    # handle multiple occurrences of the delimiter :
+    LD_LIBRARY_PATH = LD_LIBRARY_PATH.replace(":", " ")
+    library_paths  += LD_LIBRARY_PATH.strip().split()
 
 # Python and Numpy
 python_inc = os.path.join(sys.prefix, "include")
@@ -247,10 +257,11 @@ else:
     macros += [("MIRSUPPORT", 0)]
 
 
-# remove duplicate library paths that are included in LD_LIBRARY_PATH
-library_paths = list(set(library_paths))
+# remove duplicate include and library paths while preserving the order
+include_paths = list(OrderedDict.fromkeys(include_paths))
+library_paths = list(OrderedDict.fromkeys(library_paths))
 
-# reverse the order so that user-defined paths have higher priority
+# reverse the order to give user-defined paths higher priority
 include_paths = include_paths[::-1]
 library_paths = library_paths[::-1]
 
@@ -315,7 +326,6 @@ setup_ext = setup_ext_fmt.format(
     INCPATH  = ", ".join(["\"{}\"".format(i)  for i in include_paths]),
     LIBPATH  = ", ".join(["\"{}\"".format(i)  for i in library_paths]),
     LIB      = ", ".join(["\"{}\"".format(i)  for i in libs]),
-#    MACRO    = ", ".join(["('{}', '{}')".format(str(key), str(val))  for key, val in macros])
     MACRO    = ", ".join(["(\"{}\", {})".format(str(key), str(val))  for key, val in macros])
 )
 
