@@ -17,8 +17,8 @@
 #      If this is not the case, use 'X_INC' and 'X_LIB' to specify them manually.
 #
 
-### setting the environment variables
-CCLIB=$GCC_DIR
+### set the environment variables
+CCLIB=$GCC_DIR/lib64
 MPI_DIR=$OPENMPI_DIR
 HDF5_DIR=$HDF5_DIR
 FFTW_DIR=$FFTW_DIR
