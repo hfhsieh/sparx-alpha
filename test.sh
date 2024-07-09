@@ -44,7 +44,7 @@ case $CASE in
 
         \cp ../benchmark/2002_p2a_benchmark/model_1.d ./
         \cp ../benchmark/2002_p2a_benchmark/pops_ratran.dat ./
-        gnuplot ../benchmark/2002_p2a_benchmark/plot
+        python3 ../benchmark/2002_p2a_benchmark/plot.py
 
         ;;
     "P2B")
@@ -65,7 +65,7 @@ case $CASE in
 
         \cp ../benchmark/2002_p2b_benchmark/model_2.d ./
         \cp ../benchmark/2002_p2b_benchmark/pops_ratran.dat ./
-        gnuplot ../benchmark/2002_p2b_benchmark/plot
+        python3 ../benchmark/2002_p2b_benchmark/plot.py
 
         ;;
 # preprocessing
