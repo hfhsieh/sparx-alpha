@@ -18,13 +18,15 @@
 #
 
 ### set the environment variables
-CCLIB=$GCC_DIR/lib64
+CCLIB=$GCC_DIR
 MPI_DIR=$OPENMPI_DIR
 HDF5_DIR=$HDF5_DIR
 FFTW_DIR=$FFTW_DIR
-GSL_DIR=/tiara/home/hfhsieh/opt/gsl_2.8
+GSL_DIR=$GSL_DIR
 CFITSIO_DIR=$CFITSIO_DIR
-PGPLOT_DIR=/tiara/home/hfhsieh/opt/pgplot
+PGPLOT_DIR=
+MIR_INC=
+MIR_LIB=
 
 
 ### generate setup.py
@@ -37,8 +39,8 @@ python3 configure.py \
 --cfitsio=$CFITSIO_DIR \
 --pgplot-inc=$PGPLOT_DIR \
 --pgplot-lib=$PGPLOT_DIR \
---miriad-inc=$MIRINC \
---miriad-lib=$MIRLIB
+--miriad-inc=$MIR_INC \
+--miriad-lib=$MIR_LIB
 
 
 ### installation

@@ -170,6 +170,7 @@ if args.{keyword}:
 
     if not args.{keyword}_lib:
         args.{keyword}_lib = os.path.join(args.{keyword}, "lib")
+        args.{keyword}_lib = os.path.join(args.{keyword}, "lib64")
 """
 
     cmd = cmd_template.format(keyword = keyword)
